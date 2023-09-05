@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public ObjectManager ObjectManager;
+    
     private float HP = 200.0f;
     public int EnemyType = 0;
 
@@ -14,19 +14,24 @@ public class Enemy : MonoBehaviour
 
     //°ø°Ýenemy1_1
     public Transform target;
+    //public Rigidbody2D Target;
     private float Enemy1_1CurShotDelay = 0.0f;
     private float Enemy1_2CurShotDelay = 0.0f;
     private float Enemy1_3CurShotDelay = 0.0f;
     public Transform ShotPos;
     Vector3 Targetvec;
+    private SpriteRenderer spriteRenderer;
     //shopui
     public GameObject ShopUI;
 
 
     private void OnEnable()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         MoveSpeed = 70;
-        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        //Target = GameManager.instance.player.GetComponent<Rigidbody2D>();
+        target = GameManager.instance.player.transform;
+        //target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         if (EnemyType == 1)
         {
             HP = 1000.0f;
@@ -94,21 +99,25 @@ public class Enemy : MonoBehaviour
         if (Right)
         {
             transform.position += new Vector3(Move, 0, 0) * Time.deltaTime;
+            spriteRenderer.flipX = false;
         }
 
         if (Left)
         {
             transform.position += new Vector3(-Move, 0, 0) * Time.deltaTime;
+            spriteRenderer.flipX = true;
         }
 
         if (Down)
         {
             transform.position += new Vector3(0, -Move, 0) * Time.deltaTime;
+            spriteRenderer.flipX = true;
         }
 
         if (Up)
         {
             transform.position += new Vector3(0, Move, 0) * Time.deltaTime;
+            spriteRenderer.flipX = false;
         }
     }
 
@@ -119,14 +128,14 @@ public class Enemy : MonoBehaviour
 
     public void Explosion(Transform pos)
     {
-        GameObject Explosion = ObjectManager.MakeObj("PlayerExplosion");
+        GameObject Explosion = GameManager.instance.pool.Get(8);
         Explosion.transform.position = pos.transform.position;
     }
     private void Enemy1_1Attack()
     {
         if (Enemy1_1CurShotDelay >= 8.0f)
         {
-            GameObject Enemy1_1Bullet = ObjectManager.MakeObj("Enemy1_1Bullet");
+            GameObject Enemy1_1Bullet = GameManager.instance.pool.Get(1);
             Enemy1_1Bullet.transform.position = ShotPos.transform.position;
             Rigidbody2D Rigid = Enemy1_1Bullet.GetComponent<Rigidbody2D>();
             Rigid.AddForce(Targetvec.normalized * 5.0f, ForceMode2D.Impulse);
@@ -144,7 +153,7 @@ public class Enemy : MonoBehaviour
             Vector3 EnemyVec = new Vector3(transform.position.x, transform.position.y, -10);
             Vector3 len = Playervec - EnemyVec;
             float z = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
-            GameObject Enemy1_2Bullet = ObjectManager.MakeObj("Enemy1_2Bullet");
+            GameObject Enemy1_2Bullet = GameManager.instance.pool.Get(3);
             Enemy1_2Bullet.transform.position = ShotPos.transform.position;
             Enemy1_2Bullet.transform.rotation = Quaternion.Euler(0, 0, z+270);
             Enemy1_2CurShotDelay = 0.0f;
@@ -155,7 +164,7 @@ public class Enemy : MonoBehaviour
     {
         if (Enemy1_3CurShotDelay >= 8.0f)
         {
-            GameObject Enemy1_3Bullet = ObjectManager.MakeObj("Enemy1_3Bullet");
+            GameObject Enemy1_3Bullet = GameManager.instance.pool.Get(5);
             Enemy1_3Bullet.transform.position = ShotPos.transform.position;
             Rigidbody2D Rigid = Enemy1_3Bullet.GetComponent<Rigidbody2D>();
             Rigid.AddForce(Targetvec.normalized * 15.0f, ForceMode2D.Impulse);

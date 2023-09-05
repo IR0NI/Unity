@@ -7,26 +7,18 @@ public class GameManager : MonoBehaviour
     //싱글톤
     public static GameManager instance;
 
-    //적 배열
-    public string[] enemyObjs;
-
-    //오브젝트 매니저
-    public ObjectManager ObjectManager;
+    public PoolManager pool;
+    public Player player;
     float EXPimsi;
-    //큐
-
     [SerializeField]
     private Slider EXPbar;
 
-    
     //플레이어 데이터
     public int Gold = 0;
     public float EXP = 0.0f;
     private float MaxEXP = 15.0f;
     private int Level = 1;
 
-
-    
     //게임 데이터
     public bool isPause = false;
     public bool OnMenu = false;
@@ -70,10 +62,8 @@ public class GameManager : MonoBehaviour
     public Transform EnemyBuildPos3;
     public GameObject GunGun;
 
-
     private void Awake()
     {
-
         if (instance == null)
         {
             instance = this;
@@ -82,7 +72,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        enemyObjs = new string[] { "Enemy1_1", "Enemy1_2", "Enemy1_3" };
         EnemyBuildPos = new Transform[] {EnemyBuildPos1,EnemyBuildPos2,EnemyBuildPos3 };
         EXPbar.value = (float)EXP / (float)MaxEXP;
     }
@@ -109,19 +98,11 @@ public class GameManager : MonoBehaviour
         LevelUp();
         Reload();
     }
-
-    private void FixedUpdate()
-    {
-       //EXPimsi = (float)EXP / (float)MaxEXP;
-       //EXPbar.value = Mathf.Lerp(EXPbar.value, EXPimsi, Time.deltaTime * 10);
-    }
     private void Reload()
     {
-
         CurEnemy1_1BuildDelay += Time.deltaTime;
         CurEnemy1_2BuildDelay += Time.deltaTime;
         CurEnemy1_3BuildDelay += Time.deltaTime;
-
     }
 
     private void LevelUp()
@@ -134,14 +115,12 @@ public class GameManager : MonoBehaviour
             UpgradeMenu();
             UpgradeUI.SetActive(true);
             MaxEXP += 5.0f;
-
         }
     }
 
     public void GetExp(float exp)
     {
         EXP += exp;
-        
     }
     public void MenuOff()
     {
@@ -167,20 +146,17 @@ public class GameManager : MonoBehaviour
         Gold += gold;
         GoldText.text = Gold+" Gold";
     }
-
     public void GetEXP(int exp)
     {
         EXP += exp;
-
     }
     private void BuildEnemy()
     {
         if (CurEnemy1_1BuildDelay > MaxEnemy1_1BuildDelay)
         {
             pos = Random.Range(0, 3);
-            GameObject enemy1_1 = ObjectManager.MakeObj(enemyObjs[0]);
+            GameObject enemy1_1 = pool.Get(0);
             Enemy enemyLogic1_1 = enemy1_1.GetComponent<Enemy>();
-            enemyLogic1_1.ObjectManager = ObjectManager;
             enemy1_1.transform.position = EnemyBuildPos[pos].position;
             CurEnemy1_1BuildDelay = 0;
         }
@@ -188,9 +164,8 @@ public class GameManager : MonoBehaviour
         if (CurEnemy1_2BuildDelay > MaxEnemy1_2BuildDelay)
         {
             pos = Random.Range(0, 3);
-            GameObject enemy1_2 = ObjectManager.MakeObj(enemyObjs[1]);
+            GameObject enemy1_2 = pool.Get(2);
             Enemy enemyLogic1_2 = enemy1_2.GetComponent<Enemy>();
-            enemyLogic1_2.ObjectManager = ObjectManager;
             enemy1_2.transform.position = EnemyBuildPos[pos].position;
             CurEnemy1_2BuildDelay = 0;
         }
@@ -198,9 +173,8 @@ public class GameManager : MonoBehaviour
         if (CurEnemy1_3BuildDelay > MaxEnemy1_3BuildDelay)
         {
             pos = Random.Range(0, 3);
-            GameObject enemy1_3 = ObjectManager.MakeObj(enemyObjs[2]);
+            GameObject enemy1_3 = pool.Get(4);
             Enemy enemyLogic1_3 = enemy1_3.GetComponent<Enemy>();
-            enemyLogic1_3.ObjectManager = ObjectManager;
             enemy1_3.transform.position = EnemyBuildPos[pos].position;
             CurEnemy1_3BuildDelay = 0;
         }
@@ -227,6 +201,7 @@ public class GameManager : MonoBehaviour
     {
         int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, OuraLevel, AxeLevel, KunaiLevel, EnergyLevel, Non1Level, Non2Level };
         Queue<int> FullUpgrade = new Queue<int>();
+
         for (int i = 1; i < 13; i++)
         {
             if (UpgradeLevel[i] > 3)
@@ -236,11 +211,14 @@ public class GameManager : MonoBehaviour
         }
         //큐FullUpgrade를 배열FullUpgradecopy로 복사
         int[] FullUpgradecopy = FullUpgrade.ToArray();
+
         for(int i = 0; i<FullUpgrade.Count; i++)
         {
             Debug.Log(FullUpgradecopy[i]);
         }
+
         Upgrade();
+
         for(int i = 0; i<FullUpgradecopy.Length; i++)
         {
             if(Upgradenum1 == FullUpgradecopy[i] || Upgradenum2 == FullUpgradecopy[i] || Upgradenum3 == FullUpgradecopy[i])
@@ -248,9 +226,6 @@ public class GameManager : MonoBehaviour
                 UpgradeMenu();
             }
         }
-
-
-
 
         Text[] UpgradeText = { Upgrade1Text, Upgrade2Text, Upgrade3Text };
         Text[] UpgradeExplainText = { Upgrade1ExplainText, Upgrade2ExplainText, Upgrade3ExplainText };

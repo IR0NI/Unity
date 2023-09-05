@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public ObjectManager ObjectManager;
-
     public static Player instance;
 
     public string[] BulletObjs;
@@ -117,10 +115,8 @@ public class Player : MonoBehaviour
 
             if (isDash)
             {
-
                 moveSpeed = DashSpeed;
             }
-            
         }
     }
 
@@ -183,7 +179,7 @@ public class Player : MonoBehaviour
                 switch (GameManager.instance.Gun1Level)
                 {
                     case 0:
-                        GameObject Bul = ObjectManager.MakeObj(BulletObjs[0]);
+                        GameObject Bul = GameManager.instance.pool.Get(7);
                         if (len.x > 0)
                         {
                             Bul.transform.position = GunRighthud.transform.position;
@@ -197,8 +193,8 @@ public class Player : MonoBehaviour
                         rigid.AddForce(len.normalized * 15.0f, ForceMode2D.Impulse);
                         break;
                     case 1:
-                        GameObject bul1_1 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul1_2 = ObjectManager.MakeObj(BulletObjs[0]);
+                        GameObject bul1_1 = GameManager.instance.pool.Get(7);
+                        GameObject bul1_2 = GameManager.instance.pool.Get(7);
 
                         if (len.x > 0)
                         {
@@ -218,9 +214,9 @@ public class Player : MonoBehaviour
                         rigid2.AddForce((len_2.normalized) * 15.0f, ForceMode2D.Impulse);
                         break;
                     case 2:
-                        GameObject bul2_1 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul2_2 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul2_3 = ObjectManager.MakeObj(BulletObjs[0]);
+                        GameObject bul2_1 = GameManager.instance.pool.Get(7);
+                        GameObject bul2_2 = GameManager.instance.pool.Get(7);
+                        GameObject bul2_3 = GameManager.instance.pool.Get(7);
 
                         if (len.x > 0)
                         {
@@ -248,10 +244,10 @@ public class Player : MonoBehaviour
                         rigid2_3.AddForce((len_2.normalized) * 15.0f, ForceMode2D.Impulse);
                         break;
                     case 3:
-                        GameObject bul3_1 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul3_2 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul3_3 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul3_4 = ObjectManager.MakeObj(BulletObjs[0]);
+                        GameObject bul3_1 = GameManager.instance.pool.Get(7);
+                        GameObject bul3_2 = GameManager.instance.pool.Get(7);
+                        GameObject bul3_3 = GameManager.instance.pool.Get(7);
+                        GameObject bul3_4 = GameManager.instance.pool.Get(7);
 
                         if (len.x > 0)
                         {
@@ -285,14 +281,14 @@ public class Player : MonoBehaviour
                         rigid3_4.AddForce((len__3.normalized) * 15.0f, ForceMode2D.Impulse);
                         break;
                     case 4:
-                        GameObject bul4_1 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul4_2 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul4_3 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul4_4 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul4_5 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul4_6 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul4_7 = ObjectManager.MakeObj(BulletObjs[0]);
-                        GameObject bul4_8 = ObjectManager.MakeObj(BulletObjs[0]);
+                        GameObject bul4_1 = GameManager.instance.pool.Get(7);
+                        GameObject bul4_2 = GameManager.instance.pool.Get(7);
+                        GameObject bul4_3 = GameManager.instance.pool.Get(7);
+                        GameObject bul4_4 = GameManager.instance.pool.Get(7);
+                        GameObject bul4_5 = GameManager.instance.pool.Get(7);
+                        GameObject bul4_6 = GameManager.instance.pool.Get(7);
+                        GameObject bul4_7 = GameManager.instance.pool.Get(7);
+                        GameObject bul4_8 = GameManager.instance.pool.Get(7);
 
                         if (len.x > 0)
                         {
