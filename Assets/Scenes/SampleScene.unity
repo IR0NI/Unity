@@ -6626,6 +6626,8 @@ MonoBehaviour:
   GunRighthud: {fileID: 1264392652}
   Gun2Lefthud: {fileID: 438948096}
   Gun2Righthud: {fileID: 2032927144}
+  Gun1: {fileID: 2128275328}
+  Gun2: {fileID: 849224584}
   isDash: 0
   moveSpeed: 100
   NormalSpeed: 100
@@ -6640,7 +6642,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1825655914}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0

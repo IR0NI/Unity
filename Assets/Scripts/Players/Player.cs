@@ -19,7 +19,10 @@ public class Player : MonoBehaviour
     public Transform GunRighthud;
     public Transform Gun2Lefthud;
     public Transform Gun2Righthud;
-    
+
+    //총
+    public Gun1 Gun1;
+    public Gun2 Gun2; 
 
     //애니메이터
     private Animator animator;
@@ -131,6 +134,11 @@ public class Player : MonoBehaviour
     {
         gameObject.layer = 7;
         spriteRenderer.color = new Color(1, 1, 1, 1);
+        Gun1.normal();
+        if (GameManager.instance.Gun1Level == 4)
+        {
+            Gun2.normal();
+        }
     }
 
     private void Heart()
@@ -345,16 +353,16 @@ public class Player : MonoBehaviour
                         Rigidbody2D rigid4_8 = bul4_8.GetComponent<Rigidbody2D>();
                         rigid4_8.AddForce((len__3.normalized) * 15.0f, ForceMode2D.Impulse);
 
-                        Gun2.instance.Shot();
-                        Gun2.instance.Idle();
+                        Gun2.Shot();
+                        Gun2.Idle();
 
                         break;
 
                 }
                 
                 CurFireDelay = 0.0f;
-                Gun1.instance.Shot();
-                Gun1.instance.Idle();
+                Gun1.Shot();
+                Gun1.Shot();
             }
         }
     }
@@ -364,6 +372,11 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "EnemyAttack")
         {
             spriteRenderer.color = new Color(1, 1, 1, 0.4f);
+            Gun1.transparency();
+            if (GameManager.instance.Gun1Level == 4)
+            {
+                Gun2.transparency();
+            }
             gameObject.layer = 9;
             Invoke("NormalLayer", 1.0f);
             HP -= 1;

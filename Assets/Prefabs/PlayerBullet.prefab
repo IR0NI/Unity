@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 31737238611579272}
   - component: {fileID: 6294742935805332156}
   - component: {fileID: 8537545761708309830}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: PlayerBullet
-  m_TagString: Untagged
+  m_TagString: PlayerBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -121,6 +121,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee541550abfc47f498ff0337bee611eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distance: 2
+  isLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!95 &6294742935805332156
 Animator:
   serializedVersion: 4

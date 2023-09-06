@@ -2,21 +2,13 @@ using UnityEngine;
 
 public class Gun2 : MonoBehaviour
 {
-    public static Gun2 instance;
+    
     private Animator animator;
     public Transform GunHud;
     public SpriteRenderer spriteRenderer;
     public void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -39,6 +31,15 @@ public class Gun2 : MonoBehaviour
         }
     }
 
+    public void transparency()
+    {
+        spriteRenderer.color = new Color(1, 1, 1, 0.4f);
+    }
+
+    public void normal()
+    {
+        spriteRenderer.color = new Color(1, 1, 1, 1.0f);
+    }
     public void Shot()
     {
         animator.SetTrigger("Shot");

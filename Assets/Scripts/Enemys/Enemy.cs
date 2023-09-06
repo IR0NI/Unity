@@ -3,7 +3,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     
-    private float HP = 200.0f;
+    public float HP = 200.0f;
     public int EnemyType = 0;
 
     private bool Right = true;

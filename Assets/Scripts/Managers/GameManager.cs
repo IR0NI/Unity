@@ -22,8 +22,8 @@ public class GameManager : MonoBehaviour
     //게임 데이터
     public bool isPause = false;
     public bool OnMenu = false;
-    private float CurEnemy1_1BuildDelay = 0.0f;
-    private float CurEnemy1_2BuildDelay = -60.0f;
+    private float CurEnemy1_1BuildDelay = -600.0f;
+    private float CurEnemy1_2BuildDelay = 0.0f;
     private float CurEnemy1_3BuildDelay = -120.0f;
     private float MaxEnemy1_1BuildDelay = 2.0f;
     private float MaxEnemy1_2BuildDelay = 3.0f;

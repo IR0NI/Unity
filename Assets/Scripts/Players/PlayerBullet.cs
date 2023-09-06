@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerBullet : MonoBehaviour
 {
+    /*public float distance;
+    public LayerMask isLayer;*/
     private void OnEnable()
     {
         
@@ -9,6 +11,34 @@ public class PlayerBullet : MonoBehaviour
         Invoke("Deactive", 1.5f);
 
     }
+    /*private void FixedUpdate()
+    {
+        RaycastHit2D ray = Physics2D.Raycast(transform.position, transform.right, distance, isLayer);
+        if (ray.collider != null)
+        {
+            if (ray.collider.tag == "Enemy")
+            {
+                switch (GameManager.instance.Gun2Level)
+                {
+                    case 0:
+                        ray.collider.GetComponent<Enemy>().TakeDamage(Player.instance.AD);
+                        Deactive();
+                        break;
+
+                    case 1:
+                        Deactive();
+                        break;
+
+                    case 2:
+                        Deactive();
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+    }*/
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
@@ -17,18 +47,27 @@ public class PlayerBullet : MonoBehaviour
             {
                 case 0:
                     collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD);
-                    Deactive();
+                    if (collision.GetComponent<Enemy>().HP >= 0   )
+                    {
+                        Deactive();
+                    }
                     break;
 
                 case 1:
                     collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 100.0f + Player.instance.AP * 1.0f);
-                    Deactive();
+                    if (collision.GetComponent<Enemy>().HP >= 0)
+                    {
+                        Deactive();
+                    }
                     break;
 
                 case 2:
                     collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 200.0f + Player.instance.AP * 1.5f);
                     collision.GetComponent<Enemy>().MoveZero();
-                    Deactive();
+                    if (collision.GetComponent<Enemy>().HP >= 0)
+                    {
+                        Deactive();
+                    }
                     break;
 
                 case 3:
@@ -48,7 +87,8 @@ public class PlayerBullet : MonoBehaviour
             }
         }
     }
-    private void Deactive()
+    
+    public void Deactive()
     {
         gameObject.SetActive(false);
     }
