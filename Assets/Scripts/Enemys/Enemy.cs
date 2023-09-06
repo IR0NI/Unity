@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
     private bool Left = false;
     private bool Down = false;
     private bool Up = false;
-    private float MoveSpeed = 70.0f;
+    public float MoveSpeed = 70.0f;
 
     //°ø°Ýenemy1_1
     public Transform target;
@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     //shopui
     public GameObject ShopUI;
+    public GameObject Enemy1_2Bullet;
 
 
     private void OnEnable()
@@ -75,6 +76,7 @@ public class Enemy : MonoBehaviour
 
         if (EnemyType == 12)
         {
+            
             Enemy1_2Attack();
             Enemy1_2CurShotDelay += Time.deltaTime;
         }
@@ -145,17 +147,18 @@ public class Enemy : MonoBehaviour
 
     private void Enemy1_2Attack()
     {
-        if (Enemy1_2CurShotDelay >= 8.0f)
+        if (Enemy1_2CurShotDelay >= 5.0f)
         {
             MoveSpeed = 0.0f;
-            Invoke("NormalSpeed", 2.0f);
+            Invoke("NormalSpeed", 3.0f);
             Vector3 Playervec = new Vector3(target.position.x, target.position.y, -10);
             Vector3 EnemyVec = new Vector3(transform.position.x, transform.position.y, -10);
             Vector3 len = Playervec - EnemyVec;
             float z = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
-            GameObject Enemy1_2Bullet = GameManager.instance.pool.Get(3);
+            Enemy1_2Bullet.SetActive(true);
             Enemy1_2Bullet.transform.position = ShotPos.transform.position;
-            Enemy1_2Bullet.transform.rotation = Quaternion.Euler(0, 0, z+270);
+            Enemy1_2Bullet.transform.rotation = Quaternion.Euler(0, 0, z + 90);
+            
             Enemy1_2CurShotDelay = 0.0f;
         }
     }
