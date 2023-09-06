@@ -125,7 +125,13 @@ public class Enemy : MonoBehaviour
 
     public  void TakeDamage(float Dmg)
     {
-        HP -= Dmg;
+        if (HP > Dmg)
+        {
+            HP -= Dmg;
+        }else if(HP <= Dmg){
+            HP = -1;
+        }
+        
     }
 
     public void Explosion(Transform pos)
@@ -147,7 +153,7 @@ public class Enemy : MonoBehaviour
 
     private void Enemy1_2Attack()
     {
-        if (Enemy1_2CurShotDelay >= 5.0f)
+        if (Enemy1_2CurShotDelay >= 12.0f)
         {
             MoveSpeed = 0.0f;
             Invoke("NormalSpeed", 3.0f);

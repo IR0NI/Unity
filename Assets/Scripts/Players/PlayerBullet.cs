@@ -4,9 +4,11 @@ public class PlayerBullet : MonoBehaviour
 {
     /*public float distance;
     public LayerMask isLayer;*/
+    //평범한총알하나가 여러명 때리는거 방지
+    public bool touch = false;
     private void OnEnable()
     {
-        
+        touch = false;
         CancelInvoke();
         Invoke("Deactive", 1.5f);
 
@@ -41,20 +43,26 @@ public class PlayerBullet : MonoBehaviour
     }*/
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        
+        
         if (collision.gameObject.tag == "Enemy")
         {
             switch (GameManager.instance.Gun2Level)
             {
                 case 0:
+                    if(!touch)
                     collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD);
-                    if (collision.GetComponent<Enemy>().HP >= 0   )
+                    touch = true;
+                    if (collision.GetComponent<Enemy>().HP >= 0 )
                     {
                         Deactive();
                     }
                     break;
 
                 case 1:
+                    if(!touch)
                     collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 100.0f + Player.instance.AP * 1.0f);
+                    touch = true;
                     if (collision.GetComponent<Enemy>().HP >= 0)
                     {
                         Deactive();
@@ -62,7 +70,9 @@ public class PlayerBullet : MonoBehaviour
                     break;
 
                 case 2:
+                    if(!touch)
                     collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 200.0f + Player.instance.AP * 1.5f);
+                    touch = true;
                     collision.GetComponent<Enemy>().MoveZero();
                     if (collision.GetComponent<Enemy>().HP >= 0)
                     {
