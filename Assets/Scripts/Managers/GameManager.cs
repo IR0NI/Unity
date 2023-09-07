@@ -22,12 +22,14 @@ public class GameManager : MonoBehaviour
     //게임 데이터
     public bool isPause = false;
     public bool OnMenu = false;
-    private float CurEnemy1_1BuildDelay = 0.0f;
-    private float CurEnemy1_2BuildDelay = -60.0f;
-    private float CurEnemy1_3BuildDelay = -120.0f;
-    private float MaxEnemy1_1BuildDelay = 1.0f;
-    private float MaxEnemy1_2BuildDelay = 3.0f;
-    private float MaxEnemy1_3BuildDelay = 4.0f;
+    private float CurShopEnemyBuildDelay = -100.0f;
+    private float CurEnemy1_1BuildDelay = -1000.0f;
+    private float CurEnemy1_2BuildDelay = -6000.0f;
+    private float CurEnemy1_3BuildDelay = 120.0f;
+    private float MaxShopEnemyBuildDelay = 300.0f;
+    private float MaxEnemy1_1BuildDelay = 0.8f;
+    private float MaxEnemy1_2BuildDelay = 4.0f;
+    private float MaxEnemy1_3BuildDelay = 5.0f;
     public int Upgradenum1;
     public int Upgradenum2;
     public int Upgradenum3;
@@ -44,6 +46,8 @@ public class GameManager : MonoBehaviour
     public int Non1Level = 0;
     public int Non2Level = 0;
     public int pos = 0;
+    public float HitBullet = 0.0f;
+    public int kill = 0;
 
     //게임 오브젝트
     public Text GoldText;
@@ -61,6 +65,8 @@ public class GameManager : MonoBehaviour
     public Transform EnemyBuildPos2;
     public Transform EnemyBuildPos3;
     public GameObject GunGun;
+    public GameObject ShopUI;
+    public Text LevelText;
 
     private void Awake()
     {
@@ -98,8 +104,13 @@ public class GameManager : MonoBehaviour
         LevelUp();
         Reload();
     }
+    private void FixedUpdate()
+    {
+        HitBullet += Time.fixedDeltaTime;
+    }
     private void Reload()
     {
+        CurShopEnemyBuildDelay += Time.deltaTime;
         CurEnemy1_1BuildDelay += Time.deltaTime;
         CurEnemy1_2BuildDelay += Time.deltaTime;
         CurEnemy1_3BuildDelay += Time.deltaTime;
@@ -110,12 +121,21 @@ public class GameManager : MonoBehaviour
         if (EXP >= MaxEXP)
         {
             Level += 1;
+            LevelText.text = "LV. "+Level;
             EXP = 0.0f;
             IsPause();
             UpgradeMenu();
             UpgradeUI.SetActive(true);
             MaxEXP += 5.0f;
         }
+    }
+    public void LevelUPItem()
+    {
+        Level += 1;
+        IsPause();
+        UpgradeMenu();
+        UpgradeUI.SetActive(true);
+        MaxEXP += 5.0f;
     }
 
     public void GetExp(float exp)
@@ -140,6 +160,10 @@ public class GameManager : MonoBehaviour
         }
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
     }
+    public void ShopOpen()
+    {
+        ShopUI.SetActive(true);
+    }
 
     public void GetGold(int gold)
     {
@@ -152,11 +176,18 @@ public class GameManager : MonoBehaviour
     }
     private void BuildEnemy()
     {
+        if(CurShopEnemyBuildDelay > MaxShopEnemyBuildDelay)
+        {
+            pos = Random.Range(0, 3);
+            GameObject ShopEnemy = pool.Get(9);
+            ShopEnemy.transform.position = EnemyBuildPos[pos].position;
+            CurShopEnemyBuildDelay = 0;
+        }
         if (CurEnemy1_1BuildDelay > MaxEnemy1_1BuildDelay)
         {
             pos = Random.Range(0, 3);
             GameObject enemy1_1 = pool.Get(0);
-            Enemy enemyLogic1_1 = enemy1_1.GetComponent<Enemy>();
+            //Enemy enemyLogic1_1 = enemy1_1.GetComponent<Enemy>();
             enemy1_1.transform.position = EnemyBuildPos[pos].position;
             CurEnemy1_1BuildDelay = 0;
         }
@@ -165,7 +196,7 @@ public class GameManager : MonoBehaviour
         {
             pos = Random.Range(0, 3);
             GameObject enemy1_2 = pool.Get(2);
-            Enemy enemyLogic1_2 = enemy1_2.GetComponent<Enemy>();
+            //Enemy enemyLogic1_2 = enemy1_2.GetComponent<Enemy>();
             enemy1_2.transform.position = EnemyBuildPos[pos].position;
             CurEnemy1_2BuildDelay = 0;
         }
@@ -240,16 +271,16 @@ public class GameManager : MonoBehaviour
                     switch (Gun1Level)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "2발로 증가, 공격력 -10";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "3발로 증가";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "4발로 증가, 공격속도 +10%";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "총을 하나 더 든다";
                             break;
                     }
                     break;
@@ -258,16 +289,16 @@ public class GameManager : MonoBehaviour
                     switch (Gun2Level)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "총알이 추가피해를 준다";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "총알이 적을 속박하고 추가피해량이 상승한다";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "총알이 적을 관통한다";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "총알이 적을 타격시 일정확률로 폭발한다";
                             break;
                     }
                     break;
@@ -276,16 +307,16 @@ public class GameManager : MonoBehaviour
                     switch (BombLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "폭탄공격을 한다";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "폭탄을 두개 던진다";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "폭탄의 피해량이 상승한다";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "폭탄의 폭발범위가 늘어난다";
                             break;
                     }
                     break;
@@ -294,16 +325,16 @@ public class GameManager : MonoBehaviour
                     switch (DragonLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "지금부터 200킬시 소환수 소환";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "소환수의 공격속도가 상승한다";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "소환수가 적을 3번 공격한다";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "소환수의 공격이 적을 타격시 불구덩이를 생성한다";
                             break;
                     }
                     break;
@@ -312,16 +343,16 @@ public class GameManager : MonoBehaviour
                     switch (ArmorLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "체력 +1";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "캐릭터 주위를 도는 방어막 생성 ";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "캐릭터의 크기가 작아진다";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "체력 +1, 사망시 부활하며 체력을 전부 회복한다";
                             break;
                     }
                     break;
@@ -330,16 +361,16 @@ public class GameManager : MonoBehaviour
                     switch (KnifeLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "칼을 던진다";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "칼을 3개 던진다";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "더 짧은 간격으로 공격한다";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "3번 던질때 마다 거대칼로 공격한다";
                             break;
                     }
                     break;
@@ -348,13 +379,13 @@ public class GameManager : MonoBehaviour
                     switch (OuraLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "캐릭터 주변을 공격하는 오우라 생성";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "오우라의 피해량이 상승한다";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "오우라의 범위가 상승한다";
                             break;
                         case 3:
                             UpgradeExplainText[i].text = "";
@@ -366,13 +397,13 @@ public class GameManager : MonoBehaviour
                     switch (AxeLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "캐릭터의 주변을 돌며 공격하는 도끼 생성";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "도끼의 피해량이 상승한다";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "도끼의 범위가 늘어나고 도끼 하나 추가";
                             break;
                         case 3:
                             UpgradeExplainText[i].text = "";
@@ -384,16 +415,16 @@ public class GameManager : MonoBehaviour
                     switch (KunaiLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "총을 쏠때마다 쿠나이로 같이 공격한다";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "쿠나이의 피해량의 상승한다";
                             break;
                         case 2:
                             UpgradeExplainText[i].text = "";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "쿠나이를 3개 더 던진다";
                             break;
                     }
                     break;
@@ -402,7 +433,7 @@ public class GameManager : MonoBehaviour
                     switch (EnergyLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "에너지로 공격한다";
                             break;
                         case 1:
                             UpgradeExplainText[i].text = "";

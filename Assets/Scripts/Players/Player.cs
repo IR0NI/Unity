@@ -28,15 +28,19 @@ public class Player : MonoBehaviour
     private Animator animator;
 
     public bool isDash = false;
+    public bool isSlow = false;
+    
 
     //ƒ≥∏Ø≈Õ Ω∫≈»
     public float moveSpeed = 100.0f;
     public float NormalSpeed = 100.0f;
     private float DashSpeed = 200.0f;
+    public float ChangeSpeed = 100.0f;
+    public int MaxHP = 3;
     public int HP = 3;
     public float AD = 100.0f;
     public float AP = 0.0f;
-    private float AS = 0.0f;
+    public float AS = 0.0f;
 
     //µÙ∑π¿Ã
     private float CurFireDelay = 0.0f;

@@ -11,6 +11,7 @@ TagManager:
   - UpGround
   - EnemyAttack
   - PlayerBullet
+  - PlayerBomb
   layers:
   - Default
   - TransparentFX

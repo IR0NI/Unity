@@ -4,19 +4,21 @@ public class Enemy1_3SlowPot : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && !Player.instance.isSlow)
         {
-            Player.instance.moveSpeed = 50.0f;
-            Player.instance.NormalSpeed = 50.0f;
+            Player.instance.isSlow = true;
+            Player.instance.moveSpeed = Player.instance.ChangeSpeed -50;
+            Player.instance.NormalSpeed = Player.instance.ChangeSpeed - 50;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && Player.instance.isSlow)
         {
-            Player.instance.moveSpeed = 100.0f;
-            Player.instance.NormalSpeed = 100.0f;
+            Player.instance.isSlow = false;
+            Player.instance.moveSpeed = Player.instance.ChangeSpeed;
+            Player.instance.NormalSpeed = Player.instance.ChangeSpeed;
         }
     }
 }

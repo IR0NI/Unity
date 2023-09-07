@@ -485,6 +485,8 @@ MonoBehaviour:
   Non1Level: 0
   Non2Level: 0
   pos: 0
+  HitBullet: 0
+  kill: 0
   GoldText: {fileID: 1387656981}
   UpgradeText: []
   Upgrade1Text: {fileID: 1794688954}
@@ -500,6 +502,8 @@ MonoBehaviour:
   EnemyBuildPos2: {fileID: 895086821}
   EnemyBuildPos3: {fileID: 1295395058}
   GunGun: {fileID: 849224580}
+  ShopUI: {fileID: 2023010989}
+  LevelText: {fileID: 958116638}
 --- !u!1 &130021551
 GameObject:
   m_ObjectHideFlags: 0
@@ -3306,6 +3310,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1601037115}
+  - {fileID: 958116637}
   m_Father: {fileID: 176684941}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3430,6 +3435,9 @@ MonoBehaviour:
   - {fileID: 2238913675302020526, guid: 0788833b8951f4143b4e47836ec2caf3, type: 3}
   - {fileID: 8253761812565861414, guid: d7ebe615b3c730d4db2923e68cce2432, type: 3}
   - {fileID: 6993863130301132381, guid: c161940b7d283ff4681dffd2b5213eab, type: 3}
+  - {fileID: 5863524308299833417, guid: 84085aeb1a12f6a43909701d7f30d9e0, type: 3}
+  - {fileID: 7630386160092766288, guid: b14724532aba01646953cd91157a6efb, type: 3}
+  - {fileID: 374030518771960379, guid: 523b2145d6d8dd44587ae38149ea4a8e, type: 3}
 --- !u!1 &895086820
 GameObject:
   m_ObjectHideFlags: 0
@@ -3461,6 +3469,86 @@ Transform:
   m_Father: {fileID: 1744467278}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &958116636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 958116637}
+  - component: {fileID: 958116639}
+  - component: {fileID: 958116638}
+  m_Layer: 5
+  m_Name: LevelText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &958116637
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 958116636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 866389618}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 114.13, y: -9.609985}
+  m_SizeDelta: {x: 300, y: 200}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &958116638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 958116636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 30
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Lv. 1
+--- !u!222 &958116639
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 958116636}
+  m_CullTransparentMesh: 1
 --- !u!1 &962263644
 GameObject:
   m_ObjectHideFlags: 0
@@ -6629,11 +6717,15 @@ MonoBehaviour:
   Gun1: {fileID: 2128275328}
   Gun2: {fileID: 849224584}
   isDash: 0
+  isSlow: 0
   moveSpeed: 100
   NormalSpeed: 100
+  ChangeSpeed: 100
+  MaxHP: 3
   HP: 3
   AD: 100
   AP: 0
+  AS: 0
 --- !u!50 &1825655916
 Rigidbody2D:
   serializedVersion: 4
@@ -6774,11 +6866,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55c8e2dcf9f733d498ba66404945f32a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScanRange: 10
+  ScanRange: 15
   TargetLayer:
     serializedVersion: 2
     m_Bits: 256
   NearestTarget: {fileID: 0}
+  SecondTarget: {fileID: 0}
 --- !u!1 &1836897244
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,11 +18,10 @@ public class Enemy : MonoBehaviour
     private float Enemy1_1CurShotDelay = 0.0f;
     private float Enemy1_2CurShotDelay = 0.0f;
     private float Enemy1_3CurShotDelay = 0.0f;
+    private float Randomtime = 0.0f;
     public Transform ShotPos;
     Vector3 Targetvec;
     private SpriteRenderer spriteRenderer;
-    //shopui
-    public GameObject ShopUI;
     public GameObject Enemy1_2Bullet;
 
 
@@ -33,21 +32,26 @@ public class Enemy : MonoBehaviour
         //Target = GameManager.instance.player.GetComponent<Rigidbody2D>();
         target = GameManager.instance.player.transform;
         //target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        Randomtime = Random.Range(0, 8);
         if (EnemyType == 1)
         {
             HP = 1000.0f;
         }
         if (EnemyType == 11)
         {
-            HP = 200.0f;
+            HP = 150.0f;
+            MoveSpeed = 50.0f;
+            Enemy1_1CurShotDelay += Randomtime;
         }
         if (EnemyType == 12)
         {
             HP = 200.0f;
+            Enemy1_2CurShotDelay += Randomtime;
         }
         if (EnemyType == 13)
         {
             HP = 200.0f;
+            Enemy1_3CurShotDelay += Randomtime;
         }
 
     }
@@ -58,9 +62,8 @@ public class Enemy : MonoBehaviour
         {
             if(EnemyType == 1)
             {
-                ShopManager.instance.ItemNumShuffle();
-                GameManager.instance.IsPause();
-                ShopUI.SetActive(true);
+                GameObject Shop = GameManager.instance.pool.Get(11);
+                Shop.transform.position = transform.position;
             }
             GameManager.instance.GetGold(1);
             GameManager.instance.GetEXP(1);
@@ -86,7 +89,6 @@ public class Enemy : MonoBehaviour
             Enemy1_3Attack();
             Enemy1_3CurShotDelay += Time.deltaTime;
         }
-        
     }
 
     private void FixedUpdate()
@@ -125,13 +127,18 @@ public class Enemy : MonoBehaviour
 
     public  void TakeDamage(float Dmg)
     {
+        GameManager.instance.HitBullet = 0.0f;
+        GameObject hudText = GameManager.instance.pool.Get(12);
+        float ran = Random.Range(-0.25f, 0.25f);
+        hudText.transform.position =new Vector3(transform.position.x+ran, transform.position.y+ran,0);
+        hudText.GetComponent<DamagedText>().damage = Dmg;
         if (HP > Dmg)
-        {
-            HP -= Dmg;
-        }else if(HP <= Dmg){
-            HP = -1;
-        }
-        
+            {
+                HP -= Dmg;
+            } else if (HP <= Dmg) {
+
+                HP = 0.0f;
+            }
     }
 
     public void Explosion(Transform pos)
@@ -141,7 +148,7 @@ public class Enemy : MonoBehaviour
     }
     private void Enemy1_1Attack()
     {
-        if (Enemy1_1CurShotDelay >= 8.0f)
+        if (Enemy1_1CurShotDelay >= 15.0f)
         {
             GameObject Enemy1_1Bullet = GameManager.instance.pool.Get(1);
             Enemy1_1Bullet.transform.position = ShotPos.transform.position;
@@ -190,6 +197,10 @@ public class Enemy : MonoBehaviour
     private void NormalSpeed()
     {
         MoveSpeed = 70.0f;
+        if(EnemyType == 11)
+        {
+            MoveSpeed = 50.0f;
+        }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

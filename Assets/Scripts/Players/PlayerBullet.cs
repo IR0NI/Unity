@@ -13,47 +13,20 @@ public class PlayerBullet : MonoBehaviour
         Invoke("Deactive", 1.5f);
 
     }
-    /*private void FixedUpdate()
-    {
-        RaycastHit2D ray = Physics2D.Raycast(transform.position, transform.right, distance, isLayer);
-        if (ray.collider != null)
-        {
-            if (ray.collider.tag == "Enemy")
-            {
-                switch (GameManager.instance.Gun2Level)
-                {
-                    case 0:
-                        ray.collider.GetComponent<Enemy>().TakeDamage(Player.instance.AD);
-                        Deactive();
-                        break;
-
-                    case 1:
-                        Deactive();
-                        break;
-
-                    case 2:
-                        Deactive();
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-    }*/
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         
         
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.CompareTag("Enemy"))
         {
+            if(GameManager.instance.HitBullet > 0.01f)
             switch (GameManager.instance.Gun2Level)
             {
                 case 0:
                     if(!touch)
                     collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD);
                     touch = true;
-                    if (collision.GetComponent<Enemy>().HP >= 0 )
+                    if (collision.GetComponent<Enemy>().HP >= 0)
                     {
                         Deactive();
                     }
@@ -88,7 +61,7 @@ public class PlayerBullet : MonoBehaviour
                 case 4:
                     collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 200.0f + Player.instance.AP * 1.5f);
                     collision.GetComponent<Enemy>().MoveZero();
-                    int ran = Random.Range(1, 2);
+                    int ran = Random.Range(1, 6);
                     if(ran == 1)
                     {
                         collision.GetComponent<Enemy>().Explosion(this.transform);
