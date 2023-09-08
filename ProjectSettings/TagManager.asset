@@ -12,6 +12,7 @@ TagManager:
   - EnemyAttack
   - PlayerBullet
   - PlayerBomb
+  - PlayerBarrier
   layers:
   - Default
   - TransparentFX

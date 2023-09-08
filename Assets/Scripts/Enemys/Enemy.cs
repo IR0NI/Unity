@@ -18,11 +18,15 @@ public class Enemy : MonoBehaviour
     private float Enemy1_1CurShotDelay = 0.0f;
     private float Enemy1_2CurShotDelay = 0.0f;
     private float Enemy1_3CurShotDelay = 0.0f;
+    private float Enemy1_1MaxShotDelay = 15.0f;
+    private float Enemy1_2MaxShotDelay = 12.0f;
+    private float Enemy1_3MaxShotDelay = 8.0f;
     private float Randomtime = 0.0f;
     public Transform ShotPos;
     Vector3 Targetvec;
     private SpriteRenderer spriteRenderer;
     public GameObject Enemy1_2Bullet;
+    
 
 
     private void OnEnable()
@@ -33,27 +37,61 @@ public class Enemy : MonoBehaviour
         target = GameManager.instance.player.transform;
         //target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         Randomtime = Random.Range(0, 8);
+
+
         if (EnemyType == 1)
         {
             HP = 1000.0f;
         }
-        if (EnemyType == 11)
-        {
-            HP = 150.0f;
-            MoveSpeed = 50.0f;
-            Enemy1_1CurShotDelay += Randomtime;
-        }
-        if (EnemyType == 12)
-        {
-            HP = 200.0f;
-            Enemy1_2CurShotDelay += Randomtime;
-        }
-        if (EnemyType == 13)
-        {
-            HP = 200.0f;
-            Enemy1_3CurShotDelay += Randomtime;
-        }
 
+        int Elite = Random.Range(1, 11
+            );
+        if (Elite == 1)
+        {
+            GameObject Buff = GameManager.instance.pool.Get(14);
+            //프리팹을 자식오브젝트로 생성
+            Buff.transform.SetParent(gameObject.transform, false);
+            if (EnemyType == 11)
+            {
+                Buff.transform.position = new Vector3(transform.position.x + 0.4f, transform.position.y - 0.6f, 0);
+                Enemy1_1MaxShotDelay = 5.0f;
+                HP = 300.0f;
+                MoveSpeed = 50.0f;
+                Enemy1_1CurShotDelay += Randomtime;
+            }
+            if (EnemyType == 12)
+            {
+                Buff.transform.position = new Vector3(transform.position.x + 0.375f, transform.position.y, 0);
+                Buff.transform.localScale = new Vector3(10, 10, 0);
+                Enemy1_2MaxShotDelay = 8.0f;
+                MoveSpeed = 100.0f;
+                HP = 400.0f;
+                Enemy1_2CurShotDelay += Randomtime;
+            }
+            if (EnemyType == 13)
+            {
+                Buff.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+                HP = 400.0f;
+                Enemy1_3CurShotDelay += Randomtime;
+            }
+        } else {
+            if (EnemyType == 11)
+            {
+                HP = 150.0f;
+                MoveSpeed = 50.0f;
+                Enemy1_1CurShotDelay += Randomtime;
+            }
+            if (EnemyType == 12)
+            {
+                HP = 200.0f;
+                Enemy1_2CurShotDelay += Randomtime;
+            }
+            if (EnemyType == 13)
+            {
+                HP = 200.0f;
+                Enemy1_3CurShotDelay += Randomtime;
+            }
+        }
     }
 
     private void Update()
@@ -148,7 +186,7 @@ public class Enemy : MonoBehaviour
     }
     private void Enemy1_1Attack()
     {
-        if (Enemy1_1CurShotDelay >= 15.0f)
+        if (Enemy1_1CurShotDelay >= Enemy1_1MaxShotDelay)
         {
             GameObject Enemy1_1Bullet = GameManager.instance.pool.Get(1);
             Enemy1_1Bullet.transform.position = ShotPos.transform.position;
@@ -160,7 +198,7 @@ public class Enemy : MonoBehaviour
 
     private void Enemy1_2Attack()
     {
-        if (Enemy1_2CurShotDelay >= 12.0f)
+        if (Enemy1_2CurShotDelay >= Enemy1_2MaxShotDelay)
         {
             MoveSpeed = 0.0f;
             Invoke("NormalSpeed", 3.0f);
@@ -178,7 +216,7 @@ public class Enemy : MonoBehaviour
 
     private void Enemy1_3Attack()
     {
-        if (Enemy1_3CurShotDelay >= 8.0f)
+        if (Enemy1_3CurShotDelay >= Enemy1_3MaxShotDelay)
         {
             GameObject Enemy1_3Bullet = GameManager.instance.pool.Get(5);
             Enemy1_3Bullet.transform.position = ShotPos.transform.position;

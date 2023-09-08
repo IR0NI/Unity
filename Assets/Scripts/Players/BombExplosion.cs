@@ -14,7 +14,14 @@ public class BombExplosion : MonoBehaviour
     {
         if(collision.gameObject.tag == "Enemy")
         {
-            collision.gameObject.GetComponent<Enemy>().TakeDamage(200.0f+0.8f*Player.instance.AP);
+            if (GameManager.instance.BombLevel <= 2)
+            {
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(100.0f + 0.5f * Player.instance.AP);
+            }
+            else
+            {
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(200.0f + 0.8f * Player.instance.AP);
+            }
         }
     }
     private void DeActive()

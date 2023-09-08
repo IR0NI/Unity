@@ -27,6 +27,10 @@ public class PlayerBomb : MonoBehaviour
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
         spriteRenderer.color = new Color(1, 1, 1, 0);
         BombExplosion.SetActive(true);
+        if(GameManager.instance.BombLevel == 4)
+        {
+            BombExplosion.transform.localScale = new Vector3(5, 5, 0);
+        }
         Invoke("DeActive", 1.2f);
         
     }

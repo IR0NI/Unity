@@ -19,5 +19,11 @@ public class Enemy1_1Bullet : MonoBehaviour
             CancelInvoke();
             gameObject.SetActive(false);
         }
+
+        if (collision.gameObject.tag == "PlayerBarrier")
+        {
+            CancelInvoke();
+            gameObject.SetActive(false);
+        }
     }
 }

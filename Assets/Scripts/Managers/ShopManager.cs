@@ -234,6 +234,7 @@ public class ShopManager : MonoBehaviour
                 if (GameManager.instance.Gold >= 400 && Player.instance.MaxHP > Player.instance.HP)
                 {
                     Player.instance.HP += 1;
+                    Player.instance.Heart();
                     GameManager.instance.Gold -= 400;
                     ItemBuyUI(num);
                 }
@@ -274,6 +275,7 @@ public class ShopManager : MonoBehaviour
                 if (GameManager.instance.Gold >= 700 && Player.instance.MaxHP > Player.instance.HP)
                 {
                     Player.instance.HP += 2;
+                    Player.instance.Heart();
                     GameManager.instance.Gold -= 700;
                     ItemBuyUI(num);
                 }

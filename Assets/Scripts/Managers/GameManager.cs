@@ -23,9 +23,9 @@ public class GameManager : MonoBehaviour
     public bool isPause = false;
     public bool OnMenu = false;
     private float CurShopEnemyBuildDelay = -100.0f;
-    private float CurEnemy1_1BuildDelay = -1000.0f;
-    private float CurEnemy1_2BuildDelay = -6000.0f;
-    private float CurEnemy1_3BuildDelay = 120.0f;
+    private float CurEnemy1_1BuildDelay = 0.0f;
+    private float CurEnemy1_2BuildDelay = -60.0f;
+    private float CurEnemy1_3BuildDelay = -120.0f;
     private float MaxShopEnemyBuildDelay = 300.0f;
     private float MaxEnemy1_1BuildDelay = 0.8f;
     private float MaxEnemy1_2BuildDelay = 4.0f;
@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
     public GameObject GunGun;
     public GameObject ShopUI;
     public Text LevelText;
+    public GameObject PlayerBarrier;
 
     private void Awake()
     {
@@ -388,7 +389,7 @@ public class GameManager : MonoBehaviour
                             UpgradeExplainText[i].text = "오우라의 범위가 상승한다";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "0.5초마다 공격하고 체력 15%이하일때 오우라 피해입으면 즉사한다";
                             break;
                     }
                     break;
@@ -406,25 +407,25 @@ public class GameManager : MonoBehaviour
                             UpgradeExplainText[i].text = "도끼의 범위가 늘어나고 도끼 하나 추가";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "도끼가 적과 충돌해도 사라지지 않는다";
                             break;
                     }
                     break;
                 case 9:
-                    UpgradeText[i].text = "쿠나이";
+                    UpgradeText[i].text = "수리검";
                     switch (KunaiLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "총을 쏠때마다 쿠나이로 같이 공격한다";
+                            UpgradeExplainText[i].text = "총을 쏠때마다 수리검이 같이 공격한다";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "쿠나이의 피해량의 상승한다";
+                            UpgradeExplainText[i].text = "수리검의 피해량의 상승한다";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "5번 공격할 때마다 사방으로 수리검을 던진다";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "쿠나이를 3개 더 던진다";
+                            UpgradeExplainText[i].text = "수리검를 4개 더 던진다";
                             break;
                     }
                     break;
@@ -447,7 +448,7 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 case 11:
-                    UpgradeText[i].text = "미정";
+                    UpgradeText[i].text = "부메랑";
                     switch (Non1Level)
                     {
                         case 0:
@@ -556,13 +557,20 @@ public class GameManager : MonoBehaviour
                 switch (ArmorLevel)
                 {
                     case 0:
-                        
+                        Player.instance.HP += 1;
+                        Player.instance.MaxHP += 1;
+                        Player.instance.Heart();
                         break;
                     case 1:
+                        PlayerBarrier.SetActive(true);
                         break;
                     case 2:
+                        Player.instance.transform.localScale = new Vector3(0.2f, 0.2f, 0);
                         break;
                     case 3:
+                        Player.instance.HP += 1;
+                        Player.instance.MaxHP += 1;
+                        Player.instance.Heart();
                         break;
                 }
                 ArmorLevel += 1;

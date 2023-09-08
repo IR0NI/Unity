@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     public GameObject Heart1;
     public GameObject Heart2;
     public GameObject Heart3;
+    public GameObject Heart4;
+    public GameObject Heart5;
 
     //플레이어 총알 시작위치
     public Transform GunLefthud;
@@ -29,6 +31,7 @@ public class Player : MonoBehaviour
 
     public bool isDash = false;
     public bool isSlow = false;
+    public bool isRevive = false;
     
 
     //캐릭터 스탯
@@ -70,6 +73,11 @@ public class Player : MonoBehaviour
     {
         Fire();
         Dash();
+        Revive();
+        if (HP <= 0)
+        {
+            //gameover
+        }
     }
 
     private void FixedUpdate()
@@ -144,29 +152,122 @@ public class Player : MonoBehaviour
             Gun2.normal();
         }
     }
-
-    private void Heart()
+    public void Revive()
     {
-        if(HP == 3)
+        if(GameManager.instance.ArmorLevel == 4 && isRevive == false)
         {
-            Heart3.SetActive(true);
-            Heart2.SetActive(true);
-            Heart1.SetActive(true);
-        } else if (HP == 2)
-        {
-            Heart3.SetActive(false);
-            Heart2.SetActive(true);
-            Heart1.SetActive(true);
-        } else if (HP == 1)
-        {
-            Heart3.SetActive(false);
-            Heart2.SetActive(false);
-            Heart1.SetActive(true);
+            isRevive = true;
+            HP = 5;
+            Heart();
         }
-        else {
-            Heart3.SetActive(false);
-            Heart2.SetActive(false);
-            Heart1.SetActive(false);
+    }
+    public void Heart()
+    {
+        if (MaxHP == 3)
+        {
+            if (HP == 3)
+            {
+                Heart3.SetActive(true);
+                Heart2.SetActive(true);
+                Heart1.SetActive(true);
+            }
+            else if (HP == 2)
+            {
+                Heart3.SetActive(false);
+                Heart2.SetActive(true);
+                Heart1.SetActive(true);
+            }
+            else if (HP == 1)
+            {
+                Heart3.SetActive(false);
+                Heart2.SetActive(false);
+                Heart1.SetActive(true);
+            }
+            else
+            {
+                Heart3.SetActive(false);
+                Heart2.SetActive(false);
+                Heart1.SetActive(false);
+            }
+        }else if(MaxHP == 4)
+        {
+            if( HP == 4)
+            {
+                Heart4.SetActive(true);
+                Heart3.SetActive(true);
+                Heart2.SetActive(true);
+                Heart1.SetActive(true);
+            }
+            if (HP == 3)
+            {
+                Heart4.SetActive(false);
+                Heart3.SetActive(true);
+                Heart2.SetActive(true);
+                Heart1.SetActive(true);
+            }
+            else if (HP == 2)
+            {
+                Heart4.SetActive(false);
+                Heart3.SetActive(false);
+                Heart2.SetActive(true);
+                Heart1.SetActive(true);
+            }
+            else if (HP == 1)
+            {
+                Heart4.SetActive(false);
+                Heart3.SetActive(false);
+                Heart2.SetActive(false);
+                Heart1.SetActive(true);
+            }
+            else
+            {
+                Heart4.SetActive(false);
+                Heart3.SetActive(false);
+                Heart2.SetActive(false);
+                Heart1.SetActive(false);
+            }
+        }else if(MaxHP == 5)
+        {
+            if (HP == 4)
+            {
+                Heart5.SetActive(true);
+                Heart4.SetActive(true);
+                Heart3.SetActive(true);
+                Heart2.SetActive(true);
+                Heart1.SetActive(true);
+            }
+            if (HP == 3)
+            {
+                Heart5.SetActive(false);
+                Heart4.SetActive(false);
+                Heart3.SetActive(true);
+                Heart2.SetActive(true);
+                Heart1.SetActive(true);
+            }
+            else if (HP == 2)
+            {
+                Heart5.SetActive(false);
+                Heart4.SetActive(false);
+                Heart3.SetActive(false);
+                Heart2.SetActive(true);
+                Heart1.SetActive(true);
+            }
+            else if (HP == 1)
+            {
+                Heart5.SetActive(false);
+                Heart4.SetActive(false);
+                Heart3.SetActive(false);
+                Heart2.SetActive(false);
+                Heart1.SetActive(true);
+            }
+            else
+            {
+                Heart5.SetActive(false);
+                Heart4.SetActive(false);
+                Heart3.SetActive(false);
+                Heart2.SetActive(false);
+                Heart1.SetActive(false);
+            }
         }
     }
 
