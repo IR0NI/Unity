@@ -4,7 +4,6 @@ public class Player : MonoBehaviour
 {
     public static Player instance;
 
-    public string[] BulletObjs;
     private Rigidbody2D rigid2D;
     private Vector3 moveDirectionX = Vector3.zero;
     private SpriteRenderer spriteRenderer;
@@ -24,7 +23,14 @@ public class Player : MonoBehaviour
 
     //총
     public Gun1 Gun1;
-    public Gun2 Gun2; 
+    public Gun2 Gun2;
+    // 수리검 
+    public GameObject KunaiPos1;
+    public GameObject KunaiPos2;
+    public GameObject KunaiPos3;
+    public GameObject KunaiPos4;
+    public GameObject KunaiPos5;
+    public GameObject KunaiPos6;
 
     //애니메이터
     private Animator animator;
@@ -64,7 +70,6 @@ public class Player : MonoBehaviour
             Destroy(gameObject);
         }
         rigid2D = GetComponent<Rigidbody2D>();
-        BulletObjs = new string[] { "PlayerBullet" };
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
     }
@@ -468,6 +473,52 @@ public class Player : MonoBehaviour
                 CurFireDelay = 0.0f;
                 Gun1.Shot();
                 Gun1.Shot();
+                if (GameManager.instance.KunaiLevel >= 1)
+                {
+                    if (GameManager.instance.KunaiLevel >= 1)
+                    {
+                        GameObject Kunai1 = GameManager.instance.pool.Get(16);
+                        Kunai1.transform.position = KunaiPos1.transform.position;
+                        Kunai1.transform.rotation = Quaternion.Euler(0, 0, z + 270.0f);
+                        Rigidbody2D rigid = Kunai1.GetComponent<Rigidbody2D>();
+                        rigid.AddForce(len.normalized * 15.0f, ForceMode2D.Impulse);
+                    }
+                    if (GameManager.instance.KunaiLevel >= 2)
+                    {
+                        GameObject Kunai2 = GameManager.instance.pool.Get(16);
+                        Kunai2.transform.position = KunaiPos2.transform.position;
+                        Kunai2.transform.rotation = Quaternion.Euler(0, 0, z + 270.0f);
+                        Rigidbody2D rigid = Kunai2.GetComponent<Rigidbody2D>();
+                        rigid.AddForce(len.normalized * 15.0f, ForceMode2D.Impulse);
+                    }
+                    if (GameManager.instance.KunaiLevel >= 3)
+                    {
+
+                    }
+                    if (GameManager.instance.KunaiLevel == 4)
+                    {
+                        GameObject Kunai3 = GameManager.instance.pool.Get(16);
+                        Kunai3.transform.position = KunaiPos3.transform.position;
+                        Kunai3.transform.rotation = Quaternion.Euler(0, 0, z + 270.0f);
+                        Rigidbody2D rigid3 = Kunai3.GetComponent<Rigidbody2D>();
+                        rigid3.AddForce(len.normalized * 15.0f, ForceMode2D.Impulse);
+                        GameObject Kunai4 = GameManager.instance.pool.Get(16);
+                        Kunai4.transform.position = KunaiPos4.transform.position;
+                        Kunai4.transform.rotation = Quaternion.Euler(0, 0, z + 270.0f);
+                        Rigidbody2D rigid4 = Kunai4.GetComponent<Rigidbody2D>();
+                        rigid4.AddForce(len.normalized * 15.0f, ForceMode2D.Impulse);
+                        GameObject Kunai5 = GameManager.instance.pool.Get(16);
+                        Kunai5.transform.position = KunaiPos5.transform.position;
+                        Kunai5.transform.rotation = Quaternion.Euler(0, 0, z + 270.0f);
+                        Rigidbody2D rigid5 = Kunai5.GetComponent<Rigidbody2D>();
+                        rigid5.AddForce(len.normalized * 15.0f, ForceMode2D.Impulse);
+                        GameObject Kunai6 = GameManager.instance.pool.Get(16);
+                        Kunai6.transform.position = KunaiPos6.transform.position;
+                        Kunai6.transform.rotation = Quaternion.Euler(0, 0, z + 270.0f);
+                        Rigidbody2D rigid6 = Kunai6.GetComponent<Rigidbody2D>();
+                        rigid6.AddForce(len.normalized * 15.0f, ForceMode2D.Impulse);
+                    }
+                }
             }
         }
     }

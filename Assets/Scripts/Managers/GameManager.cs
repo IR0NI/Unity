@@ -68,6 +68,14 @@ public class GameManager : MonoBehaviour
     public GameObject ShopUI;
     public Text LevelText;
     public GameObject PlayerBarrier;
+    public GameObject PlayerAxe;
+    public GameObject PlayerFinalAxe;
+    public GameObject KunaiPos1;
+    public GameObject KunaiPos2;
+    public GameObject KunaiPos3;
+    public GameObject KunaiPos4;
+    public GameObject KunaiPos5;
+    public GameObject KunaiPos6;
 
     private void Awake()
     {
@@ -404,10 +412,10 @@ public class GameManager : MonoBehaviour
                             UpgradeExplainText[i].text = "도끼의 피해량이 상승한다";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "도끼의 범위가 늘어나고 도끼 하나 추가";
+                            UpgradeExplainText[i].text = "도끼가 적과 충돌해도 사라지지 않는다";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "도끼가 적과 충돌해도 사라지지 않는다";
+                            UpgradeExplainText[i].text = "도끼의 범위가 늘어나고 회전 속도가 빨라진다, 도끼 +2";
                             break;
                     }
                     break;
@@ -609,13 +617,15 @@ public class GameManager : MonoBehaviour
                 switch (AxeLevel)
                 {
                     case 0:
-                        
+                        PlayerAxe.SetActive(true);
                         break;
                     case 1:
                         break;
                     case 2:
                         break;
                     case 3:
+                        PlayerAxe.SetActive(false);
+                        PlayerFinalAxe.SetActive(true);
                         break;
                 }
                 AxeLevel += 1;
@@ -624,13 +634,18 @@ public class GameManager : MonoBehaviour
                 switch (KunaiLevel)
                 {
                     case 0:
-                        
+                        KunaiPos1.SetActive(true);
                         break;
                     case 1:
+                        KunaiPos2.SetActive(true);
                         break;
                     case 2:
                         break;
                     case 3:
+                        KunaiPos3.SetActive(true);
+                        KunaiPos4.SetActive(true);
+                        KunaiPos5.SetActive(true);
+                        KunaiPos6.SetActive(true);
                         break;
                 }
                 KunaiLevel += 1;

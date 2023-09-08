@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerKnife : MonoBehaviour
+public class PlayerKunai : MonoBehaviour
 {
     public bool touch = false;
     private void OnEnable()
@@ -16,7 +16,7 @@ public class PlayerKnife : MonoBehaviour
             if (!touch)
             {
                 touch = true;
-                collision.GetComponent<Enemy>().TakeDamage(200 + Player.instance.AP);
+                collision.GetComponent<Enemy>().TakeDamage(100 + Player.instance.AP*0.5f);
                 Deactive();
             }
         }

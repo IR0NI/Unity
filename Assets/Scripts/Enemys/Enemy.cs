@@ -44,8 +44,7 @@ public class Enemy : MonoBehaviour
             HP = 1000.0f;
         }
 
-        int Elite = Random.Range(1, 11
-            );
+        int Elite = Random.Range(1, 11);
         if (Elite == 1)
         {
             GameObject Buff = GameManager.instance.pool.Get(14);
@@ -103,6 +102,7 @@ public class Enemy : MonoBehaviour
                 GameObject Shop = GameManager.instance.pool.Get(11);
                 Shop.transform.position = transform.position;
             }
+            
             GameManager.instance.GetGold(1);
             GameManager.instance.GetEXP(1);
             gameObject.SetActive(false);
