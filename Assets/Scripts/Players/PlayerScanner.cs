@@ -14,6 +14,7 @@ public class PlayerScanner : MonoBehaviour
     Vector3 targetvec;
     float curBombDelay = 0.0f;
     float curKnifeDelay = 0.0f;
+    float curBoomerangDelay = 0.0f;
     int Knifenum = 0;
 
     private void FixedUpdate()
@@ -29,8 +30,26 @@ public class PlayerScanner : MonoBehaviour
 
         Bomb();
         Knife();
+        Boomerang();
     }
-
+    void Boomerang()
+    {
+        if( GameManager.instance.BoomerangLevel > 0)
+        {
+            curBoomerangDelay += Time.deltaTime;
+            if (curBoomerangDelay > 5.0f)
+            {
+                if (GameManager.instance.BoomerangLevel == 1)
+                {
+                    GameObject Boomerang = GameManager.instance.pool.Get(17);
+                    Boomerang.transform.position = transform.position;
+                    Rigidbody2D rigid = Boomerang.GetComponent<Rigidbody2D>();
+                    rigid.AddForce(len.normalized * 25.0f, ForceMode2D.Impulse);
+                    curBoomerangDelay = 0.0f;
+                }
+            }
+        }
+    }
     void Bomb()
     {
         if (GameManager.instance.BombLevel > 0)

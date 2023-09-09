@@ -58,7 +58,9 @@ public class Player : MonoBehaviour
     private float MaxDashDelay = 3.0f;
 
     private Vector3 playervec;
-    private Vector3 len;
+    public Vector3 len;
+
+    private int atknum = 0;
     private void Awake()
     {
         if (instance == null)
@@ -493,6 +495,34 @@ public class Player : MonoBehaviour
                     }
                     if (GameManager.instance.KunaiLevel >= 3)
                     {
+                        atknum += 1;
+                        GameObject[] kunai = new GameObject[12];
+                        Rigidbody2D[] rigid = new Rigidbody2D[12];
+                        Vector3[] len = new Vector3[12];
+                        len[0] = new Vector3(0,2,0);
+                        len[1] = new Vector3(1,Mathf.Sqrt(3),0);
+                        len[2] = new Vector3(Mathf.Sqrt(3),1,0);
+                        len[3] = new Vector3(2,0,0);
+                        len[4] = new Vector3(Mathf.Sqrt(3),-1,0);
+                        len[5] = new Vector3(1,-Mathf.Sqrt(3), 0);
+                        len[6] = new Vector3(0,-2,0);
+                        len[7] = new Vector3(-1,-Mathf.Sqrt(3), 0);
+                        len[8] = new Vector3(-Mathf.Sqrt(3),-1,0);
+                        len[9] = new Vector3(-2,0,0);
+                        len[10] = new Vector3(-Mathf.Sqrt(3),1,0);
+                        len[11] = new Vector3(-1, Mathf.Sqrt(3), 0);
+                        if (atknum == 5)
+                        {
+                            for (int i = 0; i < 12; i++)
+                            {
+                                kunai[i] = GameManager.instance.pool.Get(16);
+                                kunai[i].transform.position = transform.position;
+                                kunai[i].transform.rotation = Quaternion.Euler(0, 0, -30 * i);
+                                rigid[i] = kunai[i].GetComponent<Rigidbody2D>();
+                                rigid[i].AddForce(len[i].normalized * 15.0f, ForceMode2D.Impulse);
+                            }
+                            atknum = 0;
+                        }
 
                     }
                     if (GameManager.instance.KunaiLevel == 4)

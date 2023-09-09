@@ -26,7 +26,10 @@ public class Enemy : MonoBehaviour
     Vector3 Targetvec;
     private SpriteRenderer spriteRenderer;
     public GameObject Enemy1_2Bullet;
-    
+    GameObject Buff;
+    int Elite = 0;
+
+
 
 
     private void OnEnable()
@@ -44,12 +47,14 @@ public class Enemy : MonoBehaviour
             HP = 1000.0f;
         }
 
-        int Elite = Random.Range(1, 11);
+        Elite = Random.Range(1, 11);
         if (Elite == 1)
         {
-            GameObject Buff = GameManager.instance.pool.Get(14);
-            //프리팹을 자식오브젝트로 생성
-            Buff.transform.SetParent(gameObject.transform, false);
+            
+                Buff = GameManager.instance.pool.Get(14);
+                //프리팹을 자식오브젝트로 생성
+                Buff.transform.SetParent(gameObject.transform, false);
+            
             if (EnemyType == 11)
             {
                 Buff.transform.position = new Vector3(transform.position.x + 0.4f, transform.position.y - 0.6f, 0);
@@ -102,7 +107,10 @@ public class Enemy : MonoBehaviour
                 GameObject Shop = GameManager.instance.pool.Get(11);
                 Shop.transform.position = transform.position;
             }
-            
+            if (Elite == 1)
+            {
+                Buff.SetActive(false);
+            }
             GameManager.instance.GetGold(1);
             GameManager.instance.GetEXP(1);
             gameObject.SetActive(false);

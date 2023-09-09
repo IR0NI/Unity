@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     public int DragonLevel = 0;
     public int ArmorLevel = 0;
     public int KnifeLevel = 0;
-    public int OuraLevel = 0;
+    public int BoomerangLevel = 0;
     public int AxeLevel = 0;
     public int EnergyLevel = 0;
     public int KunaiLevel = 0;
@@ -76,6 +76,13 @@ public class GameManager : MonoBehaviour
     public GameObject KunaiPos4;
     public GameObject KunaiPos5;
     public GameObject KunaiPos6;
+    public Text BonusStat1;
+    public Text BonusStat2;
+    public Text BonusStat3;
+    int[] BonusStatnum ;
+    int BonusStatnum1 = 0;
+    int BonusStatnum2 = 0;
+    int BonusStatnum3 = 0;
 
     private void Awake()
     {
@@ -89,6 +96,7 @@ public class GameManager : MonoBehaviour
         }
         EnemyBuildPos = new Transform[] {EnemyBuildPos1,EnemyBuildPos2,EnemyBuildPos3 };
         EXPbar.value = (float)EXP / (float)MaxEXP;
+        
     }
 
     private void Update()
@@ -239,7 +247,7 @@ public class GameManager : MonoBehaviour
 
     public void UpgradeMenu()
     {
-        int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, OuraLevel, AxeLevel, KunaiLevel, EnergyLevel, Non1Level, Non2Level };
+        int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, BoomerangLevel, AxeLevel, KunaiLevel, EnergyLevel, Non1Level, Non2Level };
         Queue<int> FullUpgrade = new Queue<int>();
 
         for (int i = 1; i < 13; i++)
@@ -269,10 +277,18 @@ public class GameManager : MonoBehaviour
 
         Text[] UpgradeText = { Upgrade1Text, Upgrade2Text, Upgrade3Text };
         Text[] UpgradeExplainText = { Upgrade1ExplainText, Upgrade2ExplainText, Upgrade3ExplainText };
+        Text[] BonusStat = { BonusStat1, BonusStat2, BonusStat3 };
+        string[] BonusStatKind = { "공격력 ", "공격력 ", "주문력 ", "주문력 ", "공격속도 ", "공격속도 ", "이동속도 ","이동속도 " };
         int[] num = { Upgradenum1, Upgradenum2, Upgradenum3 };
-        
+        BonusStatnum1 = Random.Range(0, 8);
+        BonusStatnum2 = Random.Range(0, 8);
+        BonusStatnum3 = Random.Range(0, 8);
+        int[] BonusStatValue = {+5,-5, +10,-10, +5,-5, +3,-3  };
+        BonusStatnum = new int[] { BonusStatnum1, BonusStatnum2, BonusStatnum3 };
         for (int i = 0; i < 3; i++)
         {
+
+            BonusStat[i].text = "추가 스탯 : " + BonusStatKind[BonusStatnum[i]] +BonusStatValue[BonusStatnum[i]]*(UpgradeLevel[num[i]]+1);
             
             switch (num[i]){
                 case 1:
@@ -340,10 +356,10 @@ public class GameManager : MonoBehaviour
                             UpgradeExplainText[i].text = "소환수의 공격속도가 상승한다";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "소환수가 적을 3번 공격한다";
+                            UpgradeExplainText[i].text = "";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "소환수의 공격이 적을 타격시 불구덩이를 생성한다";
+                            UpgradeExplainText[i].text = "";
                             break;
                     }
                     break;
@@ -384,20 +400,20 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 case 7:
-                    UpgradeText[i].text = "오우라";
-                    switch (OuraLevel)
+                    UpgradeText[i].text = "";
+                    switch (BoomerangLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "캐릭터 주변을 공격하는 오우라 생성";
+                            UpgradeExplainText[i].text = "";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "오우라의 피해량이 상승한다";
+                            UpgradeExplainText[i].text = "";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "오우라의 범위가 상승한다";
+                            UpgradeExplainText[i].text = "";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "0.5초마다 공격하고 체력 15%이하일때 오우라 피해입으면 즉사한다";
+                            UpgradeExplainText[i].text = "";
                             break;
                     }
                     break;
@@ -427,13 +443,13 @@ public class GameManager : MonoBehaviour
                             UpgradeExplainText[i].text = "총을 쏠때마다 수리검이 같이 공격한다";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "수리검의 피해량의 상승한다";
+                            UpgradeExplainText[i].text = "수리검의 피해량의 상승한다, 수리검 +1";
                             break;
                         case 2:
                             UpgradeExplainText[i].text = "5번 공격할 때마다 사방으로 수리검을 던진다";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "수리검를 4개 더 던진다";
+                            UpgradeExplainText[i].text = "수리검 +4";
                             break;
                     }
                     break;
@@ -599,7 +615,7 @@ public class GameManager : MonoBehaviour
                 KnifeLevel += 1;
                 break;
             case 7:
-                switch (OuraLevel)
+                switch (BoomerangLevel)
                 {
                     case 0:
                         
@@ -611,7 +627,7 @@ public class GameManager : MonoBehaviour
                     case 3:
                         break;
                 }
-                OuraLevel += 1;
+                BoomerangLevel += 1;
                 break;
             case 8:
                 switch (AxeLevel)
@@ -695,6 +711,32 @@ public class GameManager : MonoBehaviour
                 }
                 Non2Level += 1;
                 break;
+        }
+    }
+    public void BonusStatUpgrade(int btnnum)
+    {
+        int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, BoomerangLevel, AxeLevel, KunaiLevel, EnergyLevel, Non1Level, Non2Level };
+        int[] num = { Upgradenum1, Upgradenum2, Upgradenum3 };
+        BonusStatnum = new int[] { BonusStatnum1, BonusStatnum2, BonusStatnum3 };
+        string[] BonusStatKind = { "공격력 ", "공격력 ", "주문력 ", "주문력 ", "공격속도 ", "공격속도 ", "이동속도 ", "이동속도 " };
+        int[] BonusStatValue = { 5, -5, 10, -10, 5, -5, 3, -3 };
+        if (BonusStatnum[btnnum] == 0 || BonusStatnum[btnnum] == 1)
+        {
+            Player.instance.AD += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]]);
+        }
+        else if (BonusStatnum[btnnum] == 2 || BonusStatnum[btnnum] == 3)
+        {
+            Player.instance.AP += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]]);
+        }
+        else if (BonusStatnum[btnnum] == 4 || BonusStatnum[btnnum] == 5)
+        {
+            Player.instance.AS += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]]);
+        }
+        else if (BonusStatnum[btnnum] == 6 || BonusStatnum[btnnum] == 7)
+        {
+            Player.instance.moveSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]] );
+            Player.instance.NormalSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]] );
+            Player.instance.ChangeSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]] );
         }
     }
 }
