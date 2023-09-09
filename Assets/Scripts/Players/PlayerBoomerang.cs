@@ -7,7 +7,13 @@ public class PlayerBoomerang : MonoBehaviour
 
     private void OnEnable()
     {
-        Invoke("Deactive", 30.0f);
+        if (GameManager.instance.BoomerangLevel < 3)
+        {
+            Invoke("Deactive", 10.0f);
+        }else if(GameManager.instance.BoomerangLevel >= 3)
+        {
+            Invoke("Deactive", 30.0f);
+        }
     }
     private void Start()
     {
@@ -24,7 +30,15 @@ public class PlayerBoomerang : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             float ran = Random.Range(-0.5f, 0.5f);
-            collision.gameObject.GetComponent<Enemy>().TakeDamage(100);
+            if (GameManager.instance.BoomerangLevel < 2)
+            {
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(100+Player.instance.AP*0.5f);
+            }
+            else if (GameManager.instance.BoomerangLevel >= 2)
+            {
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(200 + Player.instance.AP);
+            }
+            
             var speed = lastVelocity.magnitude;
             var dir = Vector2.Reflect(lastVelocity.normalized, lastVelocity.normalized);
             var dir2 = new Vector2(ran, ran);

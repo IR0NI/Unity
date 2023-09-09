@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerPet : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
+    public int Blocknum = 0;
 
     private void Awake()
     {
@@ -21,5 +22,27 @@ public class PlayerPet : MonoBehaviour
         {
             spriteRenderer.flipX = true;
         }
+
+        if(GameManager.instance.DragonLevel >= 3 && (GameManager.instance.kill - GameManager.instance.killpet) >= 400)
+        {
+            gameObject.layer = 0;
+        }
     }
-}
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "EnemyAttack")
+        {
+            Blocknum += 1;
+            if (Blocknum >= 300)
+            {
+                if (Player.instance.MaxHP > Player.instance.HP) { }
+                Player.instance.HP += 1;
+                Player.instance.Heart();
+            }
+                Blocknum = 0;
+
+            }
+        }
+    }
+

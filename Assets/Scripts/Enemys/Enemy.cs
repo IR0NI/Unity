@@ -75,6 +75,7 @@ public class Enemy : MonoBehaviour
             if (EnemyType == 13)
             {
                 Buff.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+                Buff.transform.localScale = new Vector3(5, 5, 0);
                 HP = 400.0f;
                 Enemy1_3CurShotDelay += Randomtime;
             }
@@ -111,6 +112,7 @@ public class Enemy : MonoBehaviour
             {
                 Buff.SetActive(false);
             }
+            GameManager.instance.kill += 1;
             GameManager.instance.GetGold(1);
             GameManager.instance.GetEXP(1);
             gameObject.SetActive(false);

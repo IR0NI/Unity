@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
     public GameObject KunaiPos4;
     public GameObject KunaiPos5;
     public GameObject KunaiPos6;
+    public GameObject Pet1;
+    public GameObject Pet2;
 
     //애니메이터
     private Animator animator;
@@ -38,6 +40,7 @@ public class Player : MonoBehaviour
     public bool isDash = false;
     public bool isSlow = false;
     public bool isRevive = false;
+    public bool isPet = false;
     
 
     //캐릭터 스탯
@@ -53,7 +56,7 @@ public class Player : MonoBehaviour
 
     //딜레이
     private float CurFireDelay = 0.0f;
-    private float MaxFireDelay = 1.0f;
+    public float MaxFireDelay = 1.0f;
     private float CurDashDelay = 3.0f;
     private float MaxDashDelay = 3.0f;
 
@@ -81,6 +84,7 @@ public class Player : MonoBehaviour
         Fire();
         Dash();
         Revive();
+        Pet();
         if (HP <= 0)
         {
             //gameover
@@ -212,21 +216,21 @@ public class Player : MonoBehaviour
                 Heart2.SetActive(true);
                 Heart1.SetActive(true);
             }
-            else if (HP == 2)
+            if (HP == 2)
             {
                 Heart4.SetActive(false);
                 Heart3.SetActive(false);
                 Heart2.SetActive(true);
                 Heart1.SetActive(true);
             }
-            else if (HP == 1)
+            if (HP == 1)
             {
                 Heart4.SetActive(false);
                 Heart3.SetActive(false);
                 Heart2.SetActive(false);
                 Heart1.SetActive(true);
             }
-            else
+            else if( HP < 1)
             {
                 Heart4.SetActive(false);
                 Heart3.SetActive(false);
@@ -251,7 +255,7 @@ public class Player : MonoBehaviour
                 Heart2.SetActive(true);
                 Heart1.SetActive(true);
             }
-            else if (HP == 2)
+            if (HP == 2)
             {
                 Heart5.SetActive(false);
                 Heart4.SetActive(false);
@@ -259,7 +263,7 @@ public class Player : MonoBehaviour
                 Heart2.SetActive(true);
                 Heart1.SetActive(true);
             }
-            else if (HP == 1)
+            if (HP == 1)
             {
                 Heart5.SetActive(false);
                 Heart4.SetActive(false);
@@ -267,7 +271,7 @@ public class Player : MonoBehaviour
                 Heart2.SetActive(false);
                 Heart1.SetActive(true);
             }
-            else
+            if (HP < 1)
             {
                 Heart5.SetActive(false);
                 Heart4.SetActive(false);
@@ -549,6 +553,39 @@ public class Player : MonoBehaviour
                         rigid6.AddForce(len.normalized * 15.0f, ForceMode2D.Impulse);
                     }
                 }
+            }
+        }
+    }
+    void Pet()
+    {
+        if (GameManager.instance.DragonLevel >= 1)
+        {
+            if ((GameManager.instance.kill - GameManager.instance.killpet) >= 100)
+            {
+                isPet = true;
+
+                Pet1.SetActive(true);
+            }
+        }
+        if (GameManager.instance.DragonLevel >= 2 && isPet == true)
+        {
+            if ((GameManager.instance.kill - GameManager.instance.killpet) >= 200)
+            {
+                
+            }
+        }
+        if (GameManager.instance.DragonLevel >= 3 && isPet == true)
+        {
+            if ((GameManager.instance.kill - GameManager.instance.killpet) >= 400)
+            {
+
+            }
+        }
+        if (GameManager.instance.DragonLevel >= 4 && isPet == true)
+        {
+            if ((GameManager.instance.kill - GameManager.instance.killpet) >= 700)
+            {
+                Pet2.SetActive(true);
             }
         }
     }

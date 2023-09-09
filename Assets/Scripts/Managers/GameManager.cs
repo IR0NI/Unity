@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
     public int pos = 0;
     public float HitBullet = 0.0f;
     public int kill = 0;
+    public int killpet = 10000;
 
     //게임 오브젝트
     public Text GoldText;
@@ -332,7 +333,7 @@ public class GameManager : MonoBehaviour
                     switch (BombLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "폭탄공격을 한다";
+                            UpgradeExplainText[i].text = "폭탄을 던진다";
                             break;
                         case 1:
                             UpgradeExplainText[i].text = "폭탄을 두개 던진다";
@@ -350,16 +351,16 @@ public class GameManager : MonoBehaviour
                     switch (DragonLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "지금부터 200킬시 소환수 소환";
+                            UpgradeExplainText[i].text = "100킬시 소환수 소환";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "소환수의 공격속도가 상승한다";
+                            UpgradeExplainText[i].text = "200킬시 소환수 투사체 +2";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "400킬시 적의 투사체를 방어하고 300번막을때마다 체력1회복";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "700킬시 소환수한마리 추가소환";
                             break;
                     }
                     break;
@@ -400,20 +401,20 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 case 7:
-                    UpgradeText[i].text = "";
+                    UpgradeText[i].text = "부메랑";
                     switch (BoomerangLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "튕기는 부메랑으로 공격";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "부메랑 피해량 상승";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "부메랑 지속시간 증가";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "부메랑 +2";
                             break;
                     }
                     break;
@@ -454,11 +455,11 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 case 10:
-                    UpgradeText[i].text = "에너지";
+                    UpgradeText[i].text = "미정";
                     switch (EnergyLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "에너지로 공격한다";
+                            UpgradeExplainText[i].text = "";
                             break;
                         case 1:
                             UpgradeExplainText[i].text = "";
@@ -472,7 +473,7 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 case 11:
-                    UpgradeText[i].text = "부메랑";
+                    UpgradeText[i].text = "미정";
                     switch (Non1Level)
                     {
                         case 0:
@@ -566,7 +567,7 @@ public class GameManager : MonoBehaviour
                 switch (DragonLevel)
                 {
                     case 0:
-                        
+                        killpet = kill;
                         break;
                     case 1:
                         break;

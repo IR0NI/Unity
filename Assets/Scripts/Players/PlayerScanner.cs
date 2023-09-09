@@ -10,12 +10,18 @@ public class PlayerScanner : MonoBehaviour
     public Transform NearestTarget;
     public Transform SecondTarget;
     Vector3 len;
+    Vector3 len2;
     Vector3 playervec;
     Vector3 targetvec;
     float curBombDelay = 0.0f;
     float curKnifeDelay = 0.0f;
     float curBoomerangDelay = 0.0f;
+    float curDragonatkDelay = 0.0f;
     int Knifenum = 0;
+    public GameObject Pet1leftatk;
+    public GameObject Pet1rightatk;
+    public GameObject Pet2leftatk;
+    public GameObject Pet2rightatk;
 
     private void FixedUpdate()
     {
@@ -31,20 +37,129 @@ public class PlayerScanner : MonoBehaviour
         Bomb();
         Knife();
         Boomerang();
+        PetAttack();
+    }
+
+    void PetAttack()
+    {
+        if (GameManager.instance.DragonLevel > 0 && Player.instance.isPet == true)
+        {
+            Vector3 len_5 = Quaternion.AngleAxis(5, new Vector3(0, 0, 1)) * len;
+            Vector3 len__5 = Quaternion.AngleAxis(-5, new Vector3(0, 0, 1)) * len;
+            len2 = Camera.main.ScreenToWorldPoint(Input.mousePosition) - playervec;
+            curDragonatkDelay += Time.deltaTime;
+            if (curDragonatkDelay > Player.instance.MaxFireDelay * 100.0f / (100.0f + Player.instance.AS))
+            {
+                if (GameManager.instance.DragonLevel >= 1 )
+                {
+                    GameObject PetAtk = GameManager.instance.pool.Get(18);
+                    if(len2.x < 0)
+                    {
+                        PetAtk.transform.position = Pet1leftatk.transform.position;
+                    }
+                    else if (len2.x > 0)
+                    {
+                        PetAtk.transform.position = Pet1rightatk.transform.position;
+                    }
+                    Rigidbody2D rigid = PetAtk.GetComponent<Rigidbody2D>();
+                    rigid.AddForce(len.normalized * 25.0f, ForceMode2D.Impulse);
+                }
+
+                if (GameManager.instance.DragonLevel >= 2 && (GameManager.instance.kill - GameManager.instance.killpet) >= 200)
+                {
+                    GameObject PetAtk = GameManager.instance.pool.Get(18);
+                    if (len2.x < 0)
+                    {
+                        PetAtk.transform.position = Pet1leftatk.transform.position;
+                    }
+                    else if (len2.x > 0)
+                    {
+                        PetAtk.transform.position = Pet1rightatk.transform.position;
+                    }
+                    Rigidbody2D rigid = PetAtk.GetComponent<Rigidbody2D>();
+                    rigid.AddForce(len_5.normalized * 25.0f, ForceMode2D.Impulse);
+                    GameObject PetAtk2 = GameManager.instance.pool.Get(18);
+                    if (len2.x < 0)
+                    {
+                        PetAtk2.transform.position = Pet1leftatk.transform.position;
+                    }
+                    else if (len2.x > 0)
+                    {
+                        PetAtk2.transform.position = Pet1rightatk.transform.position;
+                    }
+                    Rigidbody2D rigid2 = PetAtk2.GetComponent<Rigidbody2D>();
+                    rigid2.AddForce(len__5.normalized * 25.0f, ForceMode2D.Impulse);
+                }
+
+                if (GameManager.instance.DragonLevel >= 4 && (GameManager.instance.kill - GameManager.instance.killpet) >= 700)
+                {
+                    GameObject PetAtk = GameManager.instance.pool.Get(18);
+                    if (len2.x < 0)
+                    {
+                        PetAtk.transform.position = Pet2leftatk.transform.position;
+                    }
+                    else if (len2.x > 0)
+                    {
+                        PetAtk.transform.position = Pet2rightatk.transform.position;
+                    }
+                    Rigidbody2D rigid = PetAtk.GetComponent<Rigidbody2D>();
+                    rigid.AddForce(len_5.normalized * 25.0f, ForceMode2D.Impulse);
+                    GameObject PetAtk2 = GameManager.instance.pool.Get(18);
+                    if (len2.x < 0)
+                    {
+                        PetAtk2.transform.position = Pet2leftatk.transform.position;
+                    }
+                    else if (len2.x > 0)
+                    {
+                        PetAtk2.transform.position = Pet2rightatk.transform.position;
+                    }
+                    Rigidbody2D rigid2 = PetAtk2.GetComponent<Rigidbody2D>();
+                    rigid2.AddForce(len.normalized * 25.0f, ForceMode2D.Impulse);
+                    GameObject PetAtk3 = GameManager.instance.pool.Get(18);
+                    if (len2.x < 0)
+                    {
+                        PetAtk3.transform.position = Pet2leftatk.transform.position;
+                    }
+                    else if (len2.x > 0)
+                    {
+                        PetAtk3.transform.position = Pet2rightatk.transform.position;
+                    }
+                    Rigidbody2D rigid3 = PetAtk3.GetComponent<Rigidbody2D>();
+                    rigid3.AddForce(len__5.normalized * 25.0f, ForceMode2D.Impulse);
+                }
+                curDragonatkDelay = 0.0f;
+            }
+            
+        }
+
     }
     void Boomerang()
     {
         if( GameManager.instance.BoomerangLevel > 0)
         {
             curBoomerangDelay += Time.deltaTime;
+            
             if (curBoomerangDelay > 5.0f)
             {
-                if (GameManager.instance.BoomerangLevel == 1)
+                if (GameManager.instance.BoomerangLevel <= 1)
                 {
                     GameObject Boomerang = GameManager.instance.pool.Get(17);
                     Boomerang.transform.position = transform.position;
                     Rigidbody2D rigid = Boomerang.GetComponent<Rigidbody2D>();
                     rigid.AddForce(len.normalized * 25.0f, ForceMode2D.Impulse);
+                    curBoomerangDelay = 0.0f;
+                }
+
+                if(GameManager.instance.BoomerangLevel == 4)
+                {
+                    GameObject Boomerang1 = GameManager.instance.pool.Get(17);
+                    Boomerang1.transform.position = transform.position;
+                    Rigidbody2D rigid1 = Boomerang1.GetComponent<Rigidbody2D>();
+                    rigid1.AddForce(len.normalized * 25.0f, ForceMode2D.Impulse);
+                    GameObject Boomerang2 = GameManager.instance.pool.Get(17);
+                    Boomerang2.transform.position = transform.position;
+                    Rigidbody2D rigid2 = Boomerang2.GetComponent<Rigidbody2D>();
+                    rigid2.AddForce(len.normalized * 25.0f, ForceMode2D.Impulse);
                     curBoomerangDelay = 0.0f;
                 }
             }
