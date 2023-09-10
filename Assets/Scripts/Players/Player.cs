@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
     public bool isSlow = false;
     public bool isRevive = false;
     public bool isPet = false;
+    public bool isDmg = false;
     
 
     //ƒ≥∏Ø≈Õ Ω∫≈»
@@ -57,11 +58,12 @@ public class Player : MonoBehaviour
     //µÙ∑π¿Ã
     private float CurFireDelay = 0.0f;
     public float MaxFireDelay = 1.0f;
-    private float CurDashDelay = 3.0f;
+    public float CurDashDelay = 3.0f;
     private float MaxDashDelay = 3.0f;
 
     private Vector3 playervec;
     public Vector3 len;
+
 
     private int atknum = 0;
     private void Awake()
@@ -87,7 +89,7 @@ public class Player : MonoBehaviour
         Pet();
         if (HP <= 0)
         {
-            //gameover
+            GameManager.instance.GameOver();
         }
     }
 
@@ -134,7 +136,7 @@ public class Player : MonoBehaviour
             {
                 gameObject.layer = 9;
                 NormalSpeed = moveSpeed;
-                Invoke("ByeDash", 0.3f);
+                Invoke("ByeDash", 0.5f);
                 isDash = true;
                 CurDashDelay = 0.0f;
             }
@@ -155,6 +157,7 @@ public class Player : MonoBehaviour
 
     private void NormalLayer()
     {
+        isDmg = false;
         gameObject.layer = 7;
         spriteRenderer.color = new Color(1, 1, 1, 1);
         Gun1.normal();
@@ -592,8 +595,9 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "EnemyAttack")
+        if (collision.gameObject.tag == "EnemyAttack" && !isDmg)
         {
+            isDmg = true;
             spriteRenderer.color = new Color(1, 1, 1, 0.4f);
             Gun1.transparency();
             if (GameManager.instance.Gun1Level == 4)
@@ -601,7 +605,7 @@ public class Player : MonoBehaviour
                 Gun2.transparency();
             }
             gameObject.layer = 9;
-            Invoke("NormalLayer", 1.0f);
+            Invoke("NormalLayer", 1.5f);
             HP -= 1;
             Heart();
         }

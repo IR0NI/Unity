@@ -6,6 +6,7 @@ public class PlayerKunai : MonoBehaviour
     private void OnEnable()
     {
         touch = false;
+        CancelInvoke();
         Invoke("Deactive", 4.0f);
     }
 

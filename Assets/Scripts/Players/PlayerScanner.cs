@@ -8,11 +8,16 @@ public class PlayerScanner : MonoBehaviour
     public LayerMask TargetLayer;
     public RaycastHit2D[] Targets;
     public Transform NearestTarget;
+    public Transform farthestTarget;
     public Transform SecondTarget;
     Vector3 len;
+    Vector3 farlen;
+    Vector3 secondlen;
     Vector3 len2;
     Vector3 playervec;
     Vector3 targetvec;
+    Vector3 fartargetvec;
+    Vector3 secondtargetvec;
     float curBombDelay = 0.0f;
     float curKnifeDelay = 0.0f;
     float curBoomerangDelay = 0.0f;
@@ -27,12 +32,18 @@ public class PlayerScanner : MonoBehaviour
     {
         Targets = Physics2D.CircleCastAll(transform.position, ScanRange, Vector2.zero, 0, TargetLayer);
         NearestTarget = GetNearest();
+        farthestTarget = GetFarthest();
+        SecondTarget = GetSecond();
     }
     private void Update()
     {
         playervec = new Vector3(transform.position.x, transform.position.y, -10);
         targetvec = new Vector3(NearestTarget.transform.position.x, NearestTarget.transform.position.y, -10);
+        fartargetvec = new Vector3(farthestTarget.transform.position.x, farthestTarget.transform.position.y, -10);
+        secondtargetvec = new Vector3(SecondTarget.transform.position.x, SecondTarget.transform.position.y, -10);
         len = targetvec - playervec;
+        farlen = fartargetvec - playervec;
+        secondlen = secondtargetvec - playervec;
 
         Bomb();
         Knife();
@@ -155,11 +166,11 @@ public class PlayerScanner : MonoBehaviour
                     GameObject Boomerang1 = GameManager.instance.pool.Get(17);
                     Boomerang1.transform.position = transform.position;
                     Rigidbody2D rigid1 = Boomerang1.GetComponent<Rigidbody2D>();
-                    rigid1.AddForce(len.normalized * 25.0f, ForceMode2D.Impulse);
+                    rigid1.AddForce(secondlen.normalized * 25.0f, ForceMode2D.Impulse);
                     GameObject Boomerang2 = GameManager.instance.pool.Get(17);
                     Boomerang2.transform.position = transform.position;
                     Rigidbody2D rigid2 = Boomerang2.GetComponent<Rigidbody2D>();
-                    rigid2.AddForce(len.normalized * 25.0f, ForceMode2D.Impulse);
+                    rigid2.AddForce(farlen.normalized * 25.0f, ForceMode2D.Impulse);
                     curBoomerangDelay = 0.0f;
                 }
             }
@@ -174,26 +185,20 @@ public class PlayerScanner : MonoBehaviour
             {
 
 
-                if (GameManager.instance.BombLevel == 1)
+                if (GameManager.instance.BombLevel >= 1)
                 {
                     GameObject Bomb = GameManager.instance.pool.Get(10);
                     Bomb.transform.position = transform.position;
                     Rigidbody2D rigid = Bomb.GetComponent<Rigidbody2D>();
-                    rigid.AddForce(len.normalized * 25.0f, ForceMode2D.Impulse);
+                    rigid.AddForce(secondlen.normalized * 25.0f, ForceMode2D.Impulse);
                     curBombDelay = 0.0f;
                 }
-                if (GameManager.instance.BombLevel > 1)
+                if (GameManager.instance.BombLevel >= 2)
                 {
-                    //Vector3 target2vec = new Vector3(SecondTarget.transform.position.x, SecondTarget.transform.position.y, -10);
-                    //Vector3 len2 = target2vec - playervec;
-                    GameObject Bomb1 = GameManager.instance.pool.Get(10);
                     GameObject Bomb2 = GameManager.instance.pool.Get(10);
-                    Bomb1.transform.position = transform.position;
                     Bomb2.transform.position = transform.position;
-                    Rigidbody2D rigid1 = Bomb1.GetComponent<Rigidbody2D>();
                     Rigidbody2D rigid2 = Bomb2.GetComponent<Rigidbody2D>();
-                    rigid1.AddForce(len.normalized * 25.0f, ForceMode2D.Impulse);
-                    rigid2.AddForce(len.normalized * 25.0f, ForceMode2D.Impulse);
+                    rigid2.AddForce(farlen.normalized * 25.0f, ForceMode2D.Impulse);
                     curBombDelay = 0.0f;
                 }
                 
@@ -266,20 +271,69 @@ public class PlayerScanner : MonoBehaviour
 
     Transform GetNearest()
     {
-        Transform result = null;
+        Transform[] result2 = new Transform[Targets.Length];
         float diff = 100;
+        int i = 0;
 
         foreach (RaycastHit2D target in Targets)
         {
             Vector3 mypos = transform.position;
             Vector3 targetpos = target.transform.position;
+            
             float curDiff = Vector3.Distance(mypos, targetpos);
             if(curDiff < diff)
             {
                 diff = curDiff;
-                result = target.transform;
+                result2[i] = target.transform;
+                i += 1;
             }
         }
-        return result;
+        return result2[i-1];
     }
+
+    Transform GetFarthest()
+    {
+        Transform[] result2 = new Transform[Targets.Length];
+        float diff = 100;
+        int i = 0;
+
+        foreach (RaycastHit2D target in Targets)
+        {
+            Vector3 mypos = transform.position;
+            Vector3 targetpos = target.transform.position;
+
+            float curDiff = Vector3.Distance(mypos, targetpos);
+            if (curDiff < diff)
+            {
+                diff = curDiff;
+                result2[i] = target.transform;
+                i += 1;
+            }
+        }
+        return result2[0];
+    }
+
+    Transform GetSecond()
+    {
+        Transform[] result2 = new Transform[Targets.Length];
+        float diff = 100;
+        int i = 0;
+
+        foreach (RaycastHit2D target in Targets)
+        {
+            Vector3 mypos = transform.position;
+            Vector3 targetpos = target.transform.position;
+
+            float curDiff = Vector3.Distance(mypos, targetpos);
+            if (curDiff < diff)
+            {
+                diff = curDiff;
+                result2[i] = target.transform;
+                i += 1;
+            }
+        }
+        return result2[i-2];
+    }
+
+
 }

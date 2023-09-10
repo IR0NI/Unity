@@ -22,6 +22,7 @@ public class ShopManager : MonoBehaviour
     public int Item1;
     public int Item2;
     public int Item3;
+    
 
     private void Awake()
     {
@@ -122,11 +123,11 @@ public class ShopManager : MonoBehaviour
                     ItemExplainText[i].text = "체력 2회복";
                     break;
                 case 16:
-                    ItemNameText[i].text = "16 (300골드)";
+                    ItemNameText[i].text = "16 (300골드)미구현클릭x!!";
                     ItemExplainText[i].text = "강화종류가 11개이상일때 공격력 +150, 손재주 +200";
                     break;
                 case 17:
-                    ItemNameText[i].text = "17 (900골드)";
+                    ItemNameText[i].text = "17 (900골드)미구현클릭x!!";
                     ItemExplainText[i].text = "레벨 +1";
                     break;
                 case 18:
@@ -252,12 +253,14 @@ public class ShopManager : MonoBehaviour
                 if (GameManager.instance.Gold >= 350)
                 {
                     GameManager.instance.Gold -= 350;
+                    GameManager.instance.doublemoney = true;
                     ItemBuyUI(num);
                 }
                 break;
             case 13:
                 if (GameManager.instance.Gold >= 444)
                 {
+                    GameManager.instance.killed444 = GameManager.instance.kill;
                     GameManager.instance.Gold -= 444;
                     ItemBuyUI(num);
                 }
@@ -322,8 +325,8 @@ public class ShopManager : MonoBehaviour
                     ItemBuyUI(num);
                 }
                 break;
-
         }
+        GameManager.instance.GetGold(0);
     }
     public void ItemBuyUI(int num)
     {

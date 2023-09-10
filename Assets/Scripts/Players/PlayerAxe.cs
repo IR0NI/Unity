@@ -4,7 +4,7 @@ public class PlayerAxe : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
 
-    private void Awake()
+    private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }

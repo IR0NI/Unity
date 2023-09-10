@@ -4,7 +4,7 @@ public class Enemy1_1Bullet : MonoBehaviour
 {
     private void OnEnable()
     {
-        Invoke("DeActive", 5.0f);
+        Invoke("DeActive", 7.0f);
     }
 
     private void DeActive()

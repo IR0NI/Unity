@@ -10,7 +10,7 @@ public class PlayerAxePivot : MonoBehaviour
         }
         else if(GameManager.instance.AxeLevel < 4)
         {
-            transform.Rotate(Vector3.back * 100.0f * Time.deltaTime);
+            transform.Rotate(Vector3.back * 150.0f * Time.deltaTime);
         }
     }
 }

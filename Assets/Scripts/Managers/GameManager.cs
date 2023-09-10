@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+
 public class GameManager : MonoBehaviour
 {
     //싱글톤
@@ -10,8 +11,11 @@ public class GameManager : MonoBehaviour
     public PoolManager pool;
     public Player player;
     float EXPimsi;
+    float Dashimsi;
     [SerializeField]
     private Slider EXPbar;
+    [SerializeField]
+    private Slider Dashbar;
 
     //플레이어 데이터
     public int Gold = 0;
@@ -21,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     //게임 데이터
     public bool isPause = false;
+    public bool isGameover = false;
     public bool OnMenu = false;
     private float CurShopEnemyBuildDelay = -100.0f;
     private float CurEnemy1_1BuildDelay = 0.0f;
@@ -49,6 +54,10 @@ public class GameManager : MonoBehaviour
     public float HitBullet = 0.0f;
     public int kill = 0;
     public int killpet = 10000;
+    public int killed444 = 0;
+    public bool doublemoney = false;
+    public bool isKilled444 = false;
+
 
     //게임 오브젝트
     public Text GoldText;
@@ -80,10 +89,12 @@ public class GameManager : MonoBehaviour
     public Text BonusStat1;
     public Text BonusStat2;
     public Text BonusStat3;
+    public Text KillText;
     int[] BonusStatnum ;
     int BonusStatnum1 = 0;
     int BonusStatnum2 = 0;
     int BonusStatnum3 = 0;
+    public GameObject GameoverUI;
 
     private void Awake()
     {
@@ -97,13 +108,15 @@ public class GameManager : MonoBehaviour
         }
         EnemyBuildPos = new Transform[] {EnemyBuildPos1,EnemyBuildPos2,EnemyBuildPos3 };
         EXPbar.value = (float)EXP / (float)MaxEXP;
-        
+        Dashbar.value = (float)player.CurDashDelay / (float)3.0f;
     }
 
     private void Update()
     {
         EXPimsi = (float)EXP / (float)MaxEXP;
+        Dashimsi = (float)player.CurDashDelay / (float)3.0f;
         EXPbar.value = Mathf.Lerp(EXPbar.value, EXPimsi, Time.deltaTime * 10);
+        Dashbar.value = Mathf.Lerp(Dashbar.value, Dashimsi, Time.deltaTime * 10);
 
         if (Input.GetKeyDown(KeyCode.Escape) && OnMenu == false && isPause == false)
         {
@@ -118,9 +131,21 @@ public class GameManager : MonoBehaviour
             MenuUI.SetActive(false);
             IsPause();
         }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Player.instance.MaxHP += 1000;
+            Player.instance.HP += 1000;
+        }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            GetEXP(50);
+        }
         BuildEnemy();
         LevelUp();
         Reload();
+        Kill444();
     }
     private void FixedUpdate()
     {
@@ -132,6 +157,16 @@ public class GameManager : MonoBehaviour
         CurEnemy1_1BuildDelay += Time.deltaTime;
         CurEnemy1_2BuildDelay += Time.deltaTime;
         CurEnemy1_3BuildDelay += Time.deltaTime;
+    }
+
+    public void GameOver()
+    {
+        if (!isGameover)
+        {
+            isGameover = true;
+            GameoverUI.SetActive(true);
+            IsPause();
+        }
     }
 
     private void LevelUp()
@@ -156,7 +191,7 @@ public class GameManager : MonoBehaviour
         MaxEXP += 5.0f;
     }
 
-    public void GetExp(float exp)
+    private void GetExp(float exp)
     {
         EXP += exp;
     }
@@ -164,6 +199,24 @@ public class GameManager : MonoBehaviour
     {
         OnMenu = false;
         IsPause();
+    }
+
+    public void KillEnemy(int num)
+    {
+        kill += 1;
+        KillText.text = kill + " Kill";
+        switch (num)
+        {
+            case 1:
+                GetEXP(1);
+                GetGold(1);
+                break;
+            case 2:
+                int ran = Random.Range(5, 11);
+                GetEXP(ran);
+                GetGold(ran);
+                break;
+        }
     }
     public void IsPause()
     {
@@ -185,7 +238,13 @@ public class GameManager : MonoBehaviour
 
     public void GetGold(int gold)
     {
-        Gold += gold;
+        if (!doublemoney)
+        {
+            Gold += gold;
+        }else if (doublemoney)
+        {
+            Gold += gold * 2;
+        }
         GoldText.text = Gold+" Gold";
     }
     public void GetEXP(int exp)
@@ -279,7 +338,7 @@ public class GameManager : MonoBehaviour
         Text[] UpgradeText = { Upgrade1Text, Upgrade2Text, Upgrade3Text };
         Text[] UpgradeExplainText = { Upgrade1ExplainText, Upgrade2ExplainText, Upgrade3ExplainText };
         Text[] BonusStat = { BonusStat1, BonusStat2, BonusStat3 };
-        string[] BonusStatKind = { "공격력 ", "공격력 ", "주문력 ", "주문력 ", "공격속도 ", "공격속도 ", "이동속도 ","이동속도 " };
+        string[] BonusStatKind = { "공격력 ", "공격력 ", "손재주 ", "손재주 ", "공격속도 ", "공격속도 ", "이동속도 ","이동속도 " };
         int[] num = { Upgradenum1, Upgradenum2, Upgradenum3 };
         BonusStatnum1 = Random.Range(0, 8);
         BonusStatnum2 = Random.Range(0, 8);
@@ -521,11 +580,12 @@ public class GameManager : MonoBehaviour
                 switch (Gun1Level)
                 {
                     case 0:
-                        
+                        Player.instance.AD -= 10;
                         break;
                     case 1:
                         break;
                     case 2:
+                        Player.instance.AS += 10;
                         break;
                     case 3:
                         GunGun.SetActive(true);
@@ -719,7 +779,7 @@ public class GameManager : MonoBehaviour
         int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, BoomerangLevel, AxeLevel, KunaiLevel, EnergyLevel, Non1Level, Non2Level };
         int[] num = { Upgradenum1, Upgradenum2, Upgradenum3 };
         BonusStatnum = new int[] { BonusStatnum1, BonusStatnum2, BonusStatnum3 };
-        string[] BonusStatKind = { "공격력 ", "공격력 ", "주문력 ", "주문력 ", "공격속도 ", "공격속도 ", "이동속도 ", "이동속도 " };
+        string[] BonusStatKind = { "공격력 ", "공격력 ", "손재주 ", "손재주 ", "공격속도 ", "공격속도 ", "이동속도 ", "이동속도 " };
         int[] BonusStatValue = { 5, -5, 10, -10, 5, -5, 3, -3 };
         if (BonusStatnum[btnnum] == 0 || BonusStatnum[btnnum] == 1)
         {
@@ -738,6 +798,17 @@ public class GameManager : MonoBehaviour
             Player.instance.moveSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]] );
             Player.instance.NormalSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]] );
             Player.instance.ChangeSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]] );
+        }
+    }
+
+    void Kill444()
+    {
+        if(kill-killed444 >= 444 && isKilled444 == false)
+        {
+            isKilled444 = true;
+            Player.instance.AD += 44;
+            Player.instance.AP += 44;
+            Player.instance.AS += 44;
         }
     }
 }

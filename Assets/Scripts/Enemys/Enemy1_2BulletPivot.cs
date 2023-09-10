@@ -8,7 +8,9 @@ public class Enemy1_2BulletPivot : MonoBehaviour
     public GameObject laser;
     private void OnEnable()
     {
+        laser.SetActive(false);
         Bullet.SetActive(true);
+        CancelInvoke();
         Invoke("DeActive", 3.5f);
         Invoke("Laser", 2.0f);
     }

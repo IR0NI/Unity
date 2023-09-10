@@ -8,6 +8,7 @@ public class PlayerBomb : MonoBehaviour
     private void OnEnable()
     {
         Invoke("DeActive", 3.0f);
+        BombExplosion.SetActive(false);
         gameObject.GetComponent<CircleCollider2D>().enabled = true;
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.color = new Color(1, 1, 1, 1);

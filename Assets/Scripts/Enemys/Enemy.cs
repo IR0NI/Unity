@@ -4,6 +4,7 @@ public class Enemy : MonoBehaviour
 {
     
     public float HP = 200.0f;
+    public float AddHP = 0.0f;
     public int EnemyType = 0;
 
     private bool Right = true;
@@ -11,6 +12,7 @@ public class Enemy : MonoBehaviour
     private bool Down = false;
     private bool Up = false;
     public float MoveSpeed = 70.0f;
+    private float firsttime = 0.0f;
 
     //°ø°Ýenemy1_1
     public Transform target;
@@ -18,7 +20,7 @@ public class Enemy : MonoBehaviour
     private float Enemy1_1CurShotDelay = 0.0f;
     private float Enemy1_2CurShotDelay = 0.0f;
     private float Enemy1_3CurShotDelay = 0.0f;
-    private float Enemy1_1MaxShotDelay = 15.0f;
+    private float Enemy1_1MaxShotDelay = 25.0f;
     private float Enemy1_2MaxShotDelay = 12.0f;
     private float Enemy1_3MaxShotDelay = 8.0f;
     private float Randomtime = 0.0f;
@@ -27,7 +29,7 @@ public class Enemy : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public GameObject Enemy1_2Bullet;
     GameObject Buff;
-    int Elite = 0;
+    public int Elite = 0;
 
 
 
@@ -36,18 +38,18 @@ public class Enemy : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         MoveSpeed = 70;
-        //Target = GameManager.instance.player.GetComponent<Rigidbody2D>();
         target = GameManager.instance.player.transform;
-        //target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         Randomtime = Random.Range(0, 8);
+        AddHP = 50.0f * Mathf.Floor((GameManager.instance.kill)*0.01f);
+        HP = 150.0f + AddHP;
 
 
         if (EnemyType == 1)
         {
-            HP = 1000.0f;
+            HP += 850.0f;
         }
 
-        Elite = Random.Range(1, 11);
+        Elite = Random.Range(1, 31);
         if (Elite == 1)
         {
             
@@ -58,9 +60,10 @@ public class Enemy : MonoBehaviour
             if (EnemyType == 11)
             {
                 Buff.transform.position = new Vector3(transform.position.x + 0.4f, transform.position.y - 0.6f, 0);
-                Enemy1_1MaxShotDelay = 5.0f;
-                HP = 300.0f;
-                MoveSpeed = 50.0f;
+                Buff.transform.localScale = new Vector3(5, 5, 0);
+                Enemy1_1MaxShotDelay = 3.0f;
+                HP += 350.0f;
+                MoveSpeed = 70.0f;
                 Enemy1_1CurShotDelay += Randomtime;
             }
             if (EnemyType == 12)
@@ -68,32 +71,31 @@ public class Enemy : MonoBehaviour
                 Buff.transform.position = new Vector3(transform.position.x + 0.375f, transform.position.y, 0);
                 Buff.transform.localScale = new Vector3(10, 10, 0);
                 Enemy1_2MaxShotDelay = 8.0f;
-                MoveSpeed = 100.0f;
-                HP = 400.0f;
+                MoveSpeed = 110.0f;
+                HP += 550.0f;
                 Enemy1_2CurShotDelay += Randomtime;
             }
             if (EnemyType == 13)
             {
                 Buff.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
-                Buff.transform.localScale = new Vector3(5, 5, 0);
-                HP = 400.0f;
+                Buff.transform.localScale = new Vector3(3, 3, 0);
+                HP += 550.0f;
                 Enemy1_3CurShotDelay += Randomtime;
             }
         } else {
             if (EnemyType == 11)
             {
-                HP = 150.0f;
                 MoveSpeed = 50.0f;
                 Enemy1_1CurShotDelay += Randomtime;
             }
             if (EnemyType == 12)
             {
-                HP = 200.0f;
+                HP += 50.0f;
                 Enemy1_2CurShotDelay += Randomtime;
             }
             if (EnemyType == 13)
             {
-                HP = 200.0f;
+                HP += 50.0f;
                 Enemy1_3CurShotDelay += Randomtime;
             }
         }
@@ -101,6 +103,10 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        if(firsttime < 3)
+        {
+            firsttime += Time.deltaTime;
+        }
         if (HP <= 0)
         {
             if(EnemyType == 1)
@@ -111,10 +117,12 @@ public class Enemy : MonoBehaviour
             if (Elite == 1)
             {
                 Buff.SetActive(false);
+                GameManager.instance.KillEnemy(2);
             }
-            GameManager.instance.kill += 1;
-            GameManager.instance.GetGold(1);
-            GameManager.instance.GetEXP(1);
+            else if (Elite != 1)
+            {
+                GameManager.instance.KillEnemy(1);
+            }
             gameObject.SetActive(false);
         }
 
@@ -179,7 +187,7 @@ public class Enemy : MonoBehaviour
         GameObject hudText = GameManager.instance.pool.Get(12);
         float ran = Random.Range(-0.25f, 0.25f);
         hudText.transform.position =new Vector3(transform.position.x+ran, transform.position.y+ran,0);
-        hudText.GetComponent<DamagedText>().damage = Dmg;
+        hudText.GetComponent<DamagedText>().damage = Mathf.Floor(Dmg);
         if (HP > Dmg)
             {
                 HP -= Dmg;
@@ -201,7 +209,22 @@ public class Enemy : MonoBehaviour
             GameObject Enemy1_1Bullet = GameManager.instance.pool.Get(1);
             Enemy1_1Bullet.transform.position = ShotPos.transform.position;
             Rigidbody2D Rigid = Enemy1_1Bullet.GetComponent<Rigidbody2D>();
-            Rigid.AddForce(Targetvec.normalized * 5.0f, ForceMode2D.Impulse);
+            if(Elite == 1)
+            {
+                Vector3 Targetvec_3 = Quaternion.AngleAxis(3, new Vector3(0, 0, 1)) * Targetvec;
+                Vector3 Targetvec__3 = Quaternion.AngleAxis(-3, new Vector3(0, 0, 1)) * Targetvec;
+                GameObject Enemy1_1Bullet2 = GameManager.instance.pool.Get(1);
+                Enemy1_1Bullet2.transform.position = ShotPos.transform.position;
+                Rigidbody2D Rigid2 = Enemy1_1Bullet2.GetComponent<Rigidbody2D>();
+                GameObject Enemy1_1Bullet3 = GameManager.instance.pool.Get(1);
+                Enemy1_1Bullet3.transform.position = ShotPos.transform.position;
+                Rigidbody2D Rigid3 = Enemy1_1Bullet3.GetComponent<Rigidbody2D>();
+                Rigid.AddForce(Targetvec.normalized * 12.0f, ForceMode2D.Impulse);
+                Rigid2.AddForce(Targetvec_3.normalized * 12.0f, ForceMode2D.Impulse);
+                Rigid3.AddForce(Targetvec__3.normalized * 12.0f, ForceMode2D.Impulse);
+            }
+            else { Rigid.AddForce(Targetvec.normalized * 5.0f, ForceMode2D.Impulse); }
+            
             Enemy1_1CurShotDelay = 0.0f;
         }
     }
@@ -219,7 +242,6 @@ public class Enemy : MonoBehaviour
             Enemy1_2Bullet.SetActive(true);
             Enemy1_2Bullet.transform.position = ShotPos.transform.position;
             Enemy1_2Bullet.transform.rotation = Quaternion.Euler(0, 0, z + 90);
-            
             Enemy1_2CurShotDelay = 0.0f;
         }
     }
@@ -233,6 +255,17 @@ public class Enemy : MonoBehaviour
             Rigidbody2D Rigid = Enemy1_3Bullet.GetComponent<Rigidbody2D>();
             Rigid.AddForce(Targetvec.normalized * 15.0f, ForceMode2D.Impulse);
             Enemy1_3CurShotDelay = 0.0f;
+
+            if (Elite == 1)
+            {
+                Vector3 Targetvec_3 = Quaternion.AngleAxis(3, new Vector3(0, 0, 1)) * Targetvec;
+
+                GameObject Enemy1_3Bullet2 = GameManager.instance.pool.Get(1);
+                Enemy1_3Bullet2.transform.position = ShotPos.transform.position;
+                Rigidbody2D Rigid2 = Enemy1_3Bullet2.GetComponent<Rigidbody2D>();
+
+                Rigid2.AddForce(Targetvec_3.normalized * 12.0f, ForceMode2D.Impulse);
+            }
         }
     }
 
@@ -267,9 +300,12 @@ public class Enemy : MonoBehaviour
             Down = true;
         }
 
-        if (collision.tag == "UpGround")
+        if (firsttime > 2.8f)
         {
-            Up = true;
+            if (collision.tag == "UpGround")
+            {
+                Up = true;
+            }
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -289,9 +325,12 @@ public class Enemy : MonoBehaviour
             Down = false;
         }
 
-        if (collision.tag == "UpGround")
+        if (firsttime > 2.8f)
         {
-            Up = false;
+            if (collision.tag == "UpGround")
+            {
+                Up = false;
+            }
         }
     }
 }
