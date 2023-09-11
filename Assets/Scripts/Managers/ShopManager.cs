@@ -55,6 +55,9 @@ public class ShopManager : MonoBehaviour
     public void ItemNumShuffle()
     {
         ItemShuffle();
+        ItemSelled1.text = "";
+        ItemSelled2.text = "";
+        ItemSelled3.text = "";
         Text[] ItemNameText = { ItemName1, ItemName2, ItemName3 };
         Text[] ItemExplainText = { ItemExplain1, ItemExplain2, ItemExplain3 };
         int[] Item = { Item1, Item2, Item3 };
@@ -260,6 +263,7 @@ public class ShopManager : MonoBehaviour
             case 13:
                 if (GameManager.instance.Gold >= 444)
                 {
+                    GameManager.instance.getkilled444 = true;
                     GameManager.instance.killed444 = GameManager.instance.kill;
                     GameManager.instance.Gold -= 444;
                     ItemBuyUI(num);

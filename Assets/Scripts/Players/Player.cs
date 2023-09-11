@@ -518,7 +518,7 @@ public class Player : MonoBehaviour
                         len[9] = new Vector3(-2,0,0);
                         len[10] = new Vector3(-Mathf.Sqrt(3),1,0);
                         len[11] = new Vector3(-1, Mathf.Sqrt(3), 0);
-                        if (atknum == 5)
+                        if (atknum == 4)
                         {
                             for (int i = 0; i < 12; i++)
                             {

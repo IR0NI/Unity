@@ -2,27 +2,27 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    
+
     public float HP = 200.0f;
     public float AddHP = 0.0f;
     public int EnemyType = 0;
 
-    private bool Right = true;
+    private bool Right = false;
     private bool Left = false;
     private bool Down = false;
     private bool Up = false;
     public float MoveSpeed = 70.0f;
-    private float firsttime = 0.0f;
 
     //공격enemy1_1
     public Transform target;
     //public Rigidbody2D Target;
+    private float Boss1CurShotDelay = 0.0f;
     private float Enemy1_1CurShotDelay = 0.0f;
     private float Enemy1_2CurShotDelay = 0.0f;
     private float Enemy1_3CurShotDelay = 0.0f;
-    private float Enemy1_1MaxShotDelay = 25.0f;
-    private float Enemy1_2MaxShotDelay = 12.0f;
-    private float Enemy1_3MaxShotDelay = 8.0f;
+    private float Enemy1_1MaxShotDelay = 35.0f;
+    private float Enemy1_2MaxShotDelay = 15.0f;
+    private float Enemy1_3MaxShotDelay = 10.0f;
     private float Randomtime = 0.0f;
     public Transform ShotPos;
     Vector3 Targetvec;
@@ -39,8 +39,8 @@ public class Enemy : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         MoveSpeed = 70;
         target = GameManager.instance.player.transform;
-        Randomtime = Random.Range(0, 8);
-        AddHP = 50.0f * Mathf.Floor((GameManager.instance.kill)*0.01f);
+        Randomtime = Random.Range(0, 30);
+        AddHP = 50.0f * Mathf.Floor((GameManager.instance.kill) * 0.02f);
         HP = 150.0f + AddHP;
 
 
@@ -49,20 +49,26 @@ public class Enemy : MonoBehaviour
             HP += 850.0f;
         }
 
+        if (EnemyType == 2)
+        {
+            HP += 4000.0f;
+            return;
+        }
+
         Elite = Random.Range(1, 31);
         if (Elite == 1)
         {
-            
-                Buff = GameManager.instance.pool.Get(14);
-                //프리팹을 자식오브젝트로 생성
-                Buff.transform.SetParent(gameObject.transform, false);
-            
+
+            Buff = GameManager.instance.pool.Get(14);
+            //프리팹을 자식오브젝트로 생성
+            Buff.transform.SetParent(gameObject.transform, false);
+
             if (EnemyType == 11)
             {
                 Buff.transform.position = new Vector3(transform.position.x + 0.4f, transform.position.y - 0.6f, 0);
                 Buff.transform.localScale = new Vector3(5, 5, 0);
                 Enemy1_1MaxShotDelay = 3.0f;
-                HP += 350.0f;
+                HP += 250.0f + AddHP;
                 MoveSpeed = 70.0f;
                 Enemy1_1CurShotDelay += Randomtime;
             }
@@ -72,17 +78,19 @@ public class Enemy : MonoBehaviour
                 Buff.transform.localScale = new Vector3(10, 10, 0);
                 Enemy1_2MaxShotDelay = 8.0f;
                 MoveSpeed = 110.0f;
-                HP += 550.0f;
-                Enemy1_2CurShotDelay += Randomtime;
+                HP += 400.0f + AddHP;
+                Enemy1_2CurShotDelay += Randomtime * 0.2f;
             }
             if (EnemyType == 13)
             {
                 Buff.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
                 Buff.transform.localScale = new Vector3(3, 3, 0);
-                HP += 550.0f;
-                Enemy1_3CurShotDelay += Randomtime;
+                HP += 400.0f + AddHP;
+                Enemy1_3CurShotDelay += Randomtime * 0.2f;
             }
-        } else {
+        }
+        else
+        {
             if (EnemyType == 11)
             {
                 MoveSpeed = 50.0f;
@@ -103,13 +111,9 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if(firsttime < 3)
-        {
-            firsttime += Time.deltaTime;
-        }
         if (HP <= 0)
         {
-            if(EnemyType == 1)
+            if (EnemyType == 1)
             {
                 GameObject Shop = GameManager.instance.pool.Get(11);
                 Shop.transform.position = transform.position;
@@ -135,7 +139,7 @@ public class Enemy : MonoBehaviour
 
         if (EnemyType == 12)
         {
-            
+
             Enemy1_2Attack();
             Enemy1_2CurShotDelay += Time.deltaTime;
         }
@@ -144,6 +148,12 @@ public class Enemy : MonoBehaviour
         {
             Enemy1_3Attack();
             Enemy1_3CurShotDelay += Time.deltaTime;
+        }
+
+        if (EnemyType == 2)
+        {
+            Boss1Attack();
+            Boss1CurShotDelay += Time.deltaTime;
         }
     }
 
@@ -181,26 +191,84 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public  void TakeDamage(float Dmg)
+    public void TakeDamage(float Dmg)
     {
         GameManager.instance.HitBullet = 0.0f;
         GameObject hudText = GameManager.instance.pool.Get(12);
         float ran = Random.Range(-0.25f, 0.25f);
-        hudText.transform.position =new Vector3(transform.position.x+ran, transform.position.y+ran,0);
+        hudText.transform.position = new Vector3(transform.position.x + ran, transform.position.y + ran, 0);
         hudText.GetComponent<DamagedText>().damage = Mathf.Floor(Dmg);
         if (HP > Dmg)
-            {
-                HP -= Dmg;
-            } else if (HP <= Dmg) {
+        {
+            HP -= Dmg;
+        }
+        else if (HP <= Dmg)
+        {
 
-                HP = 0.0f;
-            }
+            HP = 0.0f;
+        }
     }
 
     public void Explosion(Transform pos)
     {
         GameObject Explosion = GameManager.instance.pool.Get(8);
         Explosion.transform.position = pos.transform.position;
+    }
+
+    private void Boss1Attack()
+    {
+        if (Boss1CurShotDelay >= 0.5f)
+        {
+            GameObject BossBul1 = GameManager.instance.pool.Get(1);
+            GameObject BossBul2 = GameManager.instance.pool.Get(1);
+            GameObject BossBul3 = GameManager.instance.pool.Get(1);
+            GameObject BossBul4 = GameManager.instance.pool.Get(1);
+            GameObject BossBul5 = GameManager.instance.pool.Get(1);
+            GameObject BossBul6 = GameManager.instance.pool.Get(1);
+            GameObject BossBul7 = GameManager.instance.pool.Get(1);
+            GameObject BossBul8 = GameManager.instance.pool.Get(1);
+            GameObject BossBul9 = GameManager.instance.pool.Get(1);
+            GameObject BossBul10 = GameManager.instance.pool.Get(1);
+            GameObject BossBul11 = GameManager.instance.pool.Get(1);
+            GameObject BossBul12 = GameManager.instance.pool.Get(1);
+            BossBul1.transform.position = ShotPos.transform.position;
+            BossBul2.transform.position = ShotPos.transform.position;
+            BossBul3.transform.position = ShotPos.transform.position;
+            BossBul4.transform.position = ShotPos.transform.position;
+            BossBul5.transform.position = ShotPos.transform.position;
+            BossBul6.transform.position = ShotPos.transform.position;
+            BossBul7.transform.position = ShotPos.transform.position;
+            BossBul8.transform.position = ShotPos.transform.position;
+            BossBul9.transform.position = ShotPos.transform.position;
+            BossBul10.transform.position = ShotPos.transform.position;
+            BossBul11.transform.position = ShotPos.transform.position;
+            BossBul12.transform.position = ShotPos.transform.position;
+            Rigidbody2D Rigid1 = BossBul1.GetComponent<Rigidbody2D>();
+            Rigidbody2D Rigid2 = BossBul2.GetComponent<Rigidbody2D>();
+            Rigidbody2D Rigid3 = BossBul3.GetComponent<Rigidbody2D>();
+            Rigidbody2D Rigid4 = BossBul4.GetComponent<Rigidbody2D>();
+            Rigidbody2D Rigid5 = BossBul5.GetComponent<Rigidbody2D>();
+            Rigidbody2D Rigid6 = BossBul6.GetComponent<Rigidbody2D>();
+            Rigidbody2D Rigid7 = BossBul7.GetComponent<Rigidbody2D>();
+            Rigidbody2D Rigid8 = BossBul8.GetComponent<Rigidbody2D>();
+            Rigidbody2D Rigid9 = BossBul9.GetComponent<Rigidbody2D>();
+            Rigidbody2D Rigid10 = BossBul10.GetComponent<Rigidbody2D>();
+            Rigidbody2D Rigid11 = BossBul11.GetComponent<Rigidbody2D>();
+            Rigidbody2D Rigid12 = BossBul12.GetComponent<Rigidbody2D>();
+            Rigid1.AddForce(Vector2.up * 7, ForceMode2D.Impulse);
+            Rigid2.AddForce(Vector2.right * 7, ForceMode2D.Impulse);
+            Rigid3.AddForce(Vector2.down * 7, ForceMode2D.Impulse);
+            Rigid4.AddForce(Vector2.left * 7, ForceMode2D.Impulse);
+            Rigid5.AddForce((Vector2.right + Vector2.right + Vector2.up).normalized * 7, ForceMode2D.Impulse);
+            Rigid6.AddForce((Vector2.right + Vector2.right + Vector2.down).normalized * 7, ForceMode2D.Impulse);
+            Rigid7.AddForce((Vector2.left + Vector2.left + Vector2.down).normalized * 7, ForceMode2D.Impulse);
+            Rigid8.AddForce((Vector2.left + Vector2.left + Vector2.up).normalized * 7, ForceMode2D.Impulse);
+            Rigid9.AddForce((Vector2.right + Vector2.up + Vector2.up).normalized * 7, ForceMode2D.Impulse);
+            Rigid10.AddForce((Vector2.right + Vector2.down + Vector2.down).normalized * 7, ForceMode2D.Impulse);
+            Rigid11.AddForce((Vector2.left + Vector2.down + Vector2.down).normalized * 7, ForceMode2D.Impulse);
+            Rigid12.AddForce((Vector2.left + Vector2.down + Vector2.down).normalized * 7, ForceMode2D.Impulse);
+            Boss1CurShotDelay = 0.0f;
+        }
     }
     private void Enemy1_1Attack()
     {
@@ -209,7 +277,7 @@ public class Enemy : MonoBehaviour
             GameObject Enemy1_1Bullet = GameManager.instance.pool.Get(1);
             Enemy1_1Bullet.transform.position = ShotPos.transform.position;
             Rigidbody2D Rigid = Enemy1_1Bullet.GetComponent<Rigidbody2D>();
-            if(Elite == 1)
+            if (Elite == 1)
             {
                 Vector3 Targetvec_3 = Quaternion.AngleAxis(3, new Vector3(0, 0, 1)) * Targetvec;
                 Vector3 Targetvec__3 = Quaternion.AngleAxis(-3, new Vector3(0, 0, 1)) * Targetvec;
@@ -224,7 +292,7 @@ public class Enemy : MonoBehaviour
                 Rigid3.AddForce(Targetvec__3.normalized * 12.0f, ForceMode2D.Impulse);
             }
             else { Rigid.AddForce(Targetvec.normalized * 5.0f, ForceMode2D.Impulse); }
-            
+
             Enemy1_1CurShotDelay = 0.0f;
         }
     }
@@ -278,7 +346,7 @@ public class Enemy : MonoBehaviour
     private void NormalSpeed()
     {
         MoveSpeed = 70.0f;
-        if(EnemyType == 11)
+        if (EnemyType == 11)
         {
             MoveSpeed = 50.0f;
         }
@@ -300,13 +368,12 @@ public class Enemy : MonoBehaviour
             Down = true;
         }
 
-        if (firsttime > 2.8f)
+
+        if (collision.tag == "UpGround")
         {
-            if (collision.tag == "UpGround")
-            {
-                Up = true;
-            }
+            Up = true;
         }
+
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -325,12 +392,10 @@ public class Enemy : MonoBehaviour
             Down = false;
         }
 
-        if (firsttime > 2.8f)
+        if (collision.tag == "UpGround")
         {
-            if (collision.tag == "UpGround")
-            {
-                Up = false;
-            }
+            Up = false;
         }
+
     }
 }

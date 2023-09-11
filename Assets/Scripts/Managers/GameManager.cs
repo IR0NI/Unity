@@ -20,20 +20,20 @@ public class GameManager : MonoBehaviour
     //플레이어 데이터
     public int Gold = 0;
     public float EXP = 0.0f;
-    private float MaxEXP = 15.0f;
+    private float MaxEXP = 10.0f;
     private int Level = 1;
 
     //게임 데이터
     public bool isPause = false;
     public bool isGameover = false;
     public bool OnMenu = false;
-    private float CurShopEnemyBuildDelay = -100.0f;
+    private float CurShopEnemyBuildDelay = 0.0f;
     private float CurEnemy1_1BuildDelay = 0.0f;
     private float CurEnemy1_2BuildDelay = -60.0f;
     private float CurEnemy1_3BuildDelay = -120.0f;
     private float MaxShopEnemyBuildDelay = 300.0f;
-    private float MaxEnemy1_1BuildDelay = 0.8f;
-    private float MaxEnemy1_2BuildDelay = 4.0f;
+    private float MaxEnemy1_1BuildDelay = 2.5f;
+    private float MaxEnemy1_2BuildDelay = 5.0f;
     private float MaxEnemy1_3BuildDelay = 5.0f;
     public int Upgradenum1;
     public int Upgradenum2;
@@ -57,6 +57,8 @@ public class GameManager : MonoBehaviour
     public int killed444 = 0;
     public bool doublemoney = false;
     public bool isKilled444 = false;
+    public bool getkilled444 = false;
+    public float PlusBuildEnemy = 0.0f;
 
 
     //게임 오브젝트
@@ -74,6 +76,15 @@ public class GameManager : MonoBehaviour
     public Transform EnemyBuildPos1;
     public Transform EnemyBuildPos2;
     public Transform EnemyBuildPos3;
+    public Transform EnemyBuildPos4;
+    public Transform EnemyBuildPos5;
+    public Transform EnemyBuildPos6;
+    public Transform EnemyBuildPos7;
+    public Transform EnemyBuildPos8;
+    public Transform EnemyBuildPos9;
+    public Transform EnemyBuildPos10;
+    public Transform EnemyBuildPos11;
+    public Transform EnemyBuildPos12;
     public GameObject GunGun;
     public GameObject ShopUI;
     public Text LevelText;
@@ -90,11 +101,12 @@ public class GameManager : MonoBehaviour
     public Text BonusStat2;
     public Text BonusStat3;
     public Text KillText;
-    int[] BonusStatnum ;
+    int[] BonusStatnum;
     int BonusStatnum1 = 0;
     int BonusStatnum2 = 0;
     int BonusStatnum3 = 0;
     public GameObject GameoverUI;
+    public GameObject Boss1;
 
     private void Awake()
     {
@@ -106,7 +118,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        EnemyBuildPos = new Transform[] {EnemyBuildPos1,EnemyBuildPos2,EnemyBuildPos3 };
+        EnemyBuildPos = new Transform[] { EnemyBuildPos1, EnemyBuildPos2, EnemyBuildPos3, EnemyBuildPos4, EnemyBuildPos5, EnemyBuildPos6, EnemyBuildPos7, EnemyBuildPos8, EnemyBuildPos9, EnemyBuildPos10, EnemyBuildPos11, EnemyBuildPos12 };
         EXPbar.value = (float)EXP / (float)MaxEXP;
         Dashbar.value = (float)player.CurDashDelay / (float)3.0f;
     }
@@ -134,13 +146,18 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Player.instance.MaxHP += 1000;
-            Player.instance.HP += 1000;
+            Player.instance.MaxHP += 10;
+            Player.instance.HP += 10;
         }
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            GetEXP(50);
+            GetEXP(30);
+        }
+
+        if (!Boss1.activeSelf && kill >= 1000)
+        {
+            Boss1.SetActive(true);
         }
         BuildEnemy();
         LevelUp();
@@ -174,12 +191,15 @@ public class GameManager : MonoBehaviour
         if (EXP >= MaxEXP)
         {
             Level += 1;
-            LevelText.text = "LV. "+Level;
-            EXP = 0.0f;
+            LevelText.text = "LV. " + Level;
+            EXP = EXP-MaxEXP;
             IsPause();
             UpgradeMenu();
             UpgradeUI.SetActive(true);
-            MaxEXP += 5.0f;
+            if (MaxEXP <= 95)
+            {
+                MaxEXP += 5.0f;
+            }
         }
     }
     public void LevelUPItem()
@@ -188,7 +208,10 @@ public class GameManager : MonoBehaviour
         IsPause();
         UpgradeMenu();
         UpgradeUI.SetActive(true);
-        MaxEXP += 5.0f;
+        if (MaxEXP <= 95)
+        {
+            MaxEXP += 5.0f;
+        }
     }
 
     private void GetExp(float exp)
@@ -217,6 +240,46 @@ public class GameManager : MonoBehaviour
                 GetGold(ran);
                 break;
         }
+        if(kill >= 100 && kill < 200)
+        {
+            PlusBuildEnemy = 1;
+        }else if(kill >= 200 && kill < 300)
+        {
+            PlusBuildEnemy = 2;
+        }
+        else if (kill >= 300 && kill < 400)
+        {
+            PlusBuildEnemy = 3;
+        }
+        else if (kill >= 400 && kill < 500)
+        {
+            PlusBuildEnemy = 4;
+        }
+        else if (kill >= 500 && kill < 600)
+        {
+            PlusBuildEnemy = 5;
+        }
+        else if (kill >= 600 && kill < 700)
+        {
+            PlusBuildEnemy = 6;
+        }
+        else if (kill >= 700 && kill < 800)
+        {
+            PlusBuildEnemy = 7;
+        }
+        else if (kill >= 800 && kill < 900)
+        {
+            PlusBuildEnemy = 8;
+        }
+        else if (kill >= 900 && kill <1000)
+        {
+            PlusBuildEnemy = 9;
+        }
+        else if (kill >= 1000 && kill < 1100)
+        {
+            PlusBuildEnemy = 10;
+        }
+
     }
     public void IsPause()
     {
@@ -240,12 +303,13 @@ public class GameManager : MonoBehaviour
     {
         if (!doublemoney)
         {
-            Gold += gold;
-        }else if (doublemoney)
-        {
             Gold += gold * 2;
         }
-        GoldText.text = Gold+" Gold";
+        else if (doublemoney)
+        {
+            Gold += gold * 4;
+        }
+        GoldText.text = Gold + " Gold";
     }
     public void GetEXP(int exp)
     {
@@ -253,41 +317,41 @@ public class GameManager : MonoBehaviour
     }
     private void BuildEnemy()
     {
-        if(CurShopEnemyBuildDelay > MaxShopEnemyBuildDelay)
+        if (CurShopEnemyBuildDelay > MaxShopEnemyBuildDelay)
         {
-            pos = Random.Range(0, 3);
+            pos = Random.Range(0, 12);
             GameObject ShopEnemy = pool.Get(9);
             ShopEnemy.transform.position = EnemyBuildPos[pos].position;
             CurShopEnemyBuildDelay = 0;
         }
-        if (CurEnemy1_1BuildDelay > MaxEnemy1_1BuildDelay)
+        if (CurEnemy1_1BuildDelay > MaxEnemy1_1BuildDelay-PlusBuildEnemy*0.1f)
         {
-            pos = Random.Range(0, 3);
+            pos = Random.Range(0, 12);
             GameObject enemy1_1 = pool.Get(0);
             //Enemy enemyLogic1_1 = enemy1_1.GetComponent<Enemy>();
             enemy1_1.transform.position = EnemyBuildPos[pos].position;
             CurEnemy1_1BuildDelay = 0;
         }
 
-        if (CurEnemy1_2BuildDelay > MaxEnemy1_2BuildDelay)
+        if (CurEnemy1_2BuildDelay > MaxEnemy1_2BuildDelay-PlusBuildEnemy*0.2f)
         {
-            pos = Random.Range(0, 3);
+            pos = Random.Range(0, 12);
             GameObject enemy1_2 = pool.Get(2);
             //Enemy enemyLogic1_2 = enemy1_2.GetComponent<Enemy>();
             enemy1_2.transform.position = EnemyBuildPos[pos].position;
             CurEnemy1_2BuildDelay = 0;
         }
 
-        if (CurEnemy1_3BuildDelay > MaxEnemy1_3BuildDelay)
+        if (CurEnemy1_3BuildDelay > MaxEnemy1_3BuildDelay-PlusBuildEnemy*0.2f)
         {
-            pos = Random.Range(0, 3);
+            pos = Random.Range(0, 12);
             GameObject enemy1_3 = pool.Get(4);
             Enemy enemyLogic1_3 = enemy1_3.GetComponent<Enemy>();
             enemy1_3.transform.position = EnemyBuildPos[pos].position;
             CurEnemy1_3BuildDelay = 0;
         }
     }
-    
+
     private void Upgrade()
     {
         Upgradenum1 = Random.Range(1, 13);
@@ -320,16 +384,16 @@ public class GameManager : MonoBehaviour
         //큐FullUpgrade를 배열FullUpgradecopy로 복사
         int[] FullUpgradecopy = FullUpgrade.ToArray();
 
-        for(int i = 0; i<FullUpgrade.Count; i++)
+        for (int i = 0; i < FullUpgrade.Count; i++)
         {
             Debug.Log(FullUpgradecopy[i]);
         }
 
         Upgrade();
 
-        for(int i = 0; i<FullUpgradecopy.Length; i++)
+        for (int i = 0; i < FullUpgradecopy.Length; i++)
         {
-            if(Upgradenum1 == FullUpgradecopy[i] || Upgradenum2 == FullUpgradecopy[i] || Upgradenum3 == FullUpgradecopy[i])
+            if (Upgradenum1 == FullUpgradecopy[i] || Upgradenum2 == FullUpgradecopy[i] || Upgradenum3 == FullUpgradecopy[i])
             {
                 UpgradeMenu();
             }
@@ -338,19 +402,20 @@ public class GameManager : MonoBehaviour
         Text[] UpgradeText = { Upgrade1Text, Upgrade2Text, Upgrade3Text };
         Text[] UpgradeExplainText = { Upgrade1ExplainText, Upgrade2ExplainText, Upgrade3ExplainText };
         Text[] BonusStat = { BonusStat1, BonusStat2, BonusStat3 };
-        string[] BonusStatKind = { "공격력 ", "공격력 ", "손재주 ", "손재주 ", "공격속도 ", "공격속도 ", "이동속도 ","이동속도 " };
+        string[] BonusStatKind = { "공격력 ", "공격력 ", "손재주 ", "손재주 ", "공격속도 ", "공격속도 ", "이동속도 ", "이동속도 " };
         int[] num = { Upgradenum1, Upgradenum2, Upgradenum3 };
         BonusStatnum1 = Random.Range(0, 8);
         BonusStatnum2 = Random.Range(0, 8);
         BonusStatnum3 = Random.Range(0, 8);
-        int[] BonusStatValue = {+5,-5, +10,-10, +5,-5, +3,-3  };
+        int[] BonusStatValue = { +5, -5, +10, -10, +5, -5, +3, -3 };
         BonusStatnum = new int[] { BonusStatnum1, BonusStatnum2, BonusStatnum3 };
         for (int i = 0; i < 3; i++)
         {
 
-            BonusStat[i].text = "추가 스탯 : " + BonusStatKind[BonusStatnum[i]] +BonusStatValue[BonusStatnum[i]]*(UpgradeLevel[num[i]]+1);
-            
-            switch (num[i]){
+            BonusStat[i].text = "추가 스탯 : " + BonusStatKind[BonusStatnum[i]] + BonusStatValue[BonusStatnum[i]] * (UpgradeLevel[num[i]] + 1);
+
+            switch (num[i])
+            {
                 case 1:
                     UpgradeText[i].text = "총알강화";
                     switch (Gun1Level)
@@ -568,7 +633,7 @@ public class GameManager : MonoBehaviour
                     }
                     break;
             }
-                }
+        }
     }
     public void Upgrade(int num)
     {
@@ -612,7 +677,7 @@ public class GameManager : MonoBehaviour
                 switch (BombLevel)
                 {
                     case 0:
-                        
+
                         break;
                     case 1:
                         break;
@@ -664,7 +729,7 @@ public class GameManager : MonoBehaviour
                 switch (KnifeLevel)
                 {
                     case 0:
-                        
+
                         break;
                     case 1:
                         break;
@@ -679,7 +744,7 @@ public class GameManager : MonoBehaviour
                 switch (BoomerangLevel)
                 {
                     case 0:
-                        
+
                         break;
                     case 1:
                         break;
@@ -731,7 +796,7 @@ public class GameManager : MonoBehaviour
                 switch (EnergyLevel)
                 {
                     case 0:
-                        
+
                         break;
                     case 1:
                         break;
@@ -746,7 +811,7 @@ public class GameManager : MonoBehaviour
                 switch (Non1Level)
                 {
                     case 0:
-                        
+
                         break;
                     case 1:
                         break;
@@ -761,7 +826,7 @@ public class GameManager : MonoBehaviour
                 switch (Non2Level)
                 {
                     case 0:
-                        
+
                         break;
                     case 1:
                         break;
@@ -795,15 +860,15 @@ public class GameManager : MonoBehaviour
         }
         else if (BonusStatnum[btnnum] == 6 || BonusStatnum[btnnum] == 7)
         {
-            Player.instance.moveSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]] );
-            Player.instance.NormalSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]] );
-            Player.instance.ChangeSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]] );
+            Player.instance.moveSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]]);
+            Player.instance.NormalSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]]);
+            Player.instance.ChangeSpeed += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]]);
         }
     }
 
     void Kill444()
     {
-        if(kill-killed444 >= 444 && isKilled444 == false)
+        if (kill - killed444 >= 444 && isKilled444 == false && getkilled444 == true)
         {
             isKilled444 = true;
             Player.instance.AD += 44;
