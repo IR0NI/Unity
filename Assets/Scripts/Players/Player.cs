@@ -301,7 +301,7 @@ public class Player : MonoBehaviour
 
         if (CurFireDelay >= MaxFireDelay*100.0f/(100.0f + AS))
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) && !GameManager.instance.isPause)
             {
                 switch (GameManager.instance.Gun1Level)
                 {
@@ -481,7 +481,8 @@ public class Player : MonoBehaviour
                 
                 CurFireDelay = 0.0f;
                 Gun1.Shot();
-                Gun1.Shot();
+                Gun1.Idle();
+
                 if (GameManager.instance.KunaiLevel >= 1)
                 {
                     if (GameManager.instance.KunaiLevel >= 1)

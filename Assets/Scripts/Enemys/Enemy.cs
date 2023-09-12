@@ -56,6 +56,32 @@ public class Enemy : MonoBehaviour
         }
 
         Elite = Random.Range(1, 31);
+        if (GameManager.instance.isAllElite)
+        {
+            Elite = 1;
+        }
+
+        //¿¤¸®Æ®¿Àºê¿¤¸®Æ®
+        //¿¤¸®Æ® ¹øÈ£´Â 100À¸·Î ÅëÀÏ
+        if (EnemyType == 111)
+        {
+            Enemy1_1MaxShotDelay = 3.0f;
+            Elite = 100;
+            HP += 1050;
+            MoveSpeed = 70.0f;
+        }
+        if (EnemyType == 112)
+        {
+            Elite = 100;
+            HP += 1050;
+        }
+        if (EnemyType == 113)
+        {
+            Elite = 100;
+            HP += 1050;
+        }
+
+        //¿¤¸®Æ®
         if (Elite == 1)
         {
 
@@ -70,7 +96,6 @@ public class Enemy : MonoBehaviour
                 Enemy1_1MaxShotDelay = 3.0f;
                 HP += 250.0f + AddHP;
                 MoveSpeed = 70.0f;
-                Enemy1_1CurShotDelay += Randomtime;
             }
             if (EnemyType == 12)
             {
@@ -91,6 +116,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
+            //ÀÏ¹Ý¸÷
             if (EnemyType == 11)
             {
                 MoveSpeed = 50.0f;
@@ -107,6 +133,7 @@ public class Enemy : MonoBehaviour
                 Enemy1_3CurShotDelay += Randomtime;
             }
         }
+        
     }
 
     private void Update()
@@ -122,8 +149,11 @@ public class Enemy : MonoBehaviour
             {
                 Buff.SetActive(false);
                 GameManager.instance.KillEnemy(2);
+            }else if (Elite == 100)
+            {
+                GameManager.instance.KillEnemy(2);
             }
-            else if (Elite != 1)
+            else
             {
                 GameManager.instance.KillEnemy(1);
             }
@@ -131,20 +161,20 @@ public class Enemy : MonoBehaviour
         }
 
         Targetvec = new Vector3(target.transform.position.x - transform.position.x, target.transform.position.y - transform.position.y, 0);
-        if (EnemyType == 11)
+        if (EnemyType == 11 || EnemyType == 111)
         {
             Enemy1_1Attack();
             Enemy1_1CurShotDelay += Time.deltaTime;
         }
 
-        if (EnemyType == 12)
+        if (EnemyType == 12 || EnemyType == 112)
         {
 
             Enemy1_2Attack();
             Enemy1_2CurShotDelay += Time.deltaTime;
         }
 
-        if (EnemyType == 13)
+        if (EnemyType == 13 || EnemyType == 113)
         {
             Enemy1_3Attack();
             Enemy1_3CurShotDelay += Time.deltaTime;
@@ -277,7 +307,7 @@ public class Enemy : MonoBehaviour
             GameObject Enemy1_1Bullet = GameManager.instance.pool.Get(1);
             Enemy1_1Bullet.transform.position = ShotPos.transform.position;
             Rigidbody2D Rigid = Enemy1_1Bullet.GetComponent<Rigidbody2D>();
-            if (Elite == 1)
+            if (Elite == 1 || Elite == 100)
             {
                 Vector3 Targetvec_3 = Quaternion.AngleAxis(3, new Vector3(0, 0, 1)) * Targetvec;
                 Vector3 Targetvec__3 = Quaternion.AngleAxis(-3, new Vector3(0, 0, 1)) * Targetvec;
@@ -290,6 +320,24 @@ public class Enemy : MonoBehaviour
                 Rigid.AddForce(Targetvec.normalized * 12.0f, ForceMode2D.Impulse);
                 Rigid2.AddForce(Targetvec_3.normalized * 12.0f, ForceMode2D.Impulse);
                 Rigid3.AddForce(Targetvec__3.normalized * 12.0f, ForceMode2D.Impulse);
+                if(Elite == 100)
+                {
+                    Vector3 Targetvec_5 = Quaternion.AngleAxis(5, new Vector3(0, 0, 1)) * Targetvec;
+                    Vector3 Targetvec__5 = Quaternion.AngleAxis(-5, new Vector3(0, 0, 1)) * Targetvec;
+                    GameObject Enemy1_1Bullet4 = GameManager.instance.pool.Get(1);
+                    Enemy1_1Bullet4.transform.position = ShotPos.transform.position;
+                    GameObject Enemy1_1Bullet5 = GameManager.instance.pool.Get(1);
+                    Enemy1_1Bullet5.transform.position = ShotPos.transform.position;
+                    Rigidbody2D Rigid4 = Enemy1_1Bullet4.GetComponent<Rigidbody2D>();
+                    Rigidbody2D Rigid5 = Enemy1_1Bullet5.GetComponent<Rigidbody2D>();
+                    Rigid4.AddForce(Targetvec_5.normalized * 12.0f, ForceMode2D.Impulse);
+                    Rigid5.AddForce(Targetvec__5.normalized * 12.0f, ForceMode2D.Impulse);
+                    Enemy1_1Bullet.GetComponent<Enemy1_1Bullet>().EliteElite();
+                    Enemy1_1Bullet2.GetComponent<Enemy1_1Bullet>().EliteElite();
+                    Enemy1_1Bullet3.GetComponent<Enemy1_1Bullet>().EliteElite();
+                    Enemy1_1Bullet4.GetComponent<Enemy1_1Bullet>().EliteElite();
+                    Enemy1_1Bullet5.GetComponent<Enemy1_1Bullet>().EliteElite();
+                }
             }
             else { Rigid.AddForce(Targetvec.normalized * 5.0f, ForceMode2D.Impulse); }
 
@@ -322,7 +370,15 @@ public class Enemy : MonoBehaviour
             Enemy1_3Bullet.transform.position = ShotPos.transform.position;
             Rigidbody2D Rigid = Enemy1_3Bullet.GetComponent<Rigidbody2D>();
             Rigid.AddForce(Targetvec.normalized * 15.0f, ForceMode2D.Impulse);
-            Enemy1_3CurShotDelay = 0.0f;
+            Enemy1_3Bullet.GetComponent<Enemy1_3Bullet>().EliteElite = true;
+            if (Elite == 100)
+            {
+                Enemy1_3CurShotDelay = 4.0f;
+            }
+            else
+            {
+                Enemy1_3CurShotDelay = 0.0f;
+            }
 
             if (Elite == 1)
             {

@@ -4,6 +4,7 @@ public class Enemy1_3Bullet : MonoBehaviour
 {
     public GameObject SlowPot;
     private Rigidbody2D rigid;
+    public bool EliteElite = false;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -16,6 +17,7 @@ public class Enemy1_3Bullet : MonoBehaviour
 
     private void DeActive()
     {
+        EliteElite = false;
         SlowPot.SetActive(false);
         gameObject.SetActive(false);
     }

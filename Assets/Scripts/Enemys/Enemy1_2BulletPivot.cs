@@ -15,6 +15,14 @@ public class Enemy1_2BulletPivot : MonoBehaviour
         Invoke("Laser", 2.0f);
     }
 
+    private void Update()
+    {
+        if (transform.GetComponentInParent<Enemy>().Elite == 100)
+        {
+            transform.Rotate(Vector3.back * 150.0f * Time.deltaTime);
+        }
+    }
+
     private void DeActive()
     {
         gameObject.SetActive(false);

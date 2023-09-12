@@ -18,6 +18,10 @@ public class PlayerBoomerang : MonoBehaviour
     private void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
+        if(GameManager.instance.BoomerangLevel >= 3)
+        {
+            transform.localScale = new Vector3(3, 3, 0);
+        }
     }
     void Update()
     {

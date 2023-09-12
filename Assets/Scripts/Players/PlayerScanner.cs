@@ -20,7 +20,7 @@ public class PlayerScanner : MonoBehaviour
     Vector3 secondtargetvec;
     float curBombDelay = 0.0f;
     float curKnifeDelay = 0.0f;
-    float curBoomerangDelay = 0.0f;
+    float curBoomerangDelay = 5.0f;
     float curDragonatkDelay = 0.0f;
     int Knifenum = 0;
     public GameObject Pet1leftatk;
@@ -31,24 +31,37 @@ public class PlayerScanner : MonoBehaviour
     private void FixedUpdate()
     {
         Targets = Physics2D.CircleCastAll(transform.position, ScanRange, Vector2.zero, 0, TargetLayer);
-        NearestTarget = GetNearest();
-        farthestTarget = GetFarthest();
-        SecondTarget = GetSecond();
+        if (Targets.Length >= 1)
+        {
+            NearestTarget = GetNearest();
+            farthestTarget = GetFarthest();
+            if (Targets.Length >= 1)
+            {
+                SecondTarget = GetSecond();
+            }
+        }
     }
     private void Update()
     {
-        playervec = new Vector3(transform.position.x, transform.position.y, -10);
-        targetvec = new Vector3(NearestTarget.transform.position.x, NearestTarget.transform.position.y, -10);
-        fartargetvec = new Vector3(farthestTarget.transform.position.x, farthestTarget.transform.position.y, -10);
-        secondtargetvec = new Vector3(SecondTarget.transform.position.x, SecondTarget.transform.position.y, -10);
-        len = targetvec - playervec;
-        farlen = fartargetvec - playervec;
-        secondlen = secondtargetvec - playervec;
+        if (Targets.Length >= 1)
+        {
+            playervec = new Vector3(transform.position.x, transform.position.y, -10);
+            targetvec = new Vector3(NearestTarget.transform.position.x, NearestTarget.transform.position.y, -10);
+            fartargetvec = new Vector3(farthestTarget.transform.position.x, farthestTarget.transform.position.y, -10);
+            if (Targets.Length >= 2)
+            {
+                secondtargetvec = new Vector3(SecondTarget.transform.position.x, SecondTarget.transform.position.y, -10);
+            }
 
-        Bomb();
-        Knife();
-        Boomerang();
-        PetAttack();
+            len = targetvec - playervec;
+            farlen = fartargetvec - playervec;
+            secondlen = secondtargetvec - playervec;
+
+            Bomb();
+            Knife();
+            Boomerang();
+            PetAttack();
+        }
     }
 
     void PetAttack()
@@ -152,7 +165,7 @@ public class PlayerScanner : MonoBehaviour
             
             if (curBoomerangDelay > 5.0f)
             {
-                if (GameManager.instance.BoomerangLevel <= 1)
+                if (GameManager.instance.BoomerangLevel >= 1)
                 {
                     GameObject Boomerang = GameManager.instance.pool.Get(17);
                     Boomerang.transform.position = transform.position;
@@ -288,6 +301,7 @@ public class PlayerScanner : MonoBehaviour
                 i += 1;
             }
         }
+
         return result2[i-1];
     }
 
@@ -332,7 +346,14 @@ public class PlayerScanner : MonoBehaviour
                 i += 1;
             }
         }
-        return result2[i-2];
+        if (i >= 2)
+        {
+            return result2[i - 2];
+        }
+        else
+        {
+            return result2[0];
+        }
     }
 
 

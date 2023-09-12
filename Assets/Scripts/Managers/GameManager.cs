@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     private float CurEnemy1_2BuildDelay = -60.0f;
     private float CurEnemy1_3BuildDelay = -120.0f;
     private float MaxShopEnemyBuildDelay = 300.0f;
-    private float MaxEnemy1_1BuildDelay = 2.5f;
+    public float MaxEnemy1_1BuildDelay = 2.5f;
     private float MaxEnemy1_2BuildDelay = 5.0f;
     private float MaxEnemy1_3BuildDelay = 5.0f;
     public int Upgradenum1;
@@ -59,6 +59,13 @@ public class GameManager : MonoBehaviour
     public bool isKilled444 = false;
     public bool getkilled444 = false;
     public float PlusBuildEnemy = 0.0f;
+    //특수 이벤트
+    public bool isAllElite = false;
+    public bool isManyEnemy = false;
+    public bool isEliteofElite = false;
+    public bool isEventMany = false;
+    public bool isEventAllElite = false;
+    public bool isEventEliteofElite = false;
 
 
     //게임 오브젝트
@@ -97,6 +104,10 @@ public class GameManager : MonoBehaviour
     public GameObject KunaiPos4;
     public GameObject KunaiPos5;
     public GameObject KunaiPos6;
+    //엘리트엘리트 적오브젝트
+    public GameObject EliteEliteEnemy1_1;
+    public GameObject EliteEliteEnemy1_2;
+    public GameObject EliteEliteEnemy1_3;
     public Text BonusStat1;
     public Text BonusStat2;
     public Text BonusStat3;
@@ -153,6 +164,24 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.O))
         {
             GetEXP(30);
+        }
+        if(!isEventMany && kill >= 300)
+        {
+            isEventMany = true;
+            ManyEnemy();
+        }
+        if (!isEventAllElite && kill >= 550)
+        {
+            isEventAllElite = true;
+            AllElite();
+        }
+        if (!isEventEliteofElite && kill >=800)
+        {
+            isEventEliteofElite = true;
+            EliteEliteEnemy1_1.SetActive(true);
+            EliteEliteEnemy1_2.SetActive(true);
+            EliteEliteEnemy1_3.SetActive(true);
+            EliteOfElite();
         }
 
         if (!Boss1.activeSelf && kill >= 1000)
@@ -317,6 +346,13 @@ public class GameManager : MonoBehaviour
     }
     private void BuildEnemy()
     {
+        if (isManyEnemy)
+        {
+            PlusBuildEnemy = 0.0f;
+            MaxEnemy1_1BuildDelay = 0.05f;
+            MaxEnemy1_2BuildDelay = 0.1f;
+            MaxEnemy1_3BuildDelay = 0.1f;
+        }
         if (CurShopEnemyBuildDelay > MaxShopEnemyBuildDelay)
         {
             pos = Random.Range(0, 12);
@@ -875,5 +911,32 @@ public class GameManager : MonoBehaviour
             Player.instance.AP += 44;
             Player.instance.AS += 44;
         }
+    }
+
+    public void AllElite()
+    {
+        isAllElite = true;
+        Invoke("EventOff", 3.0f);
+    }
+
+    public void EliteOfElite()
+    {
+        isEliteofElite = true;
+        Invoke("EventOff", 5.0f);
+    }
+
+    public void ManyEnemy()
+    {
+        isManyEnemy = true;
+        Invoke("EventOff", 3.0f);
+    }
+    void EventOff()
+    {
+        isAllElite = false;
+        isEliteofElite = false;
+        isManyEnemy = false;
+        MaxEnemy1_1BuildDelay = 2.5f;
+        MaxEnemy1_2BuildDelay = 5.0f;
+        MaxEnemy1_3BuildDelay = 5.0f;
     }
 }
