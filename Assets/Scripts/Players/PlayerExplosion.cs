@@ -16,7 +16,7 @@ public class PlayerExplosion : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            collision.GetComponent<Enemy>().TakeDamage(200+Player.instance.AP*0.5f);
+            collision.GetComponent<Enemy>().TakeDamage(40+Player.instance.AP*0.5f);
         }
 
     }

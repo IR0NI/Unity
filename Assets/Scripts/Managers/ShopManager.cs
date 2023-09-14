@@ -67,11 +67,11 @@ public class ShopManager : MonoBehaviour
             {
                 case 1:
                     ItemNameText[i].text = "1 (300골드)";
-                    ItemExplainText[i].text = "공격력 +30";
+                    ItemExplainText[i].text = "공격력 +3";
                     break;
                 case 2:
                     ItemNameText[i].text = "2 (400골드)";
-                    ItemExplainText[i].text = "공격력 +50, 손재주 -20 ";
+                    ItemExplainText[i].text = "공격력 +5, 손재주 -2 ";
                     break;
                 case 3:
                     ItemNameText[i].text = "3 (300골드)";
@@ -79,15 +79,15 @@ public class ShopManager : MonoBehaviour
                     break;
                 case 4:
                     ItemNameText[i].text = "4 (400골드)";
-                    ItemExplainText[i].text = "공격속도 +40%, 공격력 -10";
+                    ItemExplainText[i].text = "공격속도 +40%, 공격력 -1";
                     break;
                 case 5:
                     ItemNameText[i].text = "5 (300골드)";
-                    ItemExplainText[i].text = "손재주 +50";
+                    ItemExplainText[i].text = "손재주 +5";
                     break;
                 case 6:
                     ItemNameText[i].text = "6 (500골드)";
-                    ItemExplainText[i].text = "손재주 +100, 공격력 -20";
+                    ItemExplainText[i].text = "손재주 +10, 공격력 -2";
                     break;
                 case 7:
                     ItemNameText[i].text = "7 (200골드)";
@@ -99,7 +99,7 @@ public class ShopManager : MonoBehaviour
                     break;
                 case 9:
                     ItemNameText[i].text = "9 (400골드)";
-                    ItemExplainText[i].text = "손재주 +40, 공격속도 +20%";
+                    ItemExplainText[i].text = "손재주 +4, 공격속도 +20%";
                     break;
                 case 10:
                     ItemNameText[i].text = "10 (400골드)";
@@ -107,7 +107,7 @@ public class ShopManager : MonoBehaviour
                     break;
                 case 11:
                     ItemNameText[i].text = "11 (550골드)";
-                    ItemExplainText[i].text = "공격력 +30, 공격속도 +30%";
+                    ItemExplainText[i].text = "공격력 +3, 공격속도 +30%";
                     break;
                 case 12:
                     ItemNameText[i].text = "12 (350골드)";
@@ -119,7 +119,7 @@ public class ShopManager : MonoBehaviour
                     break;
                 case 14:
                     ItemNameText[i].text = "14 (1200골드)";
-                    ItemExplainText[i].text = "공격력 +100, 손재주 +130";
+                    ItemExplainText[i].text = "공격력 +10, 손재주 +13";
                     break;
                 case 15:
                     ItemNameText[i].text = "15 (700골드)";
@@ -127,7 +127,7 @@ public class ShopManager : MonoBehaviour
                     break;
                 case 16:
                     ItemNameText[i].text = "16 (300골드)미구현클릭x!!";
-                    ItemExplainText[i].text = "강화종류가 11개이상일때 공격력 +150, 손재주 +200";
+                    ItemExplainText[i].text = "강화종류가 11개이상일때 공격력 +15, 손재주 +20";
                     break;
                 case 17:
                     ItemNameText[i].text = "17 (900골드)미구현클릭x!!";
@@ -157,7 +157,7 @@ public class ShopManager : MonoBehaviour
             case 1:
                 if (GameManager.instance.Gold >= 300)
                 {
-                    Player.instance.AD += 30;
+                    Player.instance.AD += 3;
                     GameManager.instance.Gold -= 300;
                     ItemBuyUI(num);
                 }
@@ -165,8 +165,8 @@ public class ShopManager : MonoBehaviour
             case 2:
                 if (GameManager.instance.Gold >= 400)
                 {
-                    Player.instance.AD += 50;
-                    Player.instance.AP -= 20;
+                    Player.instance.AD += 5;
+                    Player.instance.AP -= 2;
                     GameManager.instance.Gold -= 400;
                     ItemBuyUI(num);
                 }
@@ -182,8 +182,8 @@ public class ShopManager : MonoBehaviour
             case 4:
                 if (GameManager.instance.Gold >= 400)
                 {
-                    Player.instance.AP += 40;
-                    Player.instance.AD -= 10;
+                    Player.instance.AP += 4;
+                    Player.instance.AD -= 1;
                     GameManager.instance.Gold -= 400;
                     ItemBuyUI(num);
                 }
@@ -191,7 +191,7 @@ public class ShopManager : MonoBehaviour
             case 5:
                 if (GameManager.instance.Gold >= 300)
                 {
-                    Player.instance.AP += 50;
+                    Player.instance.AP += 5;
                     GameManager.instance.Gold -= 300;
                     ItemBuyUI(num);
                 }
@@ -199,8 +199,8 @@ public class ShopManager : MonoBehaviour
             case 6:
                 if (GameManager.instance.Gold >= 500)
                 {
-                    Player.instance.AP += 100;
-                    Player.instance.AD -= 20;
+                    Player.instance.AP += 10;
+                    Player.instance.AD -= 2;
                     GameManager.instance.Gold -= 500;
                     ItemBuyUI(num);
                 }
@@ -228,7 +228,7 @@ public class ShopManager : MonoBehaviour
             case 9:
                 if (GameManager.instance.Gold >= 400)
                 {
-                    Player.instance.AP += 40;
+                    Player.instance.AP += 4;
                     Player.instance.AS += 20;
                     GameManager.instance.Gold -= 400;
                     ItemBuyUI(num);
@@ -246,7 +246,7 @@ public class ShopManager : MonoBehaviour
             case 11:
                 if (GameManager.instance.Gold >= 550)
                 {
-                    Player.instance.AD += 30;
+                    Player.instance.AD += 3;
                     Player.instance.AS += 30;
                     GameManager.instance.Gold -= 550;
                     ItemBuyUI(num);
@@ -272,8 +272,8 @@ public class ShopManager : MonoBehaviour
             case 14:
                 if (GameManager.instance.Gold >= 1200)
                 {
-                    Player.instance.AD += 100;
-                    Player.instance.AP += 130;
+                    Player.instance.AD += 10;
+                    Player.instance.AP += 13;
                     GameManager.instance.Gold -= 1200;
                     ItemBuyUI(num);
                 }

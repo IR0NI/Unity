@@ -908,7 +908,7 @@ MonoBehaviour:
   EnergyLevel: 0
   KunaiLevel: 0
   Non1Level: 0
-  Non2Level: 0
+  Gun3Level: 0
   pos: 0
   HitBullet: 0
   kill: 0
@@ -5654,6 +5654,7 @@ MonoBehaviour:
   - {fileID: 966101308899977773, guid: b8d209d954a9eae4fa892be03a1e4d42, type: 3}
   - {fileID: 9080540343439849952, guid: 3006a7e8bee93d940944b10bb0534aed, type: 3}
   - {fileID: 6605964733987757987, guid: b616a4768dce74e40a0a35f5e7f8dae3, type: 3}
+  - {fileID: 1837440965352619650, guid: bd405aeae2c7dad429d363aa267b0dad, type: 3}
 --- !u!1 &895086820
 GameObject:
   m_ObjectHideFlags: 0
@@ -10473,11 +10474,13 @@ MonoBehaviour:
   ChangeSpeed: 100
   MaxHP: 3
   HP: 3
-  AD: 100
+  AD: 10
   AP: 0
   AS: 0
+  BulletSpeed: 15
   MaxFireDelay: 1
   CurDashDelay: 3
+  playervec: {x: 0, y: 0, z: 0}
   len: {x: 0, y: 0, z: 0}
 --- !u!50 &1825655916
 Rigidbody2D:

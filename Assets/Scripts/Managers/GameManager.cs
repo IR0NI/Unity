@@ -33,8 +33,8 @@ public class GameManager : MonoBehaviour
     private float CurEnemy1_3BuildDelay = -120.0f;
     private float MaxShopEnemyBuildDelay = 300.0f;
     public float MaxEnemy1_1BuildDelay = 2.5f;
-    private float MaxEnemy1_2BuildDelay = 5.0f;
-    private float MaxEnemy1_3BuildDelay = 5.0f;
+    private float MaxEnemy1_2BuildDelay = 10.0f;
+    private float MaxEnemy1_3BuildDelay = 10.0f;
     public int Upgradenum1;
     public int Upgradenum2;
     public int Upgradenum3;
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     public int EnergyLevel = 0;
     public int KunaiLevel = 0;
     public int Non1Level = 0;
-    public int Non2Level = 0;
+    public int Gun3Level = 0;
     public int pos = 0;
     public float HitBullet = 0.0f;
     public int kill = 0;
@@ -157,25 +157,25 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Player.instance.MaxHP += 10;
-            Player.instance.HP += 10;
+            //Player.instance.MaxHP += 1;
+            Player.instance.HP += 1;
         }
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            GetEXP(30);
+            GetEXP(20);
         }
-        if(!isEventMany && kill >= 300)
+        if(!isEventMany && kill >= 150)
         {
             isEventMany = true;
             ManyEnemy();
         }
-        if (!isEventAllElite && kill >= 550)
+        if (!isEventAllElite && kill >= 350)
         {
             isEventAllElite = true;
             AllElite();
         }
-        if (!isEventEliteofElite && kill >=800)
+        if (!isEventEliteofElite && kill >=550)
         {
             isEventEliteofElite = true;
             EliteEliteEnemy1_1.SetActive(true);
@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour
             EliteOfElite();
         }
 
-        if (!Boss1.activeSelf && kill >= 1000)
+        if (!Boss1.activeSelf && kill >= 700)
         {
             Boss1.SetActive(true);
         }
@@ -269,46 +269,6 @@ public class GameManager : MonoBehaviour
                 GetGold(ran);
                 break;
         }
-        if(kill >= 100 && kill < 200)
-        {
-            PlusBuildEnemy = 1;
-        }else if(kill >= 200 && kill < 300)
-        {
-            PlusBuildEnemy = 2;
-        }
-        else if (kill >= 300 && kill < 400)
-        {
-            PlusBuildEnemy = 3;
-        }
-        else if (kill >= 400 && kill < 500)
-        {
-            PlusBuildEnemy = 4;
-        }
-        else if (kill >= 500 && kill < 600)
-        {
-            PlusBuildEnemy = 5;
-        }
-        else if (kill >= 600 && kill < 700)
-        {
-            PlusBuildEnemy = 6;
-        }
-        else if (kill >= 700 && kill < 800)
-        {
-            PlusBuildEnemy = 7;
-        }
-        else if (kill >= 800 && kill < 900)
-        {
-            PlusBuildEnemy = 8;
-        }
-        else if (kill >= 900 && kill <1000)
-        {
-            PlusBuildEnemy = 9;
-        }
-        else if (kill >= 1000 && kill < 1100)
-        {
-            PlusBuildEnemy = 10;
-        }
-
     }
     public void IsPause()
     {
@@ -344,14 +304,23 @@ public class GameManager : MonoBehaviour
     {
         EXP += exp;
     }
+    
+    //적 생성
     private void BuildEnemy()
     {
+        for (int i = 0; i < 10; i++)
+        {
+            if (kill >= (i + 1) * 20 && PlusBuildEnemy == i)
+            {
+                PlusBuildEnemy = i + 1;
+            }
+        }
         if (isManyEnemy)
         {
             PlusBuildEnemy = 0.0f;
-            MaxEnemy1_1BuildDelay = 0.05f;
-            MaxEnemy1_2BuildDelay = 0.1f;
-            MaxEnemy1_3BuildDelay = 0.1f;
+            MaxEnemy1_1BuildDelay = 0.1f;
+            MaxEnemy1_2BuildDelay = 0.3f;
+            MaxEnemy1_3BuildDelay = 0.2f;
         }
         if (CurShopEnemyBuildDelay > MaxShopEnemyBuildDelay)
         {
@@ -360,20 +329,18 @@ public class GameManager : MonoBehaviour
             ShopEnemy.transform.position = EnemyBuildPos[pos].position;
             CurShopEnemyBuildDelay = 0;
         }
-        if (CurEnemy1_1BuildDelay > MaxEnemy1_1BuildDelay-PlusBuildEnemy*0.1f)
+        if (CurEnemy1_1BuildDelay > MaxEnemy1_1BuildDelay-PlusBuildEnemy*0.2f)
         {
             pos = Random.Range(0, 12);
             GameObject enemy1_1 = pool.Get(0);
-            //Enemy enemyLogic1_1 = enemy1_1.GetComponent<Enemy>();
             enemy1_1.transform.position = EnemyBuildPos[pos].position;
             CurEnemy1_1BuildDelay = 0;
         }
 
-        if (CurEnemy1_2BuildDelay > MaxEnemy1_2BuildDelay-PlusBuildEnemy*0.2f)
+        if (CurEnemy1_2BuildDelay > MaxEnemy1_2BuildDelay-PlusBuildEnemy*0.1f)
         {
             pos = Random.Range(0, 12);
             GameObject enemy1_2 = pool.Get(2);
-            //Enemy enemyLogic1_2 = enemy1_2.GetComponent<Enemy>();
             enemy1_2.transform.position = EnemyBuildPos[pos].position;
             CurEnemy1_2BuildDelay = 0;
         }
@@ -407,7 +374,7 @@ public class GameManager : MonoBehaviour
 
     public void UpgradeMenu()
     {
-        int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, BoomerangLevel, AxeLevel, KunaiLevel, EnergyLevel, Non1Level, Non2Level };
+        int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, BoomerangLevel, AxeLevel, KunaiLevel, EnergyLevel, Non1Level, Gun3Level };
         Queue<int> FullUpgrade = new Queue<int>();
 
         for (int i = 1; i < 13; i++)
@@ -443,7 +410,7 @@ public class GameManager : MonoBehaviour
         BonusStatnum1 = Random.Range(0, 8);
         BonusStatnum2 = Random.Range(0, 8);
         BonusStatnum3 = Random.Range(0, 8);
-        int[] BonusStatValue = { +5, -5, +10, -10, +5, -5, +3, -3 };
+        int[] BonusStatValue = { +2, -2, +3, -3, +5, -5, +3, -3 };
         BonusStatnum = new int[] { BonusStatnum1, BonusStatnum2, BonusStatnum3 };
         for (int i = 0; i < 3; i++)
         {
@@ -453,11 +420,11 @@ public class GameManager : MonoBehaviour
             switch (num[i])
             {
                 case 1:
-                    UpgradeText[i].text = "총알강화";
+                    UpgradeText[i].text = "사격강화";
                     switch (Gun1Level)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "2발로 증가, 공격력 -10";
+                            UpgradeExplainText[i].text = "2발로 증가, 공격력 -2";
                             break;
                         case 1:
                             UpgradeExplainText[i].text = "3발로 증가";
@@ -471,7 +438,7 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 case 2:
-                    UpgradeText[i].text = "총알강화2";
+                    UpgradeText[i].text = "사격강화 2";
                     switch (Gun2Level)
                     {
                         case 0:
@@ -651,20 +618,20 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 case 12:
-                    UpgradeText[i].text = "미정";
-                    switch (Non2Level)
+                    UpgradeText[i].text = "사격강화 3";
+                    switch (Gun3Level)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "탄속 +30%, 공격속도 +30%";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "5초마다 5초동안 공격속도 +100%";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "8번 공격할 때마다 전방향으로 공격";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "총알로 적 타격시 파편을 남기고 잠시후 파편을 잡아당겨서 공격";
                             break;
                     }
                     break;
@@ -681,7 +648,7 @@ public class GameManager : MonoBehaviour
                 switch (Gun1Level)
                 {
                     case 0:
-                        Player.instance.AD -= 10;
+                        Player.instance.AD -= 2;
                         break;
                     case 1:
                         break;
@@ -859,29 +826,31 @@ public class GameManager : MonoBehaviour
                 Non1Level += 1;
                 break;
             case 12:
-                switch (Non2Level)
+                switch (Gun3Level)
                 {
                     case 0:
-
+                        Player.instance.BulletSpeed += 4.5f;
+                        Player.instance.AS += 30.0f;
                         break;
                     case 1:
+                        Player.instance.FiveSecondASUp();
                         break;
                     case 2:
                         break;
                     case 3:
                         break;
                 }
-                Non2Level += 1;
+                Gun3Level += 1;
                 break;
         }
     }
     public void BonusStatUpgrade(int btnnum)
     {
-        int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, BoomerangLevel, AxeLevel, KunaiLevel, EnergyLevel, Non1Level, Non2Level };
+        int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, BoomerangLevel, AxeLevel, KunaiLevel, EnergyLevel, Non1Level, Gun3Level };
         int[] num = { Upgradenum1, Upgradenum2, Upgradenum3 };
         BonusStatnum = new int[] { BonusStatnum1, BonusStatnum2, BonusStatnum3 };
         string[] BonusStatKind = { "공격력 ", "공격력 ", "손재주 ", "손재주 ", "공격속도 ", "공격속도 ", "이동속도 ", "이동속도 " };
-        int[] BonusStatValue = { 5, -5, 10, -10, 5, -5, 3, -3 };
+        int[] BonusStatValue = { 2, -2, 3, -3, 5, -5, 3, -3 };
         if (BonusStatnum[btnnum] == 0 || BonusStatnum[btnnum] == 1)
         {
             Player.instance.AD += BonusStatValue[BonusStatnum[btnnum]] * (UpgradeLevel[num[btnnum]]);
@@ -913,16 +882,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //적 이벤트
     public void AllElite()
     {
         isAllElite = true;
-        Invoke("EventOff", 3.0f);
+        Invoke("EventOff", 6.0f);
     }
 
     public void EliteOfElite()
     {
         isEliteofElite = true;
-        Invoke("EventOff", 5.0f);
+        Invoke("EventOff", 10.0f);
     }
 
     public void ManyEnemy()
@@ -936,7 +906,7 @@ public class GameManager : MonoBehaviour
         isEliteofElite = false;
         isManyEnemy = false;
         MaxEnemy1_1BuildDelay = 2.5f;
-        MaxEnemy1_2BuildDelay = 5.0f;
-        MaxEnemy1_3BuildDelay = 5.0f;
+        MaxEnemy1_2BuildDelay = 10.0f;
+        MaxEnemy1_3BuildDelay = 10.0f;
     }
 }

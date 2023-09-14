@@ -51,9 +51,10 @@ public class Player : MonoBehaviour
     public float ChangeSpeed = 100.0f;
     public int MaxHP = 3;
     public int HP = 3;
-    public float AD = 100.0f;
+    public float AD = 10.0f;
     public float AP = 0.0f;
     public float AS = 0.0f;
+    public float BulletSpeed = 15.0f;
 
     //µÙ∑π¿Ã
     private float CurFireDelay = 0.0f;
@@ -61,10 +62,11 @@ public class Player : MonoBehaviour
     public float CurDashDelay = 3.0f;
     private float MaxDashDelay = 3.0f;
 
-    private Vector3 playervec;
+    public Vector3 playervec;
     public Vector3 len;
 
 
+    private int bulletatknum = 0;
     private int atknum = 0;
     private void Awake()
     {
@@ -285,6 +287,18 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void FiveSecondASUp()
+    {
+        AS += 100.0f;
+        Invoke("FiveSecondASDown", 5.0f);
+    }
+
+    private void FiveSecondASDown()
+    {
+        AS -= 100.0f;
+        Invoke("FiveSecondASUp", 5.0f);
+    }
+
     private void Fire()
     {
      
@@ -317,7 +331,7 @@ public class Player : MonoBehaviour
                         }
                         Bul.transform.rotation = Quaternion.Euler(0, 0, z);
                         Rigidbody2D rigid = Bul.GetComponent<Rigidbody2D>();
-                        rigid.AddForce(len.normalized * 15.0f, ForceMode2D.Impulse);
+                        rigid.AddForce(len.normalized * BulletSpeed, ForceMode2D.Impulse);
                         break;
                     case 1:
                         GameObject bul1_1 = GameManager.instance.pool.Get(7);
@@ -335,10 +349,10 @@ public class Player : MonoBehaviour
                         }
                         bul1_1.transform.rotation = Quaternion.Euler(0, 0, z - 2);
                         Rigidbody2D rigid1 = bul1_1.GetComponent<Rigidbody2D>();
-                        rigid1.AddForce((len__2.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid1.AddForce((len__2.normalized) * BulletSpeed, ForceMode2D.Impulse);
                         bul1_2.transform.rotation = Quaternion.Euler(0, 0, z + 2);
                         Rigidbody2D rigid2 = bul1_2.GetComponent<Rigidbody2D>();
-                        rigid2.AddForce((len_2.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid2.AddForce((len_2.normalized) * BulletSpeed, ForceMode2D.Impulse);
                         break;
                     case 2:
                         GameObject bul2_1 = GameManager.instance.pool.Get(7);
@@ -360,15 +374,15 @@ public class Player : MonoBehaviour
 
                         bul2_1.transform.rotation = Quaternion.Euler(0, 0, z - 2);
                         Rigidbody2D rigid2_1 = bul2_1.GetComponent<Rigidbody2D>();
-                        rigid2_1.AddForce((len__2.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid2_1.AddForce((len__2.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         bul2_2.transform.rotation = Quaternion.Euler(0, 0, z);
                         Rigidbody2D rigid2_2 = bul2_2.GetComponent<Rigidbody2D>();
-                        rigid2_2.AddForce((len.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid2_2.AddForce((len.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         bul2_3.transform.rotation = Quaternion.Euler(0, 0, z + 2);
                         Rigidbody2D rigid2_3 = bul2_3.GetComponent<Rigidbody2D>();
-                        rigid2_3.AddForce((len_2.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid2_3.AddForce((len_2.normalized) * BulletSpeed, ForceMode2D.Impulse);
                         break;
                     case 3:
                         GameObject bul3_1 = GameManager.instance.pool.Get(7);
@@ -393,19 +407,19 @@ public class Player : MonoBehaviour
 
                         bul3_1.transform.rotation = Quaternion.Euler(0, 0, z + 3);
                         Rigidbody2D rigid3_1 = bul3_1.GetComponent<Rigidbody2D>();
-                        rigid3_1.AddForce((len_3.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid3_1.AddForce((len_3.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         bul3_2.transform.rotation = Quaternion.Euler(0, 0, z + 1);
                         Rigidbody2D rigid3_2 = bul3_2.GetComponent<Rigidbody2D>();
-                        rigid3_2.AddForce((len_1.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid3_2.AddForce((len_1.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         bul3_3.transform.rotation = Quaternion.Euler(0, 0, z - 1);
                         Rigidbody2D rigid3_3 = bul3_3.GetComponent<Rigidbody2D>();
-                        rigid3_3.AddForce((len__1.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid3_3.AddForce((len__1.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         bul3_4.transform.rotation = Quaternion.Euler(0, 0, z - 3);
                         Rigidbody2D rigid3_4 = bul3_4.GetComponent<Rigidbody2D>();
-                        rigid3_4.AddForce((len__3.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid3_4.AddForce((len__3.normalized) * BulletSpeed, ForceMode2D.Impulse);
                         break;
                     case 4:
                         GameObject bul4_1 = GameManager.instance.pool.Get(7);
@@ -442,41 +456,72 @@ public class Player : MonoBehaviour
 
                         bul4_1.transform.rotation = Quaternion.Euler(0, 0, z + 3);
                         Rigidbody2D rigid4_1 = bul4_1.GetComponent<Rigidbody2D>();
-                        rigid4_1.AddForce((len_3.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid4_1.AddForce((len_3.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         bul4_2.transform.rotation = Quaternion.Euler(0, 0, z + 1);
                         Rigidbody2D rigid4_2 = bul4_2.GetComponent<Rigidbody2D>();
-                        rigid4_2.AddForce((len_1.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid4_2.AddForce((len_1.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         bul4_3.transform.rotation = Quaternion.Euler(0, 0, z - 1);
                         Rigidbody2D rigid4_3 = bul4_3.GetComponent<Rigidbody2D>();
-                        rigid4_3.AddForce((len__1.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid4_3.AddForce((len__1.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         bul4_4.transform.rotation = Quaternion.Euler(0, 0, z - 3);
                         Rigidbody2D rigid4_4 = bul4_4.GetComponent<Rigidbody2D>();
-                        rigid4_4.AddForce((len__3.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid4_4.AddForce((len__3.normalized) * BulletSpeed, ForceMode2D.Impulse);
                        
                         bul4_5.transform.rotation = Quaternion.Euler(0, 0, z + 3);
                         Rigidbody2D rigid4_5 = bul4_5.GetComponent<Rigidbody2D>();
-                        rigid4_5.AddForce((len_3.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid4_5.AddForce((len_3.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         bul4_6.transform.rotation = Quaternion.Euler(0, 0, z + 1);
                         Rigidbody2D rigid4_6 = bul4_6.GetComponent<Rigidbody2D>();
-                        rigid4_6.AddForce((len_1.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid4_6.AddForce((len_1.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         bul4_7.transform.rotation = Quaternion.Euler(0, 0, z - 1);
                         Rigidbody2D rigid4_7 = bul4_7.GetComponent<Rigidbody2D>();
-                        rigid4_7.AddForce((len__1.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid4_7.AddForce((len__1.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         bul4_8.transform.rotation = Quaternion.Euler(0, 0, z - 3);
                         Rigidbody2D rigid4_8 = bul4_8.GetComponent<Rigidbody2D>();
-                        rigid4_8.AddForce((len__3.normalized) * 15.0f, ForceMode2D.Impulse);
+                        rigid4_8.AddForce((len__3.normalized) * BulletSpeed, ForceMode2D.Impulse);
 
                         Gun2.Shot();
                         Gun2.Idle();
 
                         break;
 
+                }
+                if (GameManager.instance.Gun3Level >= 3)
+                {
+                    atknum += 1;
+                    GameObject[] Bullet = new GameObject[12];
+                    Rigidbody2D[] rigid = new Rigidbody2D[12];
+                    Vector3[] len = new Vector3[12];
+                    len[0] = new Vector3(0, 2, 0);
+                    len[1] = new Vector3(1, Mathf.Sqrt(3), 0);
+                    len[2] = new Vector3(Mathf.Sqrt(3), 1, 0);
+                    len[3] = new Vector3(2, 0, 0);
+                    len[4] = new Vector3(Mathf.Sqrt(3), -1, 0);
+                    len[5] = new Vector3(1, -Mathf.Sqrt(3), 0);
+                    len[6] = new Vector3(0, -2, 0);
+                    len[7] = new Vector3(-1, -Mathf.Sqrt(3), 0);
+                    len[8] = new Vector3(-Mathf.Sqrt(3), -1, 0);
+                    len[9] = new Vector3(-2, 0, 0);
+                    len[10] = new Vector3(-Mathf.Sqrt(3), 1, 0);
+                    len[11] = new Vector3(-1, Mathf.Sqrt(3), 0);
+                    if (atknum == 7)
+                    {
+                        for (int i = 0; i < 12; i++)
+                        {
+                            Bullet[i] = GameManager.instance.pool.Get(7);
+                            Bullet[i].transform.position = transform.position;
+                            Bullet[i].transform.rotation = Quaternion.Euler(0, 0, -30 * i + 90);
+                            rigid[i] = Bullet[i].GetComponent<Rigidbody2D>();
+                            rigid[i].AddForce(len[i].normalized * BulletSpeed, ForceMode2D.Impulse);
+                        }
+                        atknum = 0;
+                    }
                 }
                 
                 CurFireDelay = 0.0f;
@@ -503,7 +548,7 @@ public class Player : MonoBehaviour
                     }
                     if (GameManager.instance.KunaiLevel >= 3)
                     {
-                        atknum += 1;
+                        bulletatknum += 1;
                         GameObject[] kunai = new GameObject[12];
                         Rigidbody2D[] rigid = new Rigidbody2D[12];
                         Vector3[] len = new Vector3[12];
@@ -519,7 +564,7 @@ public class Player : MonoBehaviour
                         len[9] = new Vector3(-2,0,0);
                         len[10] = new Vector3(-Mathf.Sqrt(3),1,0);
                         len[11] = new Vector3(-1, Mathf.Sqrt(3), 0);
-                        if (atknum == 4)
+                        if (bulletatknum == 4)
                         {
                             for (int i = 0; i < 12; i++)
                             {
@@ -529,7 +574,7 @@ public class Player : MonoBehaviour
                                 rigid[i] = kunai[i].GetComponent<Rigidbody2D>();
                                 rigid[i].AddForce(len[i].normalized * 15.0f, ForceMode2D.Impulse);
                             }
-                            atknum = 0;
+                            bulletatknum = 0;
                         }
 
                     }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 
-    public float HP = 200.0f;
+    public float HP = 20.0f;
     public float AddHP = 0.0f;
     public int EnemyType = 0;
 
@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     private float Enemy1_1CurShotDelay = 0.0f;
     private float Enemy1_2CurShotDelay = 0.0f;
     private float Enemy1_3CurShotDelay = 0.0f;
-    private float Enemy1_1MaxShotDelay = 35.0f;
+    private float Enemy1_1MaxShotDelay = 40.0f;
     private float Enemy1_2MaxShotDelay = 15.0f;
     private float Enemy1_3MaxShotDelay = 10.0f;
     private float Randomtime = 0.0f;
@@ -40,18 +40,18 @@ public class Enemy : MonoBehaviour
         MoveSpeed = 70;
         target = GameManager.instance.player.transform;
         Randomtime = Random.Range(0, 30);
-        AddHP = 50.0f * Mathf.Floor((GameManager.instance.kill) * 0.02f);
-        HP = 150.0f + AddHP;
+        AddHP = 5.0f * Mathf.Floor((GameManager.instance.kill) * 0.02f);
+        HP = 15.0f + AddHP;
 
 
         if (EnemyType == 1)
         {
-            HP += 850.0f;
+            HP += 85.0f;
         }
 
         if (EnemyType == 2)
         {
-            HP += 4000.0f;
+            HP += 8000.0f;
             return;
         }
 
@@ -67,18 +67,18 @@ public class Enemy : MonoBehaviour
         {
             Enemy1_1MaxShotDelay = 3.0f;
             Elite = 100;
-            HP += 1050;
+            HP = 2000.0f;
             MoveSpeed = 70.0f;
         }
         if (EnemyType == 112)
         {
             Elite = 100;
-            HP += 1050;
+            HP = 2000.0f;
         }
         if (EnemyType == 113)
         {
             Elite = 100;
-            HP += 1050;
+            HP = 2000.0f;
         }
 
         //¿¤¸®Æ®
@@ -94,7 +94,7 @@ public class Enemy : MonoBehaviour
                 Buff.transform.position = new Vector3(transform.position.x + 0.4f, transform.position.y - 0.6f, 0);
                 Buff.transform.localScale = new Vector3(5, 5, 0);
                 Enemy1_1MaxShotDelay = 3.0f;
-                HP += 250.0f + AddHP;
+                HP += 25.0f + AddHP;
                 MoveSpeed = 70.0f;
             }
             if (EnemyType == 12)
@@ -103,14 +103,14 @@ public class Enemy : MonoBehaviour
                 Buff.transform.localScale = new Vector3(10, 10, 0);
                 Enemy1_2MaxShotDelay = 8.0f;
                 MoveSpeed = 110.0f;
-                HP += 400.0f + AddHP;
+                HP += 40.0f + AddHP;
                 Enemy1_2CurShotDelay += Randomtime * 0.2f;
             }
             if (EnemyType == 13)
             {
                 Buff.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
                 Buff.transform.localScale = new Vector3(3, 3, 0);
-                HP += 400.0f + AddHP;
+                HP += 40.0f + AddHP;
                 Enemy1_3CurShotDelay += Randomtime * 0.2f;
             }
         }
@@ -124,13 +124,13 @@ public class Enemy : MonoBehaviour
             }
             if (EnemyType == 12)
             {
-                HP += 50.0f;
-                Enemy1_2CurShotDelay += Randomtime;
+                HP += 5.0f;
+                Enemy1_2CurShotDelay += Randomtime * 0.2f;
             }
             if (EnemyType == 13)
             {
-                HP += 50.0f;
-                Enemy1_3CurShotDelay += Randomtime;
+                HP += 5.0f;
+                Enemy1_3CurShotDelay += Randomtime * 0.2f;
             }
         }
         
@@ -194,6 +194,10 @@ public class Enemy : MonoBehaviour
         if (Right && Down || Left && Down || Left && Up || Right && Up)
         {
             Move -= 1.0f;
+            if(MoveSpeed == 0)
+            {
+                Move = 0.0f;
+            }
         }
 
         if (Right)
@@ -350,14 +354,16 @@ public class Enemy : MonoBehaviour
         if (Enemy1_2CurShotDelay >= Enemy1_2MaxShotDelay)
         {
             MoveSpeed = 0.0f;
+            CancelInvoke();
             Invoke("NormalSpeed", 3.0f);
             Vector3 Playervec = new Vector3(target.position.x, target.position.y, -10);
             Vector3 EnemyVec = new Vector3(transform.position.x, transform.position.y, -10);
             Vector3 len = Playervec - EnemyVec;
             float z = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
-            Enemy1_2Bullet.SetActive(true);
+            
             Enemy1_2Bullet.transform.position = ShotPos.transform.position;
             Enemy1_2Bullet.transform.rotation = Quaternion.Euler(0, 0, z + 90);
+            Enemy1_2Bullet.SetActive(true);
             Enemy1_2CurShotDelay = 0.0f;
         }
     }
@@ -370,9 +376,10 @@ public class Enemy : MonoBehaviour
             Enemy1_3Bullet.transform.position = ShotPos.transform.position;
             Rigidbody2D Rigid = Enemy1_3Bullet.GetComponent<Rigidbody2D>();
             Rigid.AddForce(Targetvec.normalized * 15.0f, ForceMode2D.Impulse);
-            Enemy1_3Bullet.GetComponent<Enemy1_3Bullet>().EliteElite = true;
+            
             if (Elite == 100)
             {
+                Enemy1_3Bullet.GetComponent<Enemy1_3Bullet>().EliteElite = true;
                 Enemy1_3CurShotDelay = 4.0f;
             }
             else
@@ -395,9 +402,12 @@ public class Enemy : MonoBehaviour
 
     public void MoveZero()
     {
-        MoveSpeed = 0.0f;
-        CancelInvoke();
-        Invoke("NormalSpeed", 2.0f);
+        if (EnemyType > 10)
+        {
+            MoveSpeed = 0.0f;
+            CancelInvoke();
+            Invoke("NormalSpeed", 2.0f);
+        }
     }
     private void NormalSpeed()
     {

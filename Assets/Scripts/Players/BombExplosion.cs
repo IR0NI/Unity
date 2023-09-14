@@ -16,11 +16,11 @@ public class BombExplosion : MonoBehaviour
         {
             if (GameManager.instance.BombLevel <= 2)
             {
-                collision.gameObject.GetComponent<Enemy>().TakeDamage(100.0f + 0.5f * Player.instance.AP);
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(10.0f + 0.5f * Player.instance.AP);
             }
             else
             {
-                collision.gameObject.GetComponent<Enemy>().TakeDamage(200.0f + 0.8f * Player.instance.AP);
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(20.0f + 0.8f * Player.instance.AP);
             }
         }
     }

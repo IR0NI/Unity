@@ -16,9 +16,17 @@ public class PlayerKunai : MonoBehaviour
         {
             if (!touch)
             {
-                touch = true;
-                collision.GetComponent<Enemy>().TakeDamage(100 + Player.instance.AP*0.5f);
-                Deactive();
+                if (GameManager.instance.KunaiLevel == 1)
+                {
+                    touch = true;
+                    collision.GetComponent<Enemy>().TakeDamage(10 + Player.instance.AP * 0.3f);
+                    Deactive();
+                }else if (GameManager.instance.KunaiLevel >= 2)
+                {
+                    touch = true;
+                    collision.GetComponent<Enemy>().TakeDamage(15 + Player.instance.AP * 0.5f);
+                    Deactive();
+                }
             }
         }
     }

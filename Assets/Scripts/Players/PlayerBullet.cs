@@ -19,7 +19,13 @@ public class PlayerBullet : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            if(GameManager.instance.HitBullet > 0.01f)
+            if (GameManager.instance.HitBullet > 0.01f)
+            if (GameManager.instance.Gun3Level >= 4)
+                {
+                    GameObject Glass = GameManager.instance.pool.Get(19);
+                    Glass.transform.position = transform.position;
+                    Glass.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z - 90);
+                }
             switch (GameManager.instance.Gun2Level)
             {
                 case 0:
@@ -34,7 +40,7 @@ public class PlayerBullet : MonoBehaviour
 
                 case 1:
                     if(!touch)
-                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 100.0f + Player.instance.AP * 1.0f);
+                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 10.0f + Player.instance.AP * 0.3f);
                     touch = true;
                     if (collision.GetComponent<Enemy>().HP >= 0)
                     {
@@ -44,7 +50,7 @@ public class PlayerBullet : MonoBehaviour
 
                 case 2:
                     if(!touch)
-                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 200.0f + Player.instance.AP * 1.5f);
+                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 20.0f + Player.instance.AP * 0.7f);
                     touch = true;
                     collision.GetComponent<Enemy>().MoveZero();
                     if (collision.GetComponent<Enemy>().HP >= 0)
@@ -54,12 +60,12 @@ public class PlayerBullet : MonoBehaviour
                     break;
 
                 case 3:
-                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 200.0f + Player.instance.AP * 1.5f);
+                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 20.0f + Player.instance.AP * 0.7f);
                     collision.GetComponent<Enemy>().MoveZero();
                     break;
 
                 case 4:
-                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 200.0f + Player.instance.AP * 1.5f);
+                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 20.0f + Player.instance.AP * 0.7f);
                     collision.GetComponent<Enemy>().MoveZero();
                     int ran = Random.Range(1, 6);
                     if(ran == 1)
@@ -68,6 +74,7 @@ public class PlayerBullet : MonoBehaviour
                     }
                     break;
             }
+            
         }
     }
     

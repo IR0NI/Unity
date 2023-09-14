@@ -19,15 +19,15 @@ public class PlayerAxe : MonoBehaviour
         {
             if (GameManager.instance.AxeLevel == 1)
             {
-                collision.gameObject.GetComponent<Enemy>().TakeDamage(250 + Player.instance.AP * 1.2f);
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(40 + Player.instance.AP * 1.2f);
                 Deactive();
             }else if(GameManager.instance.AxeLevel == 2)
             {
-                collision.gameObject.GetComponent<Enemy>().TakeDamage(400 + Player.instance.AP * 2.0f);
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(60 + Player.instance.AP * 1.8f);
                 Deactive();
             }else if(GameManager.instance.AxeLevel > 2)
             {
-                collision.gameObject.GetComponent<Enemy>().TakeDamage(400 + Player.instance.AP * 2.0f);
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(60 + Player.instance.AP * 1.8f);
             }
         }
     }

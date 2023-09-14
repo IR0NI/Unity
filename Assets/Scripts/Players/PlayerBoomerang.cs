@@ -36,11 +36,11 @@ public class PlayerBoomerang : MonoBehaviour
             float ran = Random.Range(-0.5f, 0.5f);
             if (GameManager.instance.BoomerangLevel < 2)
             {
-                collision.gameObject.GetComponent<Enemy>().TakeDamage(100+Player.instance.AP*0.5f);
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(30+Player.instance.AP*0.7f);
             }
             else if (GameManager.instance.BoomerangLevel >= 2)
             {
-                collision.gameObject.GetComponent<Enemy>().TakeDamage(200 + Player.instance.AP);
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(50 + Player.instance.AP*1.5f);
             }
             
             var speed = lastVelocity.magnitude;
