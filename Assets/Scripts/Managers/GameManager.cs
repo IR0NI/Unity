@@ -46,9 +46,9 @@ public class GameManager : MonoBehaviour
     public int KnifeLevel = 0;
     public int BoomerangLevel = 0;
     public int AxeLevel = 0;
-    public int EnergyLevel = 0;
+    public int Pet2Level = 0;
     public int KunaiLevel = 0;
-    public int Non1Level = 0;
+    public int EnergyLevel = 0;
     public int Gun3Level = 0;
     public int pos = 0;
     public float HitBullet = 0.0f;
@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
     public bool isEventMany = false;
     public bool isEventAllElite = false;
     public bool isEventEliteofElite = false;
+    public bool isBoss1 = false;
 
 
     //게임 오브젝트
@@ -118,6 +119,20 @@ public class GameManager : MonoBehaviour
     int BonusStatnum3 = 0;
     public GameObject GameoverUI;
     public GameObject Boss1;
+
+    //pet2오브젝트
+    public GameObject Pet2_1;
+    public GameObject Pet2_2;
+    public GameObject Pet2_3;
+    public GameObject Pet2_4;
+    public GameObject Pet2_5;
+    public GameObject Pet2_6;
+    public GameObject Pet2_7;
+    public GameObject Pet2_8;
+
+    //업그레이드 6개제한 큐
+    private Queue<int> Upgradelist = new Queue<int>();
+    private int Upgradekind = 8;
 
     private void Awake()
     {
@@ -184,8 +199,9 @@ public class GameManager : MonoBehaviour
             EliteOfElite();
         }
 
-        if (!Boss1.activeSelf && kill >= 700)
+        if (!isBoss1 && kill >= 700)
         {
+            isBoss1 = true;
             Boss1.SetActive(true);
         }
         BuildEnemy();
@@ -318,9 +334,9 @@ public class GameManager : MonoBehaviour
         if (isManyEnemy)
         {
             PlusBuildEnemy = 0.0f;
-            MaxEnemy1_1BuildDelay = 0.1f;
-            MaxEnemy1_2BuildDelay = 0.3f;
-            MaxEnemy1_3BuildDelay = 0.2f;
+            MaxEnemy1_1BuildDelay = 0.25f;
+            MaxEnemy1_2BuildDelay = 0.5f;
+            MaxEnemy1_3BuildDelay = 0.3f;
         }
         if (CurShopEnemyBuildDelay > MaxShopEnemyBuildDelay)
         {
@@ -374,34 +390,54 @@ public class GameManager : MonoBehaviour
 
     public void UpgradeMenu()
     {
-        int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, BoomerangLevel, AxeLevel, KunaiLevel, EnergyLevel, Non1Level, Gun3Level };
-        Queue<int> FullUpgrade = new Queue<int>();
-
-        for (int i = 1; i < 13; i++)
+        
+        int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, BoomerangLevel, AxeLevel, KunaiLevel, Pet2Level, EnergyLevel, Gun3Level };
+        if (Upgradelist.Count < Upgradekind)
         {
-            if (UpgradeLevel[i] > 3)
+            Queue<int> FullUpgrade = new Queue<int>();
+
+            for (int i = 1; i < 13; i++)
             {
-                FullUpgrade.Enqueue(i);
+                if (UpgradeLevel[i] > 3)
+                {
+                    FullUpgrade.Enqueue(i);
+                }
             }
-        }
-        //큐FullUpgrade를 배열FullUpgradecopy로 복사
-        int[] FullUpgradecopy = FullUpgrade.ToArray();
+            
+            //큐FullUpgrade를 배열FullUpgradecopy로 복사
+            int[] FullUpgradecopy = FullUpgrade.ToArray();
 
-        for (int i = 0; i < FullUpgrade.Count; i++)
-        {
-            Debug.Log(FullUpgradecopy[i]);
-        }
+            Upgrade();
 
-        Upgrade();
-
-        for (int i = 0; i < FullUpgradecopy.Length; i++)
-        {
-            if (Upgradenum1 == FullUpgradecopy[i] || Upgradenum2 == FullUpgradecopy[i] || Upgradenum3 == FullUpgradecopy[i])
+            for (int i = 0; i < FullUpgradecopy.Length; i++)
             {
-                UpgradeMenu();
+                if (Upgradenum1 == FullUpgradecopy[i] || Upgradenum2 == FullUpgradecopy[i] || Upgradenum3 == FullUpgradecopy[i])
+                {
+                    UpgradeMenu();
+                }
             }
-        }
+        } else
+        {
+            int[] Upgradelistarray = Upgradelist.ToArray();
+            int ran1 = Random.Range(0, Upgradekind);
+            int ran2 = Random.Range(0, Upgradekind);
+            int ran3 = Random.Range(0, Upgradekind);
 
+            Upgradenum1 = Upgradelistarray[ran1];
+            Upgradenum2 = Upgradelistarray[ran2];
+            Upgradenum3 = Upgradelistarray[ran3];
+                while (Upgradenum1 == Upgradenum2)
+                {
+                int ran4 = Random.Range(0, Upgradekind);
+                Upgradenum2 = Upgradelistarray[ran4];
+                }
+
+                while (Upgradenum2 == Upgradenum3 || Upgradenum3 == Upgradenum1)
+                {
+                int ran5 = Random.Range(0, Upgradekind);
+                Upgradenum3 = Upgradelistarray[ran5];
+                }
+        }
         Text[] UpgradeText = { Upgrade1Text, Upgrade2Text, Upgrade3Text };
         Text[] UpgradeExplainText = { Upgrade1ExplainText, Upgrade2ExplainText, Upgrade3ExplainText };
         Text[] BonusStat = { BonusStat1, BonusStat2, BonusStat3 };
@@ -582,29 +618,29 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 case 10:
-                    UpgradeText[i].text = "미정";
-                    switch (EnergyLevel)
+                    UpgradeText[i].text = "펫2";
+                    switch (Pet2Level)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "박쥐4마리 소환";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "박쥐의 피해량이 상승한다";
                             break;
                         case 2:
                             UpgradeExplainText[i].text = "";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "박쥐4마리 소환";
                             break;
                     }
                     break;
                 case 11:
-                    UpgradeText[i].text = "미정";
-                    switch (Non1Level)
+                    UpgradeText[i].text = "에너지";
+                    switch (EnergyLevel)
                     {
                         case 0:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "에너지로 공격한다";
                             break;
                         case 1:
                             UpgradeExplainText[i].text = "";
@@ -649,6 +685,10 @@ public class GameManager : MonoBehaviour
                 {
                     case 0:
                         Player.instance.AD -= 2;
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
                         break;
                     case 1:
                         break;
@@ -665,7 +705,10 @@ public class GameManager : MonoBehaviour
                 switch (Gun2Level)
                 {
                     case 0:
-
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
                         break;
                     case 1:
                         break;
@@ -680,7 +723,10 @@ public class GameManager : MonoBehaviour
                 switch (BombLevel)
                 {
                     case 0:
-
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
                         break;
                     case 1:
                         break;
@@ -695,6 +741,10 @@ public class GameManager : MonoBehaviour
                 switch (DragonLevel)
                 {
                     case 0:
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
                         killpet = kill;
                         break;
                     case 1:
@@ -710,6 +760,10 @@ public class GameManager : MonoBehaviour
                 switch (ArmorLevel)
                 {
                     case 0:
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
                         Player.instance.HP += 1;
                         Player.instance.MaxHP += 1;
                         Player.instance.Heart();
@@ -732,7 +786,10 @@ public class GameManager : MonoBehaviour
                 switch (KnifeLevel)
                 {
                     case 0:
-
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
                         break;
                     case 1:
                         break;
@@ -747,7 +804,10 @@ public class GameManager : MonoBehaviour
                 switch (BoomerangLevel)
                 {
                     case 0:
-
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
                         break;
                     case 1:
                         break;
@@ -762,6 +822,10 @@ public class GameManager : MonoBehaviour
                 switch (AxeLevel)
                 {
                     case 0:
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
                         PlayerAxe.SetActive(true);
                         break;
                     case 1:
@@ -779,6 +843,10 @@ public class GameManager : MonoBehaviour
                 switch (KunaiLevel)
                 {
                     case 0:
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
                         KunaiPos1.SetActive(true);
                         break;
                     case 1:
@@ -796,10 +864,39 @@ public class GameManager : MonoBehaviour
                 KunaiLevel += 1;
                 break;
             case 10:
+                switch (Pet2Level)
+                {
+                    case 0:
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
+                        Pet2_1.SetActive(true);
+                        Pet2_2.SetActive(true);
+                        Pet2_3.SetActive(true);
+                        Pet2_4.SetActive(true);
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        Pet2_5.SetActive(true);
+                        Pet2_6.SetActive(true);
+                        Pet2_7.SetActive(true);
+                        Pet2_8.SetActive(true);
+                        break;
+                }
+                Pet2Level += 1;
+                break;
+            case 11:
                 switch (EnergyLevel)
                 {
                     case 0:
-
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
                         break;
                     case 1:
                         break;
@@ -810,25 +907,14 @@ public class GameManager : MonoBehaviour
                 }
                 EnergyLevel += 1;
                 break;
-            case 11:
-                switch (Non1Level)
-                {
-                    case 0:
-
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                }
-                Non1Level += 1;
-                break;
             case 12:
                 switch (Gun3Level)
                 {
                     case 0:
+                        if (Upgradelist.Count < Upgradekind)
+                        {
+                            Upgradelist.Enqueue(up[num]);
+                        }
                         Player.instance.BulletSpeed += 4.5f;
                         Player.instance.AS += 30.0f;
                         break;
@@ -843,10 +929,11 @@ public class GameManager : MonoBehaviour
                 Gun3Level += 1;
                 break;
         }
+        
     }
     public void BonusStatUpgrade(int btnnum)
     {
-        int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, BoomerangLevel, AxeLevel, KunaiLevel, EnergyLevel, Non1Level, Gun3Level };
+        int[] UpgradeLevel = { 0, Gun1Level, Gun2Level, BombLevel, DragonLevel, ArmorLevel, KnifeLevel, BoomerangLevel, AxeLevel, KunaiLevel, Pet2Level, EnergyLevel, Gun3Level };
         int[] num = { Upgradenum1, Upgradenum2, Upgradenum3 };
         BonusStatnum = new int[] { BonusStatnum1, BonusStatnum2, BonusStatnum3 };
         string[] BonusStatKind = { "공격력 ", "공격력 ", "손재주 ", "손재주 ", "공격속도 ", "공격속도 ", "이동속도 ", "이동속도 " };

@@ -61,6 +61,8 @@ public class Player : MonoBehaviour
     public float MaxFireDelay = 1.0f;
     public float CurDashDelay = 3.0f;
     private float MaxDashDelay = 3.0f;
+    private float CurEnergyDelay = 0.0f;
+    private float MaxEnergyDelay = 2.0f;
 
     public Vector3 playervec;
     public Vector3 len;
@@ -89,6 +91,7 @@ public class Player : MonoBehaviour
         Dash();
         Revive();
         Pet();
+        Energy();
         if (HP <= 0)
         {
             GameManager.instance.GameOver();
@@ -297,6 +300,68 @@ public class Player : MonoBehaviour
     {
         AS -= 100.0f;
         Invoke("FiveSecondASUp", 5.0f);
+    }
+
+    private void Energy()
+    {
+        if(GameManager.instance.EnergyLevel >= 1)
+        {
+            float x = Input.GetAxisRaw("Horizontal");
+            float y = Input.GetAxisRaw("Vertical");
+            CurEnergyDelay += Time.deltaTime;
+            if(CurEnergyDelay > MaxEnergyDelay)
+            {
+                GameObject Energy = GameManager.instance.pool.Get(20);
+                Rigidbody2D rigid = Energy.GetComponent<Rigidbody2D>();
+                Energy.transform.position = transform.position;
+                if(x>0 && y == 0)
+                {
+                    rigid.AddForce(Vector2.right*15, ForceMode2D.Impulse);
+                }else if(x>0 && y> 0)
+                {
+                    rigid.AddForce(Vector2.right * 15, ForceMode2D.Impulse);
+                    rigid.AddForce(Vector2.up * 15, ForceMode2D.Impulse);
+                }
+                else if(x>0 && y < 0)
+                {
+                    rigid.AddForce(Vector2.right * 15, ForceMode2D.Impulse);
+                    rigid.AddForce(Vector2.down * 15, ForceMode2D.Impulse);
+                }
+                else if(x==0 && y > 0)
+                {
+                    rigid.AddForce(Vector2.up * 15, ForceMode2D.Impulse);
+                }
+                else if(x==0 && y < 0)
+                {
+                    rigid.AddForce(Vector2.down * 15, ForceMode2D.Impulse);
+                }
+                else if(x<0 && y > 0)
+                {
+                    rigid.AddForce(Vector2.left * 15, ForceMode2D.Impulse);
+                    rigid.AddForce(Vector2.up * 15, ForceMode2D.Impulse);
+                }
+                else if(x<0 && y == 0)
+                {
+                    rigid.AddForce(Vector2.left * 15, ForceMode2D.Impulse);
+                }
+                else if(x<0 && y < 0)
+                {
+                    rigid.AddForce(Vector2.left * 15, ForceMode2D.Impulse);
+                    rigid.AddForce(Vector2.down * 15, ForceMode2D.Impulse);
+                }
+                else
+                {
+                    if(len.x > 0)
+                    {
+                        rigid.AddForce(Vector2.right * 15, ForceMode2D.Impulse);
+                    }else if(len.x < 0)
+                    {
+                        rigid.AddForce(Vector2.left * 15, ForceMode2D.Impulse);
+                    }
+                }
+                CurEnergyDelay = 0.0f;
+            }
+        }
     }
 
     private void Fire()

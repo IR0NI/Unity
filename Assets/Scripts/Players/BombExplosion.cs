@@ -6,6 +6,7 @@ public class BombExplosion : MonoBehaviour
 {
     private void OnEnable()
     {
+        CancelInvoke();
         Invoke("DeActive", 0.3f);
 
     }

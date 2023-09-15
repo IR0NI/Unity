@@ -46,12 +46,12 @@ public class Enemy : MonoBehaviour
 
         if (EnemyType == 1)
         {
-            HP += 85.0f;
+            HP = 100.0f;
         }
 
         if (EnemyType == 2)
         {
-            HP += 8000.0f;
+            HP = 10000.0f;
             return;
         }
 
@@ -94,7 +94,7 @@ public class Enemy : MonoBehaviour
                 Buff.transform.position = new Vector3(transform.position.x + 0.4f, transform.position.y - 0.6f, 0);
                 Buff.transform.localScale = new Vector3(5, 5, 0);
                 Enemy1_1MaxShotDelay = 3.0f;
-                HP += 25.0f + AddHP;
+                HP = 40.0f + AddHP;
                 MoveSpeed = 70.0f;
             }
             if (EnemyType == 12)
@@ -103,14 +103,14 @@ public class Enemy : MonoBehaviour
                 Buff.transform.localScale = new Vector3(10, 10, 0);
                 Enemy1_2MaxShotDelay = 8.0f;
                 MoveSpeed = 110.0f;
-                HP += 40.0f + AddHP;
+                HP = 60.0f + AddHP;
                 Enemy1_2CurShotDelay += Randomtime * 0.2f;
             }
             if (EnemyType == 13)
             {
                 Buff.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
                 Buff.transform.localScale = new Vector3(3, 3, 0);
-                HP += 40.0f + AddHP;
+                HP = 60.0f + AddHP;
                 Enemy1_3CurShotDelay += Randomtime * 0.2f;
             }
         }

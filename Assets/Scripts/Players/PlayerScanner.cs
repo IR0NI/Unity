@@ -252,11 +252,11 @@ public class PlayerScanner : MonoBehaviour
                         GameObject Knife1 = GameManager.instance.pool.Get(13);
                         GameObject Knife2 = GameManager.instance.pool.Get(13);
                         GameObject Knife3 = GameManager.instance.pool.Get(13);
-                        Knife1.transform.position = new Vector3(transform.position.x + 0.5f, transform.position.y + 0.5f, 0);
+                        Knife1.transform.position = new Vector3(transform.position.x + 1.0f, transform.position.y + 1.0f, 0);
                         Knife1.transform.rotation = Quaternion.Euler(0, 0, z + 270);
                         Knife2.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
                         Knife2.transform.rotation = Quaternion.Euler(0, 0, z + 270);
-                        Knife3.transform.position = new Vector3(transform.position.x - 0.5f, transform.position.y - 0.5f, 0);
+                        Knife3.transform.position = new Vector3(transform.position.x - 1.0f, transform.position.y - 1.0f, 0);
                         Knife3.transform.rotation = Quaternion.Euler(0, 0, z + 270);
                         Rigidbody2D rigid1 = Knife1.GetComponent<Rigidbody2D>();
                         Rigidbody2D rigid2 = Knife2.GetComponent<Rigidbody2D>();
