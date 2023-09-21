@@ -4,7 +4,7 @@ public class PlayerAxePivot : MonoBehaviour
 {
     private void Update()
     {
-        if (GameManager.instance.AxeLevel == 4)
+        if (GameManager.instance.AxeLevel >= 4)
         {
             transform.Rotate(Vector3.back * 200.0f * Time.deltaTime);
         }

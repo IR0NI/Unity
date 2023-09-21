@@ -23,6 +23,12 @@ public class Enemy : MonoBehaviour
     private float Enemy1_1MaxShotDelay = 40.0f;
     private float Enemy1_2MaxShotDelay = 15.0f;
     private float Enemy1_3MaxShotDelay = 10.0f;
+    private float Enemy2_1CurShotDelay = 0.0f;
+    private float Enemy2_2CurShotDelay = 0.0f;
+    private float Enemy2_3CurShotDelay = 0.0f;
+    private float Enemy2_1MaxShotDelay = 40.0f;
+    private float Enemy2_2MaxShotDelay = 15.0f;
+    private float Enemy2_3MaxShotDelay = 10.0f;
     private float Randomtime = 0.0f;
     public Transform ShotPos;
     Vector3 Targetvec;
@@ -88,7 +94,7 @@ public class Enemy : MonoBehaviour
             Buff = GameManager.instance.pool.Get(14);
             //프리팹을 자식오브젝트로 생성
             Buff.transform.SetParent(gameObject.transform, false);
-
+            //1스테이지
             if (EnemyType == 11)
             {
                 Buff.transform.position = new Vector3(transform.position.x + 0.4f, transform.position.y - 0.6f, 0);
@@ -113,10 +119,12 @@ public class Enemy : MonoBehaviour
                 HP = 60.0f + AddHP;
                 Enemy1_3CurShotDelay += Randomtime * 0.2f;
             }
+            //2스테이지
         }
         else
         {
             //일반몹
+            //1스테이지
             if (EnemyType == 11)
             {
                 MoveSpeed = 50.0f;
@@ -132,6 +140,25 @@ public class Enemy : MonoBehaviour
                 HP += 5.0f;
                 Enemy1_3CurShotDelay += Randomtime * 0.2f;
             }
+            //2스테이지
+            if (EnemyType == 21)
+            {
+                Enemy2_1CurShotDelay += Randomtime;
+            }
+            if (EnemyType == 22)
+            {
+                HP += 5.0f;
+                Enemy2_2CurShotDelay += Randomtime * 0.2f;
+            }
+            if (EnemyType == 23)
+            {
+                HP += 5.0f;
+                Enemy2_3CurShotDelay += Randomtime * 0.2f;
+            }
+            if (EnemyType == 24)
+            {
+                HP += 5.0f;
+            }
         }
         
     }
@@ -145,6 +172,12 @@ public class Enemy : MonoBehaviour
                 GameObject Shop = GameManager.instance.pool.Get(11);
                 Shop.transform.position = transform.position;
             }
+
+            if (EnemyType == 2)
+            {
+                GameManager.instance.stage2 = true;
+            }
+
             if (Elite == 1)
             {
                 Buff.SetActive(false);
@@ -161,6 +194,64 @@ public class Enemy : MonoBehaviour
         }
 
         Targetvec = new Vector3(target.transform.position.x - transform.position.x, target.transform.position.y - transform.position.y, 0);
+
+        EnemyAttackDelay();
+        
+    }
+
+    private void FixedUpdate()
+    {
+        float Move = MoveSpeed * 0.05f;
+        if (EnemyType != 24 && EnemyType != 34)
+        {
+            if (Right && Down || Left && Down || Left && Up || Right && Up)
+            {
+                Move -= 1.0f;
+                if (MoveSpeed == 0)
+                {
+                    Move = 0.0f;
+                }
+            }
+
+            if (Right)
+            {
+                transform.position += new Vector3(Move, 0, 0) * Time.deltaTime;
+                spriteRenderer.flipX = false;
+            }
+
+            if (Left)
+            {
+                transform.position += new Vector3(-Move, 0, 0) * Time.deltaTime;
+                spriteRenderer.flipX = true;
+            }
+
+            if (Down)
+            {
+                transform.position += new Vector3(0, -Move, 0) * Time.deltaTime;
+                spriteRenderer.flipX = true;
+            }
+
+            if (Up)
+            {
+                transform.position += new Vector3(0, Move, 0) * Time.deltaTime;
+                spriteRenderer.flipX = false;
+            }
+        }else if(EnemyType == 24 || EnemyType == 34)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, target.position, MoveSpeed *0.05f * Time.fixedDeltaTime);
+            if (target.transform.position.x - transform.position.x > 0)
+            {
+                spriteRenderer.flipX = false;
+            }
+            else if (target.transform.position.x - transform.position.x < 0)
+            {
+                spriteRenderer.flipX = true;
+            }
+        }
+    }
+
+    void EnemyAttackDelay()
+    {
         if (EnemyType == 11 || EnemyType == 111)
         {
             Enemy1_1Attack();
@@ -185,46 +276,26 @@ public class Enemy : MonoBehaviour
             Boss1Attack();
             Boss1CurShotDelay += Time.deltaTime;
         }
-    }
 
-    private void FixedUpdate()
-    {
-        float Move = MoveSpeed * 0.05f;
-
-        if (Right && Down || Left && Down || Left && Up || Right && Up)
+        if (EnemyType == 21 || EnemyType == 121)
         {
-            Move -= 1.0f;
-            if(MoveSpeed == 0)
-            {
-                Move = 0.0f;
-            }
+            Enemy2_1Attack();
+            Enemy2_1CurShotDelay += Time.deltaTime;
         }
 
-        if (Right)
+        if (EnemyType == 22 || EnemyType == 122)
         {
-            transform.position += new Vector3(Move, 0, 0) * Time.deltaTime;
-            spriteRenderer.flipX = false;
+
+            Enemy2_2Attack();
+            Enemy2_2CurShotDelay += Time.deltaTime;
         }
 
-        if (Left)
+        if (EnemyType == 23 || EnemyType == 123)
         {
-            transform.position += new Vector3(-Move, 0, 0) * Time.deltaTime;
-            spriteRenderer.flipX = true;
-        }
-
-        if (Down)
-        {
-            transform.position += new Vector3(0, -Move, 0) * Time.deltaTime;
-            spriteRenderer.flipX = true;
-        }
-
-        if (Up)
-        {
-            transform.position += new Vector3(0, Move, 0) * Time.deltaTime;
-            spriteRenderer.flipX = false;
+            Enemy2_3Attack();
+            Enemy2_3CurShotDelay += Time.deltaTime;
         }
     }
-
     public void TakeDamage(float Dmg)
     {
         GameManager.instance.HitBullet = 0.0f;
@@ -397,6 +468,41 @@ public class Enemy : MonoBehaviour
 
                 Rigid2.AddForce(Targetvec_3.normalized * 12.0f, ForceMode2D.Impulse);
             }
+        }
+    }
+
+    private void Enemy2_1Attack()
+    {
+        if (Enemy2_1CurShotDelay >= Enemy2_1MaxShotDelay)
+        {
+            GameObject Enemy1_1Bullet = GameManager.instance.pool.Get(1);
+            Enemy1_1Bullet.transform.position = ShotPos.transform.position;
+            Rigidbody2D Rigid = Enemy1_1Bullet.GetComponent<Rigidbody2D>();
+            Rigid.AddForce(Targetvec.normalized * 5.0f, ForceMode2D.Impulse); 
+
+            Enemy2_1CurShotDelay = 0.0f;
+        }
+    }
+
+    private void Enemy2_2Attack()
+    {
+        if (Enemy2_2CurShotDelay >= Enemy2_2MaxShotDelay)
+        {
+            GameObject Enemy2_4Summon = GameManager.instance.pool.Get(25);
+            Enemy2_4Summon.transform.position = ShotPos.transform.position;
+            Enemy2_2CurShotDelay = 0.0f;
+        }
+    }
+
+    private void Enemy2_3Attack()
+    {
+        if (Enemy2_3CurShotDelay >= Enemy2_3MaxShotDelay)
+        {
+            GameObject Enemy2_3Bullet = GameManager.instance.pool.Get(26);
+            Enemy2_3Bullet.transform.position = ShotPos.transform.position;
+            Rigidbody2D Rigid = Enemy2_3Bullet.GetComponent<Rigidbody2D>();
+            Rigid.AddForce(Targetvec.normalized * 15.0f, ForceMode2D.Impulse);
+            Enemy2_3CurShotDelay = 0.0f;
         }
     }
 

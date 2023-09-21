@@ -21,7 +21,7 @@ public class BombExplosion : MonoBehaviour
             }
             else
             {
-                collision.gameObject.GetComponent<Enemy>().TakeDamage(20.0f + 0.8f * Player.instance.AP);
+                collision.gameObject.GetComponent<Enemy>().TakeDamage((20.0f + 0.8f * Player.instance.AP) * (GameManager.instance.BombDmgUp + 10) * 0.1f);
             }
         }
     }

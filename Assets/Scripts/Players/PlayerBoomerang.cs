@@ -40,7 +40,7 @@ public class PlayerBoomerang : MonoBehaviour
             }
             else if (GameManager.instance.BoomerangLevel >= 2)
             {
-                collision.gameObject.GetComponent<Enemy>().TakeDamage(50 + Player.instance.AP*1.5f);
+                collision.gameObject.GetComponent<Enemy>().TakeDamage((50 + Player.instance.AP*1.5f)*(GameManager.instance.BoomerangDmgUp+10)*0.1f);
             }
             
             var speed = lastVelocity.magnitude;

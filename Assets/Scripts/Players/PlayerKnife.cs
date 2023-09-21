@@ -32,7 +32,7 @@ public class PlayerKnife : MonoBehaviour
             if (!touch)
             {
                 touch = true;
-                collision.GetComponent<Enemy>().TakeDamage(20 + Player.instance.AP);
+                collision.GetComponent<Enemy>().TakeDamage((20 + Player.instance.AP)*(GameManager.instance.KnifeDmgUp+10)*0.1f);
                 Deactive();
             }
         }

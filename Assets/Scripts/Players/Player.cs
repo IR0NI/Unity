@@ -38,7 +38,6 @@ public class Player : MonoBehaviour
     private Animator animator;
 
     public bool isDash = false;
-    public bool isSlow = false;
     public bool isRevive = false;
     public bool isPet = false;
     public bool isDmg = false;
@@ -55,6 +54,7 @@ public class Player : MonoBehaviour
     public float AP = 0.0f;
     public float AS = 0.0f;
     public float BulletSpeed = 15.0f;
+    public int SlowStacks = 0;
 
     //µÙ∑π¿Ã
     private float CurFireDelay = 0.0f;
@@ -486,7 +486,7 @@ public class Player : MonoBehaviour
                         Rigidbody2D rigid3_4 = bul3_4.GetComponent<Rigidbody2D>();
                         rigid3_4.AddForce((len__3.normalized) * BulletSpeed, ForceMode2D.Impulse);
                         break;
-                    case 4:
+                    default:
                         GameObject bul4_1 = GameManager.instance.pool.Get(7);
                         GameObject bul4_2 = GameManager.instance.pool.Get(7);
                         GameObject bul4_3 = GameManager.instance.pool.Get(7);
@@ -643,7 +643,7 @@ public class Player : MonoBehaviour
                         }
 
                     }
-                    if (GameManager.instance.KunaiLevel == 4)
+                    if (GameManager.instance.KunaiLevel >= 4)
                     {
                         GameObject Kunai3 = GameManager.instance.pool.Get(16);
                         Kunai3.transform.position = KunaiPos3.transform.position;

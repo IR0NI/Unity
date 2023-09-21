@@ -16,7 +16,7 @@ public class PlayerBigKnife : MonoBehaviour
             if (!touch)
             {
                 touch = true;
-                collision.GetComponent<Enemy>().TakeDamage(400 + Player.instance.AP*2.0f);
+                collision.GetComponent<Enemy>().TakeDamage(80 + Player.instance.AP*1.2f);
             }
         }
     }

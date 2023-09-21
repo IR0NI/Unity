@@ -7,6 +7,7 @@ public class PlayerPet : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public PlayerPetPos playerpetpos;
     public int Blocknum = 0;
+    private bool isblock = false;
 
     private void OnEnable()
     {
@@ -28,10 +29,13 @@ public class PlayerPet : MonoBehaviour
         {
             spriteRenderer.flipX = true;
         }
-
-        if(GameManager.instance.DragonLevel >= 3 && (GameManager.instance.kill - GameManager.instance.killpet) >= 400)
+        if (!isblock)
         {
-            gameObject.layer = 0;
+            if (GameManager.instance.DragonLevel >= 3 && (GameManager.instance.kill - GameManager.instance.killpet) >= 400)
+            {
+                gameObject.layer = 0;
+                isblock = true;
+            }
         }
     }
 

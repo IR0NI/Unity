@@ -13,6 +13,7 @@ public class PlayerBomb : MonoBehaviour
     public bool isboom = false;
     private void OnEnable()
     {
+        CancelInvoke();
         Invoke("DeActive", 3.0f);
         BombExplosion.SetActive(false);
         gameObject.GetComponent<CircleCollider2D>().enabled = true;

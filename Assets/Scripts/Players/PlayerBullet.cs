@@ -30,7 +30,7 @@ public class PlayerBullet : MonoBehaviour
             {
                 case 0:
                     if(!touch)
-                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD);
+                    collision.GetComponent<Enemy>().TakeDamage((Player.instance.AD)*(GameManager.instance.BulletDmgUp+10)*0.1f);
                     touch = true;
                     if (collision.GetComponent<Enemy>().HP >= 0)
                     {
@@ -40,7 +40,7 @@ public class PlayerBullet : MonoBehaviour
 
                 case 1:
                     if(!touch)
-                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 10.0f + Player.instance.AP * 0.3f);
+                    collision.GetComponent<Enemy>().TakeDamage((Player.instance.AD + 10.0f + Player.instance.AP * 0.3f) * (GameManager.instance.BulletDmgUp + 10) * 0.1f);
                     touch = true;
                     if (collision.GetComponent<Enemy>().HP >= 0)
                     {
@@ -50,7 +50,7 @@ public class PlayerBullet : MonoBehaviour
 
                 case 2:
                     if(!touch)
-                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 20.0f + Player.instance.AP * 0.7f);
+                    collision.GetComponent<Enemy>().TakeDamage((Player.instance.AD + 20.0f + Player.instance.AP * 0.7f) * (GameManager.instance.BulletDmgUp + 10) * 0.1f);
                     touch = true;
                     collision.GetComponent<Enemy>().MoveZero();
                     if (collision.GetComponent<Enemy>().HP >= 0)
@@ -60,12 +60,12 @@ public class PlayerBullet : MonoBehaviour
                     break;
 
                 case 3:
-                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 20.0f + Player.instance.AP * 0.7f);
+                    collision.GetComponent<Enemy>().TakeDamage((Player.instance.AD + 20.0f + Player.instance.AP * 0.7f) * (GameManager.instance.BulletDmgUp + 10) * 0.1f);
                     collision.GetComponent<Enemy>().MoveZero();
                     break;
 
-                case 4:
-                    collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD + 20.0f + Player.instance.AP * 0.7f);
+                default :
+                    collision.GetComponent<Enemy>().TakeDamage((Player.instance.AD + 20.0f + Player.instance.AP * 0.7f) * (GameManager.instance.BulletDmgUp + 10) * 0.1f);
                     collision.GetComponent<Enemy>().MoveZero();
                     int ran = Random.Range(1, 6);
                     if(ran == 1)

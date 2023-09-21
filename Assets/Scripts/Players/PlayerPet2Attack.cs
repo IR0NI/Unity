@@ -13,7 +13,7 @@ public class PlayerPet2Attack : MonoBehaviour
                 collision.GetComponent<Enemy>().TakeDamage(5 + Player.instance.AP * 0.3f);
             }else if(GameManager.instance.Pet2Level > 1)
             {
-                collision.GetComponent<Enemy>().TakeDamage(15 + Player.instance.AP * 0.5f);
+                collision.GetComponent<Enemy>().TakeDamage((15 + Player.instance.AP * 0.5f)*(GameManager.instance.Pet2DmgUp+10)*0.1f);
             }
 
         }

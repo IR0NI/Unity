@@ -27,7 +27,7 @@ public class PlayerAxe : MonoBehaviour
                 Deactive();
             }else if(GameManager.instance.AxeLevel > 2)
             {
-                collision.gameObject.GetComponent<Enemy>().TakeDamage(60 + Player.instance.AP * 1.8f);
+                collision.gameObject.GetComponent<Enemy>().TakeDamage((60 + Player.instance.AP * 1.8f)*(GameManager.instance.AxeDmgUp+10)*0.1f);
             }
         }
     }

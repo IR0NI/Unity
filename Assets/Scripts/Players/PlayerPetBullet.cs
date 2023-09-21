@@ -11,7 +11,7 @@ public class PlayerPetBullet : MonoBehaviour
     {
         if(collision.gameObject.tag == "Enemy")
         {
-            collision.GetComponent<Enemy>().TakeDamage(Player.instance.AD*0.7f+Player.instance.AP*0.7f);
+            collision.GetComponent<Enemy>().TakeDamage((Player.instance.AD+Player.instance.AP*0.5f)*(GameManager.instance.Pet1DmgUp+10)*0.1f);
         }
     }
     void Deactive()
