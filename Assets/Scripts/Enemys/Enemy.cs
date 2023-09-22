@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour
     private float Enemy2_2CurShotDelay = 0.0f;
     private float Enemy2_3CurShotDelay = 0.0f;
     private float Enemy2_1MaxShotDelay = 40.0f;
-    private float Enemy2_2MaxShotDelay = 15.0f;
+    private float Enemy2_2MaxShotDelay = 5.0f;
     private float Enemy2_3MaxShotDelay = 10.0f;
     private float Randomtime = 0.0f;
     public Transform ShotPos;
@@ -65,6 +65,10 @@ public class Enemy : MonoBehaviour
         if (GameManager.instance.isAllElite)
         {
             Elite = 1;
+        }
+        if(EnemyType == 24 || EnemyType == 34)
+        {
+            Elite = 10;
         }
 
         //엘리트오브엘리트
@@ -120,6 +124,30 @@ public class Enemy : MonoBehaviour
                 Enemy1_3CurShotDelay += Randomtime * 0.2f;
             }
             //2스테이지
+            if (EnemyType == 21)
+            {
+                Buff.transform.position = new Vector3(transform.position.x + 0.4f, transform.position.y - 0.6f, 0);
+                Buff.transform.localScale = new Vector3(5/6, 5/6, 0);
+                Enemy1_1MaxShotDelay = 1.0f;
+                HP = 80.0f + AddHP*4;
+                MoveSpeed = 70.0f;
+            }
+            if (EnemyType == 22)
+            {
+                Buff.transform.position = new Vector3(transform.position.x + 0.375f, transform.position.y, 0);
+                Buff.transform.localScale = new Vector3(1, 1, 0);
+                Enemy1_2MaxShotDelay = 3.0f;
+                MoveSpeed = 110.0f;
+                HP = 80.0f + AddHP*4;
+                Enemy1_2CurShotDelay += Randomtime * 0.2f;
+            }
+            if (EnemyType == 23)
+            {
+                Buff.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+                Buff.transform.localScale = new Vector3(4, 4, 0);
+                HP = 80.0f + AddHP*4;
+                Enemy1_3CurShotDelay += Randomtime * 0.2f;
+            }
         }
         else
         {
@@ -144,20 +172,21 @@ public class Enemy : MonoBehaviour
             if (EnemyType == 21)
             {
                 Enemy2_1CurShotDelay += Randomtime;
+                HP = 20.0f + AddHP * 2.0f;
             }
             if (EnemyType == 22)
             {
-                HP += 5.0f;
+                HP = 20.0f + AddHP*2.0f;
                 Enemy2_2CurShotDelay += Randomtime * 0.2f;
             }
             if (EnemyType == 23)
             {
-                HP += 5.0f;
+                HP = 20.0f + AddHP * 2.0f;
                 Enemy2_3CurShotDelay += Randomtime * 0.2f;
             }
             if (EnemyType == 24)
             {
-                HP += 5.0f;
+                HP = 20.0f + AddHP * 2.0f;
             }
         }
         
@@ -175,7 +204,9 @@ public class Enemy : MonoBehaviour
 
             if (EnemyType == 2)
             {
+                GameManager.instance.stage1 = false;
                 GameManager.instance.stage2 = true;
+                GameManager.instance.Stage1Playtime = GameManager.instance.PlayTime;
             }
 
             if (Elite == 1)
@@ -490,6 +521,11 @@ public class Enemy : MonoBehaviour
         {
             GameObject Enemy2_4Summon = GameManager.instance.pool.Get(25);
             Enemy2_4Summon.transform.position = ShotPos.transform.position;
+            if(Elite == 1)
+            {
+                GameObject Enemy2_4Summon2 = GameManager.instance.pool.Get(25);
+                Enemy2_4Summon2.transform.position = ShotPos.transform.position;
+            }
             Enemy2_2CurShotDelay = 0.0f;
         }
     }
@@ -502,7 +538,18 @@ public class Enemy : MonoBehaviour
             Enemy2_3Bullet.transform.position = ShotPos.transform.position;
             Rigidbody2D Rigid = Enemy2_3Bullet.GetComponent<Rigidbody2D>();
             Rigid.AddForce(Targetvec.normalized * 15.0f, ForceMode2D.Impulse);
+            if (Elite == 1)
+            {
+                Vector3 Targetvec_3 = Quaternion.AngleAxis(3, new Vector3(0, 0, 1)) * Targetvec;
+
+                GameObject Enemy2_3Bullet2 = GameManager.instance.pool.Get(26);
+                Enemy2_3Bullet2.transform.position = ShotPos.transform.position;
+                Rigidbody2D Rigid2 = Enemy2_3Bullet2.GetComponent<Rigidbody2D>();
+
+                Rigid2.AddForce(Targetvec_3.normalized * 12.0f, ForceMode2D.Impulse);
+            }
             Enemy2_3CurShotDelay = 0.0f;
+
         }
     }
 
@@ -546,6 +593,13 @@ public class Enemy : MonoBehaviour
             Up = true;
         }
 
+        /*if(EnemyType == 24)
+        {
+            if(collision.gameObject.tag == "Player")
+            {
+                collision.gameObject.GetComponent<Player>().GetDamaged();
+            }
+        }*/
     }
     private void OnTriggerExit2D(Collider2D collision)
     {

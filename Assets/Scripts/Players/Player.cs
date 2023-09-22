@@ -314,6 +314,10 @@ public class Player : MonoBehaviour
                 GameObject Energy = GameManager.instance.pool.Get(20);
                 Rigidbody2D rigid = Energy.GetComponent<Rigidbody2D>();
                 Energy.transform.position = transform.position;
+                if(GameManager.instance.EnergyLevel > 2)
+                {
+                    Energy.transform.localScale = new Vector3(3, 3, 0);
+                }
                 if(x>0 && y == 0)
                 {
                     rigid.AddForce(Vector2.right*15, ForceMode2D.Impulse);
@@ -704,21 +708,31 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void GetDamaged()
+    {
+        isDmg = true;
+        spriteRenderer.color = new Color(1, 1, 1, 0.4f);
+        Gun1.transparency();
+        if (GameManager.instance.Gun1Level == 4)
+        {
+            Gun2.transparency();
+        }
+        gameObject.layer = 9;
+        Invoke("NormalLayer", 1.5f);
+        HP -= 1;
+        Heart();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "EnemyAttack" && !isDmg)
         {
-            isDmg = true;
-            spriteRenderer.color = new Color(1, 1, 1, 0.4f);
-            Gun1.transparency();
-            if (GameManager.instance.Gun1Level == 4)
-            {
-                Gun2.transparency();
-            }
-            gameObject.layer = 9;
-            Invoke("NormalLayer", 1.5f);
-            HP -= 1;
-            Heart();
+            GetDamaged();
+        }
+
+        if(collision.gameObject.tag == "Enemy" && !isDmg)
+        {
+            GetDamaged();
         }
     }
 

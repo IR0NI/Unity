@@ -115,7 +115,7 @@ public class ShopManager : MonoBehaviour
                     break;
                 case 13:
                     ItemNameText[i].text = "13 (444골드)";
-                    ItemExplainText[i].text = "지금부터 444킬 달성시 공격력 +44, 손재주 +44, 공격속도 +44%";
+                    ItemExplainText[i].text = "지금부터 444킬 달성시 공격력 +4, 손재주 +4, 공격속도 +44%";
                     break;
                 case 14:
                     ItemNameText[i].text = "14 (1200골드)";
@@ -127,7 +127,7 @@ public class ShopManager : MonoBehaviour
                     break;
                 case 16:
                     ItemNameText[i].text = "16 (300골드)미구현클릭x!!";
-                    ItemExplainText[i].text = "강화종류가 11개이상일때 공격력 +15, 손재주 +20";
+                    ItemExplainText[i].text = "소환수 데미지 +15";
                     break;
                 case 17:
                     ItemNameText[i].text = "17 (900골드)미구현클릭x!!";

@@ -36,10 +36,10 @@ public class GameManager : MonoBehaviour
     private float MaxEnemy1_2BuildDelay = 10.0f;
     private float MaxEnemy1_3BuildDelay = 10.0f;
     private float CurEnemy2_1BuildDelay = 0.0f;
-    private float CurEnemy2_2BuildDelay = -60.0f;
-    private float CurEnemy2_3BuildDelay = -120.0f;
-    private float MaxEnemy2_1BuildDelay = 2.5f;
-    private float MaxEnemy2_2BuildDelay = 10.0f;
+    private float CurEnemy2_2BuildDelay = -30.0f;
+    private float CurEnemy2_3BuildDelay = -60.0f;
+    private float MaxEnemy2_1BuildDelay = 4.5f;
+    private float MaxEnemy2_2BuildDelay = 4.0f;
     private float MaxEnemy2_3BuildDelay = 10.0f;
     private float CurEnemy3_1BuildDelay = 0.0f;
     private float CurEnemy3_2BuildDelay = -60.0f;
@@ -64,6 +64,9 @@ public class GameManager : MonoBehaviour
     public int Gun3Level = 0;
     public int pos = 0;
     public float HitBullet = 0.0f;
+    public float PlayTime = 0.0f;
+    public float Stage1Playtime = 0.0f;
+    public float Stage2Playtime = 0.0f;
     public int kill = 0;
     public int killpet = 10000;
     public int killed444 = 0;
@@ -82,6 +85,7 @@ public class GameManager : MonoBehaviour
     public bool isBoss1 = false;
     public bool isBoss2 = false;
     public bool isBoss3 = false;
+    public bool stage1 = true;
     public bool stage2 = false;
     public bool stage3 = false;
 
@@ -184,7 +188,7 @@ public class GameManager : MonoBehaviour
         Dashimsi = (float)player.CurDashDelay / (float)3.0f;
         EXPbar.value = Mathf.Lerp(EXPbar.value, EXPimsi, Time.deltaTime * 10);
         Dashbar.value = Mathf.Lerp(Dashbar.value, Dashimsi, Time.deltaTime * 10);
-
+        PlayTime += Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Escape) && OnMenu == false && isPause == false)
         {
             OnMenu = true;
@@ -288,9 +292,9 @@ public class GameManager : MonoBehaviour
             IsPause();
             UpgradeMenu();
             UpgradeUI.SetActive(true);
-            if (MaxEXP <= 95)
+            if (MaxEXP <= 100)
             {
-                MaxEXP += 5.0f;
+                MaxEXP += 7.0f;
             }
         }
     }
@@ -300,9 +304,9 @@ public class GameManager : MonoBehaviour
         IsPause();
         UpgradeMenu();
         UpgradeUI.SetActive(true);
-        if (MaxEXP <= 95)
+        if (MaxEXP <= 100)
         {
-            MaxEXP += 5.0f;
+            MaxEXP += 7.0f;
         }
     }
 
@@ -371,19 +375,33 @@ public class GameManager : MonoBehaviour
     //적 생성
     private void BuildEnemy()
     {
-        for (int i = 0; i < 10; i++)
+        if (stage1)
         {
-            if (kill >= (i + 1) * 20 && PlusBuildEnemy == i)
+            for (int i = 0; i < 10; i++)
             {
-                PlusBuildEnemy = i + 1;
+                if (PlayTime >= (i + 1) * 36 && PlusBuildEnemy == i)
+                {
+                    PlusBuildEnemy = i + 1;
+                }
+            }
+        }
+
+        if (stage2)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (PlayTime-Stage1Playtime >= (i + 1) * 36 && PlusBuildEnemy == i)
+                {
+                    PlusBuildEnemy = i + 1;
+                }
             }
         }
         if (isManyEnemy)
         {
             PlusBuildEnemy = 0.0f;
-            MaxEnemy1_1BuildDelay = 0.25f;
-            MaxEnemy1_2BuildDelay = 0.5f;
-            MaxEnemy1_3BuildDelay = 0.3f;
+            MaxEnemy1_1BuildDelay = 0.15f;
+            MaxEnemy1_2BuildDelay = 1.0f;
+            MaxEnemy1_3BuildDelay = 1.0f;
         }
         if (CurShopEnemyBuildDelay > MaxShopEnemyBuildDelay)
         {
@@ -417,7 +435,7 @@ public class GameManager : MonoBehaviour
             CurEnemy1_3BuildDelay = 0;
         }
 
-        if (CurEnemy2_1BuildDelay > MaxEnemy2_1BuildDelay && !isBoss2)
+        if (CurEnemy2_1BuildDelay > MaxEnemy2_1BuildDelay - PlusBuildEnemy * 0.4f && !isBoss2)
         {
             pos = Random.Range(0, 12);
             GameObject enemy2_1 = pool.Get(21);
@@ -425,7 +443,7 @@ public class GameManager : MonoBehaviour
             CurEnemy2_1BuildDelay = 0;
         }
 
-        if (CurEnemy2_2BuildDelay > MaxEnemy2_2BuildDelay && !isBoss2)
+        if (CurEnemy2_2BuildDelay > MaxEnemy2_2BuildDelay - PlusBuildEnemy * 0.3f && !isBoss2)
         {
             pos = Random.Range(0, 12);
             GameObject enemy2_2 = pool.Get(22);
@@ -433,7 +451,7 @@ public class GameManager : MonoBehaviour
             CurEnemy2_2BuildDelay = 0;
         }
 
-        if (CurEnemy2_3BuildDelay > MaxEnemy2_3BuildDelay && !isBoss2)
+        if (CurEnemy2_3BuildDelay > MaxEnemy2_3BuildDelay - PlusBuildEnemy * 0.2f && !isBoss2)
         {
             pos = Random.Range(0, 12);
             GameObject enemy2_3 = pool.Get(23);
@@ -689,7 +707,7 @@ public class GameManager : MonoBehaviour
                             UpgradeExplainText[i].text = "부메랑 피해량 상승";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "부메랑 지속시간 증가";
+                            UpgradeExplainText[i].text = "부메랑 크기 증가";
                             break;
                         case 3:
                             UpgradeExplainText[i].text = "부메랑 +2";
@@ -752,7 +770,7 @@ public class GameManager : MonoBehaviour
                             UpgradeExplainText[i].text = "박쥐의 피해량이 상승한다";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "박쥐 공격범위 상승";
                             break;
                         case 3:
                             UpgradeExplainText[i].text = "박쥐4마리 소환";
@@ -770,13 +788,13 @@ public class GameManager : MonoBehaviour
                             UpgradeExplainText[i].text = "에너지로 공격한다";
                             break;
                         case 1:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "에너지 피해량 상승";
                             break;
                         case 2:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "에너지 크기 상승";
                             break;
                         case 3:
-                            UpgradeExplainText[i].text = "";
+                            UpgradeExplainText[i].text = "에너지가 다시 돌아온다";
                             break;
                         default:
                             UpgradeExplainText[i].text = "에너지 피해량 +10%";
@@ -1158,7 +1176,7 @@ public class GameManager : MonoBehaviour
     public void EliteOfElite()
     {
         isEliteofElite = true;
-        Invoke("EventOff", 10.0f);
+        Invoke("EventOff", 8.0f);
     }
 
     public void ManyEnemy()

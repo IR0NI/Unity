@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class ShopObject : MonoBehaviour
 {
+    private void OnEnable()
+    {
+        CancelInvoke();
+        Invoke("Deactive", 60.0f);
+    }
     private void FixedUpdate()
     {
         transform.position = Vector2.MoveTowards(transform.position, new Vector3(0,0,0), 3.0f * Time.deltaTime);
@@ -15,5 +20,10 @@ public class ShopObject : MonoBehaviour
             GameManager.instance.ShopOpen();
             gameObject.SetActive(false);
         }
+    }
+
+    void Deactive()
+    {
+        gameObject.SetActive(false);
     }
 }

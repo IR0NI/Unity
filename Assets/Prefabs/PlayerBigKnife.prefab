@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3236087176279902186}
   - component: {fileID: 7348889113201027509}
   - component: {fileID: -7119166427274106143}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: PlayerBigKnife
   m_TagString: Untagged
   m_Icon: {fileID: 0}

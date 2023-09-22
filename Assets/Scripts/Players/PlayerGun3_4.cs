@@ -6,6 +6,7 @@ public class PlayerGun3_4 : MonoBehaviour
     public bool changerot = false;
     private void OnEnable()
     {
+        time = 0.0f;
         changerot = false;
     }
 

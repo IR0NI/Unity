@@ -1283,6 +1283,9 @@ MonoBehaviour:
   Gun3Level: 0
   pos: 0
   HitBullet: 0
+  PlayTime: 0
+  Stage1Playtime: 0
+  Stage2Playtime: 0
   kill: 0
   killpet: 0
   killed444: 0
@@ -1300,6 +1303,7 @@ MonoBehaviour:
   isBoss1: 0
   isBoss2: 0
   isBoss3: 0
+  stage1: 1
   stage2: 0
   stage3: 0
   GoldText: {fileID: 1387656981}
@@ -11956,7 +11960,7 @@ MonoBehaviour:
   ScanRange: 30
   TargetLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 8448
   NearestTarget: {fileID: 0}
   farthestTarget: {fileID: 0}
   SecondTarget: {fileID: 0}

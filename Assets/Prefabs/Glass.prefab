@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1837440965352619649}
-  m_Layer: 0
+  - component: {fileID: 3700285091731927750}
+  m_Layer: 14
   m_Name: Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,6 +33,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3700285091731927750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837440965352619650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cc7c0f1a9594b4439a5aef3a99b6dba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  glass: {fileID: 1837440966224341771}
 --- !u!1 &1837440966224341771
 GameObject:
   m_ObjectHideFlags: 0
@@ -45,7 +59,7 @@ GameObject:
   - component: {fileID: 1837440966224341767}
   - component: {fileID: 1837440966224341768}
   - component: {fileID: 1837440966224341769}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,3 +183,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time: 0
+  changerot: 0

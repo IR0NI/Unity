@@ -203,7 +203,7 @@ public class PlayerScanner : MonoBehaviour
                     GameObject Bomb = GameManager.instance.pool.Get(10);
                     Bomb.transform.position = transform.position;
                     Rigidbody2D rigid = Bomb.GetComponent<Rigidbody2D>();
-                    rigid.AddForce(secondlen.normalized * 25.0f, ForceMode2D.Impulse);
+                    rigid.AddForce(secondlen.normalized * 40.0f, ForceMode2D.Impulse);
                     curBombDelay = 0.0f;
                 }
                 if (GameManager.instance.BombLevel >= 2)
@@ -211,7 +211,7 @@ public class PlayerScanner : MonoBehaviour
                     GameObject Bomb2 = GameManager.instance.pool.Get(10);
                     Bomb2.transform.position = transform.position;
                     Rigidbody2D rigid2 = Bomb2.GetComponent<Rigidbody2D>();
-                    rigid2.AddForce(farlen.normalized * 25.0f, ForceMode2D.Impulse);
+                    rigid2.AddForce(farlen.normalized * 40.0f, ForceMode2D.Impulse);
                     curBombDelay = 0.0f;
                 }
                 

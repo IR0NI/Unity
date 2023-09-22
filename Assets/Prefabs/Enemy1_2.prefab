@@ -140,11 +140,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 200
+  AddHP: 0
   EnemyType: 12
   MoveSpeed: 70
   target: {fileID: 0}
   ShotPos: {fileID: 5252132755901973815}
   Enemy1_2Bullet: {fileID: 5586218858114502654}
+  Elite: 0
 --- !u!95 &-6943405651575468790
 Animator:
   serializedVersion: 4
@@ -275,7 +277,7 @@ GameObject:
   - component: {fileID: 5350643815262761014}
   - component: {fileID: 4505428051871043443}
   - component: {fileID: 4336027661818301180}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Enemy1_2Bullet
   m_TagString: EnemyAttack
   m_Icon: {fileID: 0}

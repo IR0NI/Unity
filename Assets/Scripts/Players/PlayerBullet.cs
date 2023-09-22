@@ -13,7 +13,7 @@ public class PlayerBullet : MonoBehaviour
         Invoke("Deactive", 1.5f);
 
     }
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         
         

@@ -38,6 +38,10 @@ public class PlayerPet2 : MonoBehaviour
 
     void Active()
     {
+        if (GameManager.instance.Pet2Level > 2)
+        {
+            Attack.transform.localScale = new Vector3(4, 4, 0);
+        }
         Attack.SetActive(true);
         Invoke("Deactive", 1.0f);
     }
