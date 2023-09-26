@@ -18,14 +18,8 @@ public class Enemy1_3SlowPot : MonoBehaviour
 
     public void Update()
     {
-        if (transform.GetComponentInParent<Enemy1_3Bullet>().EliteElite)
-        {
-            transform.localScale = new Vector3(24, 16, 0);
-        }
-        else
-        {
             transform.localScale = new Vector3(6, 4, 0);
-        }
+        
     }
     private void OnTriggerExit2D(Collider2D collision)
     {

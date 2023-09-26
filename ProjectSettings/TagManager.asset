@@ -5,15 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
-  - RightGround
-  - LeftGround
-  - DownGround
-  - UpGround
   - EnemyAttack
-  - PlayerBullet
-  - PlayerBomb
-  - PlayerBarrier
-  - PlayerShield
+  - Boundary
+  - PlayerAttack
   layers:
   - Default
   - TransparentFX
@@ -24,12 +18,12 @@ TagManager:
   - Boundary
   - Player
   - Enemy
-  - NoDamage
   - EnemyAttack
-  - EnemyReady
-  - PlayerBullet
-  - Summon
   - PlayerAttack
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

@@ -31,6 +31,16 @@ public class PlayerBoomerang : MonoBehaviour
             var dir3 = dir + dir2;
             rigid.velocity = dir3 * Mathf.Max(speed, 0f);
         }
+
+        if (collision.gameObject.tag == "Boundary")
+        {
+            float ran = Random.Range(-0.5f, 0.5f);
+            var speed = lastVelocity.magnitude;
+            var dir = Vector2.Reflect(lastVelocity.normalized, lastVelocity.normalized);
+            var dir2 = new Vector2(ran, ran);
+            var dir3 = dir + dir2;
+            rigid.velocity = dir3 * Mathf.Max(speed, 0f);
+        }
     }
     
     void Deactive()

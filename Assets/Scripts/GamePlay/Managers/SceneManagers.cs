@@ -14,5 +14,9 @@ public class SceneManagers : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             
         }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            SceneManager.LoadScene("GameReady");
+        }
     }
 }

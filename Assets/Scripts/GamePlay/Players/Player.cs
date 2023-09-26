@@ -12,23 +12,16 @@ public class Player : MonoBehaviour
     public GameObject Heart1;
     public GameObject Heart2;
     public GameObject Heart3;
+    public GameObject Heart4;
+    public GameObject Heart5;
+    public GameObject Heart6;
 
     //플레이어 총알 시작위치
     public Transform GunLefthud;
     public Transform GunRighthud;
-    public Transform Gun2Lefthud;
-    public Transform Gun2Righthud;
 
     //총
     public Gun1 Gun1;
-    public Gun2 Gun2;
-    // 수리검 
-    public GameObject KunaiPos1;
-    public GameObject KunaiPos2;
-    public GameObject KunaiPos3;
-    public GameObject KunaiPos4;
-    public GameObject KunaiPos5;
-    public GameObject KunaiPos6;
 
     //애니메이터
     private Animator animator;
@@ -45,15 +38,17 @@ public class Player : MonoBehaviour
     public float ChangeSpeed = 100.0f;
     public int MaxHP = 3;
     public int HP = 3;
+    public float BaseAD = 10.0f;
     public float AD = 10.0f;
     public float AS = 0.0f;
     public int BulletNum = 1;
     public float BulletTime = 1.0f;
-    public float BulletSpeed = 15.0f;
+    public float BulletSpeed = 30.0f;
+    public int Bulletpeneration = 1;
     public int SlowStacks = 0;
 
     //딜레이
-    private float CurFireDelay = 0.0f;
+    private float CurFireDelay = 5.0f;
     public float MaxFireDelay = 1.0f;
     public float CurDashDelay = 3.0f;
     private float MaxDashDelay = 3.0f;
@@ -85,7 +80,8 @@ public class Player : MonoBehaviour
                 break;
             case 3:
                 AS += 400.0f;
-                AD -= 8;
+                BaseAD = 2;
+                AD = 2;
                 break;
         }
     }
@@ -162,57 +158,132 @@ public class Player : MonoBehaviour
         isDash = false;
     }
 
-    private void NormalLayer()
-    {
-        isDmg = false;
-        gameObject.layer = 7;
-        spriteRenderer.color = new Color(1, 1, 1, 1);
-        Gun1.normal();
-    }
     public void Heart()
     {
-        if (MaxHP == 3)
+        switch (MaxHP)
         {
-            if (HP == 3)
-            {
-                Heart3.SetActive(true);
-                Heart2.SetActive(true);
-                Heart1.SetActive(true);
-            }
-            else if (HP == 2)
-            {
-                Heart3.SetActive(false);
-                Heart2.SetActive(true);
-                Heart1.SetActive(true);
-            }
-            else if (HP == 1)
-            {
-                Heart3.SetActive(false);
-                Heart2.SetActive(false);
-                Heart1.SetActive(true);
-            }
-            else
-            {
-                Heart3.SetActive(false);
-                Heart2.SetActive(false);
-                Heart1.SetActive(false);
-            }
-        
+            case 3:
+                switch (HP)
+                {
+                    case 3:
+                        Heart3.SetActive(true);
+                        break;
+                    case 2:
+                        Heart3.SetActive(false);
+                        Heart2.SetActive(true);
+                        Heart1.SetActive(true);
+                        break;
+                    case 1:
+                        Heart2.SetActive(false);
+                        Heart1.SetActive(true);
+                        break;
+                    case 0:
+                        Heart1.SetActive(false);
+                        break;
+                }
+                break;
+            case 4:
+                switch (HP)
+                {
+                    case 4:
+                        Heart4.SetActive(true);
+                        break;
+                    case 3:
+                        Heart4.SetActive(false);
+                        Heart3.SetActive(true);
+                        Heart2.SetActive(true);
+                        Heart1.SetActive(true);
+                        break;
+                    case 2:
+                        Heart3.SetActive(false);
+                        Heart2.SetActive(true);
+                        Heart1.SetActive(true);
+                        break;
+                    case 1:
+                        Heart2.SetActive(false);
+                        Heart1.SetActive(true);
+                        break;
+                    case 0:
+                        Heart1.SetActive(false);
+                        break;
+                }
+                break;
+            case 5:
+                switch (HP)
+                {
+                    case 5:
+                        Heart5.SetActive(true);
+                        break;
+                    case 4:
+                        Heart5.SetActive(false);
+                        Heart4.SetActive(true);
+                        Heart3.SetActive(true);
+                        Heart2.SetActive(true);
+                        Heart1.SetActive(true);
+                        break;
+                    case 3:
+                        Heart4.SetActive(false);
+                        Heart3.SetActive(true);
+                        Heart2.SetActive(true);
+                        Heart1.SetActive(true);
+                        break;
+                    case 2:
+                        Heart3.SetActive(false);
+                        Heart2.SetActive(true);
+                        Heart1.SetActive(true);
+                        break;
+                    case 1:
+                        Heart2.SetActive(false);
+                        Heart1.SetActive(true);
+                        break;
+                    case 0:
+                        Heart1.SetActive(false);
+                        break;
+                }
+                break;
+            case 6:
+                switch (HP)
+                {
+                    case 6:
+                        Heart6.SetActive(true);
+                        break;
+                    case 5:
+                        Heart6.SetActive(false);
+                        Heart5.SetActive(true);
+                        Heart4.SetActive(true);
+                        Heart3.SetActive(true);
+                        Heart2.SetActive(true);
+                        Heart1.SetActive(true);
+                        break;
+                    case 4:
+                        Heart5.SetActive(false);
+                        Heart4.SetActive(true);
+                        Heart3.SetActive(true);
+                        Heart2.SetActive(true);
+                        Heart1.SetActive(true);
+                        break;
+                    case 3:
+                        Heart4.SetActive(false);
+                        Heart3.SetActive(true);
+                        Heart2.SetActive(true);
+                        Heart1.SetActive(true);
+                        break;
+                    case 2:
+                        Heart3.SetActive(false);
+                        Heart2.SetActive(true);
+                        Heart1.SetActive(true);
+                        break;
+                    case 1:
+                        Heart2.SetActive(false);
+                        Heart1.SetActive(true);
+                        break;
+                    case 0:
+                        Heart1.SetActive(false);
+                        break;
+                }
+                break;
         }
     }
-
-    public void FiveSecondASUp()
-    {
-        AS += 100.0f;
-        Invoke("FiveSecondASDown", 5.0f);
-    }
-
-    private void FiveSecondASDown()
-    {
-        AS -= 100.0f;
-        Invoke("FiveSecondASUp", 5.0f);
-    }
-
     private void Fire()
     {
      
@@ -221,11 +292,9 @@ public class Player : MonoBehaviour
         Vector3 len_1 = Quaternion.AngleAxis(1, new Vector3(0, 0, 1)) * len;
         Vector3 len_2 = Quaternion.AngleAxis(2, new Vector3(0, 0, 1)) * len;
         Vector3 len_3 = Quaternion.AngleAxis(3, new Vector3(0, 0, 1)) * len;
-        Vector3 len_4 = Quaternion.AngleAxis(4, new Vector3(0, 0, 1)) * len;
         Vector3 len__1 = Quaternion.AngleAxis(-1, new Vector3(0, 0, 1)) * len;
         Vector3 len__2 = Quaternion.AngleAxis(-2, new Vector3(0, 0, 1)) * len;
         Vector3 len__3 = Quaternion.AngleAxis(-3, new Vector3(0, 0, 1)) * len;
-        Vector3 len__4 = Quaternion.AngleAxis(-4, new Vector3(0, 0, 1)) * len;
 
         if (CurFireDelay >= MaxFireDelay*100.0f/(100.0f + AS))
         {
@@ -335,76 +404,6 @@ public class Player : MonoBehaviour
                         Rigidbody2D rigid3_4 = bul3_4.GetComponent<Rigidbody2D>();
                         rigid3_4.AddForce((len__3.normalized) * BulletSpeed, ForceMode2D.Impulse);
                         break;
-                    default:
-                        GameObject bul4_1 = GameManager.instance.pool.Get(1);
-                        GameObject bul4_2 = GameManager.instance.pool.Get(1);
-                        GameObject bul4_3 = GameManager.instance.pool.Get(1);
-                        GameObject bul4_4 = GameManager.instance.pool.Get(1);
-                        GameObject bul4_5 = GameManager.instance.pool.Get(1);
-                        GameObject bul4_6 = GameManager.instance.pool.Get(1);
-                        GameObject bul4_7 = GameManager.instance.pool.Get(1);
-                        GameObject bul4_8 = GameManager.instance.pool.Get(1);
-
-                        if (len.x > 0)
-                        {
-                            bul4_1.transform.position = GunRighthud.transform.position;
-                            bul4_2.transform.position = GunRighthud.transform.position;
-                            bul4_3.transform.position = GunRighthud.transform.position;
-                            bul4_4.transform.position = GunRighthud.transform.position;
-                            bul4_5.transform.position = Gun2Righthud.transform.position;
-                            bul4_6.transform.position = Gun2Righthud.transform.position;
-                            bul4_7.transform.position = Gun2Righthud.transform.position;
-                            bul4_8.transform.position = Gun2Righthud.transform.position;
-                        }
-                        else
-                        {
-                            bul4_1.transform.position = GunLefthud.transform.position;
-                            bul4_2.transform.position = GunLefthud.transform.position;
-                            bul4_3.transform.position = GunLefthud.transform.position;
-                            bul4_4.transform.position = GunLefthud.transform.position;
-                            bul4_5.transform.position = Gun2Lefthud.transform.position;
-                            bul4_6.transform.position = Gun2Lefthud.transform.position;
-                            bul4_7.transform.position = Gun2Lefthud.transform.position;
-                            bul4_8.transform.position = Gun2Lefthud.transform.position;
-                        }
-
-                        bul4_1.transform.rotation = Quaternion.Euler(0, 0, z + 3);
-                        Rigidbody2D rigid4_1 = bul4_1.GetComponent<Rigidbody2D>();
-                        rigid4_1.AddForce((len_3.normalized) * BulletSpeed, ForceMode2D.Impulse);
-
-                        bul4_2.transform.rotation = Quaternion.Euler(0, 0, z + 1);
-                        Rigidbody2D rigid4_2 = bul4_2.GetComponent<Rigidbody2D>();
-                        rigid4_2.AddForce((len_1.normalized) * BulletSpeed, ForceMode2D.Impulse);
-
-                        bul4_3.transform.rotation = Quaternion.Euler(0, 0, z - 1);
-                        Rigidbody2D rigid4_3 = bul4_3.GetComponent<Rigidbody2D>();
-                        rigid4_3.AddForce((len__1.normalized) * BulletSpeed, ForceMode2D.Impulse);
-
-                        bul4_4.transform.rotation = Quaternion.Euler(0, 0, z - 3);
-                        Rigidbody2D rigid4_4 = bul4_4.GetComponent<Rigidbody2D>();
-                        rigid4_4.AddForce((len__3.normalized) * BulletSpeed, ForceMode2D.Impulse);
-                       
-                        bul4_5.transform.rotation = Quaternion.Euler(0, 0, z + 3);
-                        Rigidbody2D rigid4_5 = bul4_5.GetComponent<Rigidbody2D>();
-                        rigid4_5.AddForce((len_3.normalized) * BulletSpeed, ForceMode2D.Impulse);
-
-                        bul4_6.transform.rotation = Quaternion.Euler(0, 0, z + 1);
-                        Rigidbody2D rigid4_6 = bul4_6.GetComponent<Rigidbody2D>();
-                        rigid4_6.AddForce((len_1.normalized) * BulletSpeed, ForceMode2D.Impulse);
-
-                        bul4_7.transform.rotation = Quaternion.Euler(0, 0, z - 1);
-                        Rigidbody2D rigid4_7 = bul4_7.GetComponent<Rigidbody2D>();
-                        rigid4_7.AddForce((len__1.normalized) * BulletSpeed, ForceMode2D.Impulse);
-
-                        bul4_8.transform.rotation = Quaternion.Euler(0, 0, z - 3);
-                        Rigidbody2D rigid4_8 = bul4_8.GetComponent<Rigidbody2D>();
-                        rigid4_8.AddForce((len__3.normalized) * BulletSpeed, ForceMode2D.Impulse);
-
-                        Gun2.Shot();
-                        Gun2.Idle();
-
-                        break;
-
                 }
                 CurFireDelay = 0.0f;
                 Gun1.Shot();
@@ -417,21 +416,21 @@ public class Player : MonoBehaviour
         isDmg = true;
         spriteRenderer.color = new Color(1, 1, 1, 0.4f);
         Gun1.transparency();
-        
-        gameObject.layer = 9;
         Invoke("NormalLayer", 1.5f);
         HP -= 1;
         Heart();
     }
 
+    private void NormalLayer()
+    {
+        isDmg = false;
+        spriteRenderer.color = new Color(1, 1, 1, 1);
+        Gun1.normal();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "EnemyAttack" && !isDmg)
-        {
-            GetDamaged();
-        }
-
-        if(collision.gameObject.tag == "Enemy" && !isDmg)
         {
             GetDamaged();
         }

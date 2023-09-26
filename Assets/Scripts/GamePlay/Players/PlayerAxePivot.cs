@@ -4,13 +4,9 @@ public class PlayerAxePivot : MonoBehaviour
 {
     private void Update()
     {
-        if (GameManager.instance.Level >= 4)
-        {
-            transform.Rotate(Vector3.back * 200.0f * Time.deltaTime);
-        }
-        else if(GameManager.instance.Level < 4)
-        {
-            transform.Rotate(Vector3.back * 150.0f * Time.deltaTime);
-        }
+        
+       transform.Rotate(Vector3.back * GameManager.instance.Axespeed * Time.deltaTime);
+       transform.localScale = new Vector3(GameManager.instance.Axerange*2.5f, GameManager.instance.Axerange*2.5f, 0);
+                
     }
 }
