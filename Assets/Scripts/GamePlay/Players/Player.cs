@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     public bool isDash = false;
     public bool isRevive = false;
     public bool isDmg = false;
+    public bool isReload = false;
     
 
     //Ä³¸¯ÅÍ ½ºÅÈ
@@ -41,6 +42,8 @@ public class Player : MonoBehaviour
     public float BaseAD = 10.0f;
     public float AD = 10.0f;
     public float AS = 0.0f;
+    public int magazine = 12;
+    public int maxmagazine = 12;
     public int BulletNum = 1;
     public float BulletTime = 1.0f;
     public float BulletSpeed = 30.0f;
@@ -70,18 +73,23 @@ public class Player : MonoBehaviour
         switch (GameReadyManager.instance.GunNum)
         {
             case 1:
-
+                magazine = 12;
+                maxmagazine = 12;
                 break;
             case 2:
                 AS -= 50.0f;
                 BulletNum = 4;
                 BulletTime = 0.5f;
                 BulletSpeed = 25.0f;
+                magazine = 6;
+                maxmagazine = 6;
                 break;
             case 3:
                 AS += 400.0f;
                 BaseAD = 2;
                 AD = 2;
+                magazine = 50;
+                maxmagazine = 50;
                 break;
         }
     }
@@ -93,6 +101,10 @@ public class Player : MonoBehaviour
         if (HP <= 0)
         {
             GameManager.instance.GameOver();
+        }
+        if (Input.GetKeyDown(KeyCode.R) && magazine < maxmagazine)
+        {
+            GunReload();
         }
     }
 
@@ -284,6 +296,56 @@ public class Player : MonoBehaviour
                 break;
         }
     }
+
+    private void Emptycartridge()
+    {
+        GameObject emptycartridge1 = null;
+        GameObject emptycartridge2 = null;
+        GameObject emptycartridge3 = null;
+        GameObject emptycartridge4 = null;
+        GameObject emptycartridge5 = null;
+        GameObject emptycartridge6 = null;
+        GameObject[] emptycartridge = { emptycartridge1, emptycartridge2, emptycartridge3, emptycartridge4, emptycartridge5, emptycartridge6 };
+        for (int i = 0; i < Random.Range(3, 7); i++)
+        {
+            emptycartridge[i] = GameManager.instance.pool.Get(2);
+            Rigidbody2D rigid = emptycartridge[i].GetComponent<Rigidbody2D>();
+            emptycartridge[i].transform.rotation = Quaternion.Euler(0, 0, Random.Range(0, 360));
+            if (len.x > 0)
+            {
+                emptycartridge[i].transform.position = new Vector3(GunRighthud.transform.position.x - 0.3f, GunRighthud.transform.position.y, 0);
+                rigid.AddForce(Vector2.left * Random.Range(1.0f, 4.0f) + Vector2.down * Random.Range(1.0f, 3.0f), ForceMode2D.Impulse);
+            }
+            else
+            {
+                emptycartridge[i].transform.position = new Vector3(GunLefthud.transform.position.x + 0.3f, GunLefthud.transform.position.y, 0);
+                rigid.AddForce(Vector2.right * Random.Range(1.0f, 4.0f) + Vector2.down * Random.Range(1.0f, 3.0f), ForceMode2D.Impulse);
+            }
+        }
+    }
+    private void GunReload()
+    {
+        isReload = true;
+        Invoke("EndReload", 2.0f);
+        Invoke("Emptycartridge", 0.6f);
+        switch (GameReadyManager.instance.GunNum)
+        {
+            case 1:
+                magazine = 12;
+                break;
+            case 2:
+                magazine = 8;
+                break;
+            case 3:
+                magazine = 50;
+                break;
+        }
+    }
+
+    private void EndReload()
+    {
+        isReload = false;
+    }
     private void Fire()
     {
      
@@ -298,7 +360,7 @@ public class Player : MonoBehaviour
 
         if (CurFireDelay >= MaxFireDelay*100.0f/(100.0f + AS))
         {
-            if (Input.GetMouseButton(0) && !GameManager.instance.isPause)
+            if (Input.GetMouseButton(0) && !GameManager.instance.isPause && magazine > 0 && !isReload)
             {
                 switch (BulletNum)
                 {
@@ -406,19 +468,27 @@ public class Player : MonoBehaviour
                         break;
                 }
                 CurFireDelay = 0.0f;
+                magazine -= 1;
                 Gun1.Shot();
                 Gun1.Idle();
+                if(magazine <= 0)
+                {
+                    GunReload();
+                }
             }
         }
     }
     public void GetDamaged()
     {
-        isDmg = true;
-        spriteRenderer.color = new Color(1, 1, 1, 0.4f);
-        Gun1.transparency();
-        Invoke("NormalLayer", 1.5f);
-        HP -= 1;
-        Heart();
+        if (!isDmg)
+        {
+            isDmg = true;
+            spriteRenderer.color = new Color(1, 1, 1, 0.4f);
+            Gun1.transparency();
+            Invoke("NormalLayer", 1.5f);
+            HP -= 1;
+            Heart();
+        }
     }
 
     private void NormalLayer()
@@ -430,7 +500,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "EnemyAttack" && !isDmg)
+        if (collision.gameObject.tag == "EnemyAttack" )
         {
             GetDamaged();
         }

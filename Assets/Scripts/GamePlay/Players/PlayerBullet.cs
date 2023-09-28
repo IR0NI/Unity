@@ -30,6 +30,11 @@ public class PlayerBullet : MonoBehaviour
             }
         }
 
+        if (collision.gameObject.CompareTag("EnemyBarrier"))
+        {
+            Deactive();
+        }
+
     }
 
     public void Deactive()

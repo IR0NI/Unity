@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
     public float HP = 20.0f;
     public int EnemyType = 0;
     public float MoveSpeed = 70.0f;
+    public float Diff = 100.0f;
 
     //°ø°ÝEnemy1
     public Transform target;
@@ -14,9 +15,9 @@ public class Enemy : MonoBehaviour
     private float Enemy2CurShotDelay = 0.0f;
     private float Enemy3CurShotDelay = 0.0f;
 
-    private float Enemy1MaxShotDelay = 40.0f;
+    private float Enemy1MaxShotDelay = 3.0f;
     private float Enemy2MaxShotDelay = 5.0f;
-    private float Enemy3MaxShotDelay = 10.0f;
+    private float Enemy3MaxShotDelay = 3.0f;
 
     private float Enemy4CurShotDelay = 0.0f;
     private float Enemy5CurShotDelay = 0.0f;
@@ -30,12 +31,13 @@ public class Enemy : MonoBehaviour
     Vector3 Targetvec;
     private SpriteRenderer spriteRenderer;
     public GameObject Enemy2Bullet;
-
-
+    private Animator animator;
+    private bool isAttack = false;
 
 
     private void OnEnable()
     {
+        animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         MoveSpeed = 70;
         target = GameManager.instance.player.transform;
@@ -80,6 +82,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        Diff = Vector3.Distance(transform.position, target.transform.position);
         if (HP <= 0)
         {
             CancelInvoke();
@@ -223,15 +226,32 @@ public class Enemy : MonoBehaviour
     }
     private void Enemy1Attack()
     {
-        if (Enemy1CurShotDelay >= Enemy1MaxShotDelay)
+        if (Enemy1CurShotDelay >= Enemy1MaxShotDelay && Diff < 3)
         {
+            MoveZero();
+            animator.SetBool("Enemy1Attack", true);
+            Invoke("Enemy1realattack", 0.3f);
             Enemy1CurShotDelay = 0.0f;
         }
     }
 
+    private void Enemy1realattack()
+    {
+        isAttack = true;
+        gameObject.GetComponent<BoxCollider2D>().enabled = true;
+        Invoke("Enemy1Idle", 0.2f);
+    }
+
+    private void Enemy1Idle()
+    {
+        isAttack = false;
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        animator.SetBool("Enemy1Attack", false);
+    }
+
     private void Enemy2Attack()
     {
-        float Diff = Vector3.Distance(transform.position, target.transform.position);
+        
         if (Enemy2CurShotDelay >= Enemy2MaxShotDelay && Diff<20)
         {
             
@@ -243,7 +263,7 @@ public class Enemy : MonoBehaviour
 
     private void Enemy2realattack()
     {
-        GameObject Enemy2Bullet = GameManager.instance.pool.Get(10);
+        GameObject Enemy2Bullet = GameManager.instance.pool.Get(12);
         Enemy2Bullet.transform.position = ShotPos.transform.position;
         Rigidbody2D Rigid = Enemy2Bullet.GetComponent<Rigidbody2D>();
         Rigid.AddForce(Targetvec.normalized * 25.0f, ForceMode2D.Impulse);
@@ -251,10 +271,27 @@ public class Enemy : MonoBehaviour
 
     private void Enemy3Attack()
     {
-        if (Enemy3CurShotDelay >= Enemy3MaxShotDelay)
+        if (Enemy3CurShotDelay >= Enemy3MaxShotDelay && Diff < 2)
         {
+            MoveZero();
+            animator.SetBool("Enemy3Attack", true);
+            Invoke("Enemy3realattack", 0.3f);
             Enemy3CurShotDelay = 0.0f;
         }
+    }
+
+    private void Enemy3realattack()
+    {
+        isAttack = true;
+        gameObject.GetComponent<BoxCollider2D>().enabled = true;
+        Invoke("Enemy3Idle", 0.2f);
+    }
+
+    private void Enemy3Idle()
+    {
+        isAttack = false;
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        animator.SetBool("Enemy3Attack", false);
     }
 
     private void Enemy4Attack()
@@ -292,5 +329,16 @@ public class Enemy : MonoBehaviour
     private void NormalSpeed()
     {
         MoveSpeed = 70.0f;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (isAttack)
+        {
+            if (collision.gameObject.tag == "Player")
+            {
+                collision.GetComponent<Player>().GetDamaged();
+            }
+        }
     }
 }

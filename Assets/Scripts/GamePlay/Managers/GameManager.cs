@@ -26,16 +26,16 @@ public class GameManager : MonoBehaviour
     public bool SecondWepon3 = false;
     public bool SecondWepon4 = false;
     public bool SecondWepon5 = false;
-    private float CurEnemy1BuildDelay = 0.0f;
-    private float CurEnemy2BuildDelay = 0.0f;
-    private float CurEnemy3BuildDelay = -9990.0f;
+    private float CurEnemy1BuildDelay = -9990.0f;
+    private float CurEnemy2BuildDelay = -990.0f;
+    private float CurEnemy3BuildDelay = 0.0f;
     private float CurEnemy4BuildDelay = -9990.0f;
     private float CurEnemy5BuildDelay = -9990.0f;
     private float CurEnemy6BuildDelay = -9990.0f;
 
     private float MaxEnemy1BuildDelay = 3.0f;
     private float MaxEnemy2BuildDelay = 7.0f;
-    private float MaxEnemy3BuildDelay = 10.0f;
+    private float MaxEnemy3BuildDelay = 3.0f;
     private float MaxEnemy4BuildDelay = 10.0f;
     private float MaxEnemy5BuildDelay = 10.0f;
     private float MaxEnemy6BuildDelay = 10.0f;
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     //Ä® 
     public int Knifenum = 1;
     public float Knifetime = 3.0f;
-    public float Knifedmg = 20.0f;
+    public float Knifedmg = 10.0f;
     public int Knifepenetration = 1;
 
     //ÆøÅº
@@ -60,8 +60,8 @@ public class GameManager : MonoBehaviour
     public int Bombrange = 1;
 
     //µµ³¢
-    public int Axenum = 1;
-    public float Axedmg = 15.0f;
+    public int Axenum = 3;
+    public float Axedmg = 10.0f;
     public float Axerange = 1;
     public float Axespeed = 150.0f;
     public float Axetime = 2.0f;
@@ -164,7 +164,9 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
         {
+            Player.instance.MaxHP += 1;
             Player.instance.HP += 1;
+            Player.instance.Heart();
         }
 
         if (Input.GetKeyDown(KeyCode.O))
@@ -446,6 +448,21 @@ public class GameManager : MonoBehaviour
                         break;
                     case 4:
                         Axenum += 1;
+                        switch (Axenum)
+                        {
+                            case 4:
+                                Axe3.SetActive(false);
+                                Axe4.SetActive(true);
+                                break;
+                            case 5:
+                                Axe4.SetActive(false);
+                                Axe5.SetActive(true);
+                                break;
+                            case 6:
+                                Axe5.SetActive(false);
+                                Axe6.SetActive(true);
+                                break;
+                        }
                         break;
                     case 5:
                         
@@ -456,7 +473,7 @@ public class GameManager : MonoBehaviour
                 switch (GameReadyManager.instance.SecondWeaponNum)
                 {
                     case 1:
-                        Knifedmg += 15.0f;
+                        Knifedmg += 10.0f;
                         break;
                     case 2:
                         Bombdmg += 10.0f;
