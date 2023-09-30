@@ -8,6 +8,12 @@ public class Player : MonoBehaviour
     private Vector3 moveDirectionX = Vector3.zero;
     private SpriteRenderer spriteRenderer;
 
+    //재장전시간
+    public GameObject BulletReloadTime;
+    public GameObject ReloadTime;
+    public GameObject Reloadstartline;
+    public GameObject Reloadendline;
+
     //플레이어 체력 UI
     public GameObject Heart1;
     public GameObject Heart2;
@@ -17,11 +23,22 @@ public class Player : MonoBehaviour
     public GameObject Heart6;
 
     //플레이어 총알 시작위치
-    public Transform GunLefthud;
-    public Transform GunRighthud;
-
+    //권총
+    public Transform PistolLefthud;
+    public Transform PistolRighthud;
+    //샷견
+    public Transform ShotgunLefthud;
+    public Transform ShotgunRighthud;
+    //우지
+    public Transform UziLefthud;
+    public Transform UziRighthud;
     //총
-    public Gun1 Gun1;
+    public PlayerPistol pistol;
+    public PlayerShotgun shotgun;
+    public PlayerUzi uzi;
+    public GameObject Pistolobj;
+    public GameObject Shotgunobj;
+    public GameObject Uziobj;
 
     //애니메이터
     private Animator animator;
@@ -55,8 +72,10 @@ public class Player : MonoBehaviour
     public float MaxFireDelay = 1.0f;
     public float CurDashDelay = 3.0f;
     private float MaxDashDelay = 3.0f;
+    private float CurMineDelay = 5.0f;
     public Vector3 playervec;
     public Vector3 len;
+
     private void Awake()
     {
         if (instance == null)
@@ -73,10 +92,12 @@ public class Player : MonoBehaviour
         switch (GameReadyManager.instance.GunNum)
         {
             case 1:
+                Pistolobj.SetActive(true);
                 magazine = 12;
                 maxmagazine = 12;
                 break;
             case 2:
+                Shotgunobj.SetActive(true);
                 AS -= 50.0f;
                 BulletNum = 4;
                 BulletTime = 0.5f;
@@ -85,6 +106,7 @@ public class Player : MonoBehaviour
                 maxmagazine = 6;
                 break;
             case 3:
+                Uziobj.SetActive(true);
                 AS += 400.0f;
                 BaseAD = 2;
                 AD = 2;
@@ -92,6 +114,8 @@ public class Player : MonoBehaviour
                 maxmagazine = 50;
                 break;
         }
+        GameManager.instance.Bulletupdate();
+        
     }
 
     private void Update()
@@ -106,6 +130,11 @@ public class Player : MonoBehaviour
         {
             GunReload();
         }
+        if (GameManager.instance.SecondWepon3)
+        {
+            CurMineDelay += Time.deltaTime;
+            InstallMine();
+        }
     }
 
     private void FixedUpdate()
@@ -114,6 +143,10 @@ public class Player : MonoBehaviour
         len = Camera.main.ScreenToWorldPoint(Input.mousePosition) - playervec;
         Move();
         Reload();
+        if (isReload)
+        {
+            ReloadTime.transform.position = Vector2.MoveTowards(ReloadTime.transform.position, Reloadendline.transform.position, 50.0f * Time.fixedDeltaTime);
+        }
     }
 
     private void Move()
@@ -126,6 +159,10 @@ public class Player : MonoBehaviour
 
         if (x != 0 || y != 0)
         {
+            if (isDmg)
+            {
+                animator.SetBool("Takedamage", false);
+            }
             animator.SetBool("Walk", true);
         }
         if (x == 0 && y == 0)
@@ -149,7 +186,7 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                gameObject.layer = 9;
+                gameObject.layer = 12;
                 NormalSpeed = moveSpeed;
                 Invoke("ByeDash", 0.5f);
                 isDash = true;
@@ -313,18 +350,42 @@ public class Player : MonoBehaviour
             emptycartridge[i].transform.rotation = Quaternion.Euler(0, 0, Random.Range(0, 360));
             if (len.x > 0)
             {
-                emptycartridge[i].transform.position = new Vector3(GunRighthud.transform.position.x - 0.3f, GunRighthud.transform.position.y, 0);
+                switch (GameReadyManager.instance.GunNum)
+                {
+                    case 1:
+                        emptycartridge[i].transform.position = new Vector3(PistolRighthud.transform.position.x - 0.3f, PistolRighthud.transform.position.y, 0);
+                        break;
+                    case 2:
+                        emptycartridge[i].transform.position = new Vector3(ShotgunRighthud.transform.position.x - 0.3f, ShotgunRighthud.transform.position.y, 0);
+                        break;
+                    case 3:
+                        emptycartridge[i].transform.position = new Vector3(UziRighthud.transform.position.x - 0.3f, UziRighthud.transform.position.y, 0);
+                        break;
+                }
                 rigid.AddForce(Vector2.left * Random.Range(1.0f, 4.0f) + Vector2.down * Random.Range(1.0f, 3.0f), ForceMode2D.Impulse);
             }
             else
             {
-                emptycartridge[i].transform.position = new Vector3(GunLefthud.transform.position.x + 0.3f, GunLefthud.transform.position.y, 0);
+                switch (GameReadyManager.instance.GunNum)
+                {
+                    case 1:
+                        emptycartridge[i].transform.position = new Vector3(PistolLefthud.transform.position.x - 0.3f, PistolLefthud.transform.position.y, 0);
+                        break;
+                    case 2:
+                        emptycartridge[i].transform.position = new Vector3(ShotgunLefthud.transform.position.x - 0.3f, ShotgunLefthud.transform.position.y, 0);
+                        break;
+                    case 3:
+                        emptycartridge[i].transform.position = new Vector3(UziLefthud.transform.position.x - 0.3f, UziLefthud.transform.position.y, 0);
+                        break;
+                }
                 rigid.AddForce(Vector2.right * Random.Range(1.0f, 4.0f) + Vector2.down * Random.Range(1.0f, 3.0f), ForceMode2D.Impulse);
             }
         }
+        GameManager.instance.Bulletupdate();
     }
     private void GunReload()
     {
+        BulletReloadTime.SetActive(true);
         isReload = true;
         Invoke("EndReload", 2.0f);
         Invoke("Emptycartridge", 0.6f);
@@ -334,16 +395,19 @@ public class Player : MonoBehaviour
                 magazine = 12;
                 break;
             case 2:
-                magazine = 8;
+                magazine = 6;
                 break;
             case 3:
                 magazine = 50;
                 break;
         }
+        
     }
 
     private void EndReload()
     {
+        ReloadTime.transform.position = Reloadstartline.transform.position;
+        BulletReloadTime.SetActive(false);
         isReload = false;
     }
     private void Fire()
@@ -368,66 +432,40 @@ public class Player : MonoBehaviour
                         GameObject Bul = GameManager.instance.pool.Get(1);
                         if (len.x > 0)
                         {
-                            Bul.transform.position = GunRighthud.transform.position;
+                            switch (GameReadyManager.instance.GunNum)
+                            {
+                                case 1:
+                                    Bul.transform.position = PistolRighthud.transform.position;
+                                    break;
+                                case 2:
+                                    Bul.transform.position = ShotgunRighthud.transform.position;
+                                    break;
+                                case 3:
+                                    Bul.transform.position = UziRighthud.transform.position;
+                                    break;
+                            }
+                            
                         }
                         else
                         {
-                            Bul.transform.position = GunLefthud.transform.position;
+                            switch (GameReadyManager.instance.GunNum)
+                            {
+                                case 1:
+                                    Bul.transform.position = PistolLefthud.transform.position;
+                                    break;
+                                case 2:
+                                    Bul.transform.position = ShotgunLefthud.transform.position;
+                                    break;
+                                case 3:
+                                    Bul.transform.position = UziLefthud.transform.position;
+                                    break;
+
+                            }
+                            
                         }
                         Bul.transform.rotation = Quaternion.Euler(0, 0, z);
                         Rigidbody2D rigid = Bul.GetComponent<Rigidbody2D>();
                         rigid.AddForce(len.normalized * BulletSpeed, ForceMode2D.Impulse);
-                        break;
-                    case 2:
-                        GameObject bul1_1 = GameManager.instance.pool.Get(1);
-                        GameObject bul1_2 = GameManager.instance.pool.Get(1);
-
-                        if (len.x > 0)
-                        {
-                            bul1_1.transform.position = GunRighthud.transform.position;
-                            bul1_2.transform.position = GunRighthud.transform.position;
-                        }
-                        else
-                        {
-                            bul1_1.transform.position = GunLefthud.transform.position;
-                            bul1_2.transform.position = GunLefthud.transform.position;
-                        }
-                        bul1_1.transform.rotation = Quaternion.Euler(0, 0, z - 2);
-                        Rigidbody2D rigid1 = bul1_1.GetComponent<Rigidbody2D>();
-                        rigid1.AddForce((len__2.normalized) * BulletSpeed, ForceMode2D.Impulse);
-                        bul1_2.transform.rotation = Quaternion.Euler(0, 0, z + 2);
-                        Rigidbody2D rigid2 = bul1_2.GetComponent<Rigidbody2D>();
-                        rigid2.AddForce((len_2.normalized) * BulletSpeed, ForceMode2D.Impulse);
-                        break;
-                    case 3:
-                        GameObject bul2_1 = GameManager.instance.pool.Get(1);
-                        GameObject bul2_2 = GameManager.instance.pool.Get(1);
-                        GameObject bul2_3 = GameManager.instance.pool.Get(1);
-
-                        if (len.x > 0)
-                        {
-                            bul2_1.transform.position = GunRighthud.transform.position;
-                            bul2_2.transform.position = GunRighthud.transform.position;
-                            bul2_3.transform.position = GunRighthud.transform.position;
-                        }
-                        else
-                        {
-                            bul2_1.transform.position = GunLefthud.transform.position;
-                            bul2_2.transform.position = GunLefthud.transform.position;
-                            bul2_3.transform.position = GunLefthud.transform.position;
-                        }
-
-                        bul2_1.transform.rotation = Quaternion.Euler(0, 0, z - 2);
-                        Rigidbody2D rigid2_1 = bul2_1.GetComponent<Rigidbody2D>();
-                        rigid2_1.AddForce((len__2.normalized) * BulletSpeed, ForceMode2D.Impulse);
-
-                        bul2_2.transform.rotation = Quaternion.Euler(0, 0, z);
-                        Rigidbody2D rigid2_2 = bul2_2.GetComponent<Rigidbody2D>();
-                        rigid2_2.AddForce((len.normalized) * BulletSpeed, ForceMode2D.Impulse);
-
-                        bul2_3.transform.rotation = Quaternion.Euler(0, 0, z + 2);
-                        Rigidbody2D rigid2_3 = bul2_3.GetComponent<Rigidbody2D>();
-                        rigid2_3.AddForce((len_2.normalized) * BulletSpeed, ForceMode2D.Impulse);
                         break;
                     case 4:
                         GameObject bul3_1 = GameManager.instance.pool.Get(1);
@@ -437,17 +475,53 @@ public class Player : MonoBehaviour
 
                         if (len.x > 0)
                         {
-                            bul3_1.transform.position = GunRighthud.transform.position;
-                            bul3_2.transform.position = GunRighthud.transform.position;
-                            bul3_3.transform.position = GunRighthud.transform.position;
-                            bul3_4.transform.position = GunRighthud.transform.position;
+                            switch (GameReadyManager.instance.GunNum)
+                            {
+                                case 1:
+                                    bul3_1.transform.position = PistolRighthud.transform.position;
+                                    bul3_2.transform.position = PistolRighthud.transform.position;
+                                    bul3_3.transform.position = PistolRighthud.transform.position;
+                                    bul3_4.transform.position = PistolRighthud.transform.position;
+                                    break;
+                                case 2:
+                                    bul3_1.transform.position = ShotgunRighthud.transform.position;
+                                    bul3_2.transform.position = ShotgunRighthud.transform.position;
+                                    bul3_3.transform.position = ShotgunRighthud.transform.position;
+                                    bul3_4.transform.position = ShotgunRighthud.transform.position;
+                                    break;
+                                case 3:
+                                    bul3_1.transform.position = UziRighthud.transform.position;
+                                    bul3_2.transform.position = UziRighthud.transform.position;
+                                    bul3_3.transform.position = UziRighthud.transform.position;
+                                    bul3_4.transform.position = UziRighthud.transform.position;
+                                    break;
+
+                            }
                         }
                         else
                         {
-                            bul3_1.transform.position = GunLefthud.transform.position;
-                            bul3_2.transform.position = GunLefthud.transform.position;
-                            bul3_3.transform.position = GunLefthud.transform.position;
-                            bul3_4.transform.position = GunLefthud.transform.position;
+                            switch (GameReadyManager.instance.GunNum)
+                            {
+                                case 1:
+                                    bul3_1.transform.position = PistolLefthud.transform.position;
+                                    bul3_2.transform.position = PistolLefthud.transform.position;
+                                    bul3_3.transform.position = PistolLefthud.transform.position;
+                                    bul3_4.transform.position = PistolLefthud.transform.position;
+                                    break;
+                                case 2:
+                                    bul3_1.transform.position = ShotgunLefthud.transform.position;
+                                    bul3_2.transform.position = ShotgunLefthud.transform.position;
+                                    bul3_3.transform.position = ShotgunLefthud.transform.position;
+                                    bul3_4.transform.position = ShotgunLefthud.transform.position;
+                                    break;
+                                case 3:
+                                    bul3_1.transform.position = UziLefthud.transform.position;
+                                    bul3_2.transform.position = UziLefthud.transform.position;
+                                    bul3_3.transform.position = UziLefthud.transform.position;
+                                    bul3_4.transform.position = UziLefthud.transform.position;
+                                    break;
+
+                            }
                         }
 
                         bul3_1.transform.rotation = Quaternion.Euler(0, 0, z + 3);
@@ -469,8 +543,7 @@ public class Player : MonoBehaviour
                 }
                 CurFireDelay = 0.0f;
                 magazine -= 1;
-                Gun1.Shot();
-                Gun1.Idle();
+                GameManager.instance.Bulletupdate();
                 if(magazine <= 0)
                 {
                     GunReload();
@@ -478,13 +551,35 @@ public class Player : MonoBehaviour
             }
         }
     }
+    private void InstallMine()
+    {
+        if (CurMineDelay > GameManager.instance.Minetime)
+        {
+            GameObject Mine = GameManager.instance.pool.Get(7);
+            Mine.transform.position = transform.position;
+            CurMineDelay = 0;
+        }
+    }
     public void GetDamaged()
     {
         if (!isDmg)
         {
+            animator.SetBool("Takedamage", true);
             isDmg = true;
             spriteRenderer.color = new Color(1, 1, 1, 0.4f);
-            Gun1.transparency();
+            switch (GameReadyManager.instance.GunNum)
+            {
+                case 1:
+                    pistol.transparency();
+                    break;
+                case 2:
+                    shotgun.transparency();
+                    break;
+                case 3:
+                    uzi.transparency();
+                    break;
+            }
+            
             Invoke("NormalLayer", 1.5f);
             HP -= 1;
             Heart();
@@ -494,8 +589,20 @@ public class Player : MonoBehaviour
     private void NormalLayer()
     {
         isDmg = false;
+        animator.SetBool("Takedamage", false);
         spriteRenderer.color = new Color(1, 1, 1, 1);
-        Gun1.normal();
+        switch (GameReadyManager.instance.GunNum)
+        {
+            case 1:
+                pistol.normal();
+                break;
+            case 2:
+                shotgun.normal();
+                break;
+            case 3:
+                uzi.normal();
+                break;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -1012,7 +1012,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uBD80\uBA54\uB791"
+  m_Text: "\uC9C0\uB8B0"
 --- !u!222 &516265078
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1114,7 +1114,7 @@ GameObject:
   - component: {fileID: 641116036}
   - component: {fileID: 641116035}
   m_Layer: 5
-  m_Name: Boomerang
+  m_Name: Mine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2524,7 +2524,7 @@ GameObject:
   - component: {fileID: 1790944345}
   - component: {fileID: 1790944344}
   m_Layer: 5
-  m_Name: AKM
+  m_Name: Uzi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2716,7 +2716,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: AKM
+  m_Text: Uzi
 --- !u!222 &2030926971
 CanvasRenderer:
   m_ObjectHideFlags: 0

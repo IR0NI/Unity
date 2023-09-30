@@ -23,20 +23,20 @@ public class Enemy : MonoBehaviour
     private float Enemy5CurShotDelay = 0.0f;
     private float Enemy6CurShotDelay = 0.0f;
 
-    private float Enemy4MaxShotDelay = 40.0f;
+    private float Enemy4MaxShotDelay = 0.0f;
     private float Enemy5MaxShotDelay = 5.0f;
     private float Enemy6MaxShotDelay = 10.0f;
 
     public Transform ShotPos;
     Vector3 Targetvec;
     private SpriteRenderer spriteRenderer;
-    public GameObject Enemy2Bullet;
     private Animator animator;
     private bool isAttack = false;
 
 
     private void OnEnable()
     {
+        CancelInvoke();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         MoveSpeed = 70;
@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
 
         if (EnemyType == 1)
         {
-            MoveSpeed = 100;
+
         }
         if (EnemyType == 2)
         {
@@ -63,6 +63,8 @@ public class Enemy : MonoBehaviour
         }
         if (EnemyType == 4)
         {
+            Enemy4CurShotDelay = 0.0f;
+            MoveSpeed = 100;
             HP = 20.0f;
         }
         if (EnemyType == 5)
@@ -85,6 +87,11 @@ public class Enemy : MonoBehaviour
         Diff = Vector3.Distance(transform.position, target.transform.position);
         if (HP <= 0)
         {
+            if(EnemyType == 4)
+            {
+                GameObject Enemy4Bullet = GameManager.instance.pool.Get(14);
+                Enemy4Bullet.transform.position = ShotPos.transform.position;
+            }
             CancelInvoke();
             gameObject.SetActive(false);
         }
@@ -136,6 +143,10 @@ public class Enemy : MonoBehaviour
 
         if (EnemyType == 4)
         {
+            if (Diff < 10 && Enemy4CurShotDelay>0)
+            {
+                MoveSpeed = 200;
+            }
             Enemy4Attack();
             Enemy4CurShotDelay += Time.deltaTime;
         }
@@ -296,9 +307,19 @@ public class Enemy : MonoBehaviour
 
     private void Enemy4Attack()
     {
-        if (Enemy4CurShotDelay >= Enemy4MaxShotDelay)
+        if (Enemy4CurShotDelay >= Enemy4MaxShotDelay && Diff < 3f)
         {
-            Enemy4CurShotDelay = 0.0f;
+            MoveSpeed = 0;
+            Invoke("Enemy4realattack", 0.7f);
+            Enemy4CurShotDelay = -10;
+        }
+    }
+
+    private void Enemy4realattack()
+    {
+        if (HP > 0)
+        {
+            HP -= 999;
         }
     }
 

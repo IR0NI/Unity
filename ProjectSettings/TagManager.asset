@@ -8,6 +8,7 @@ TagManager:
   - EnemyAttack
   - Boundary
   - PlayerAttack
+  - AllAttack
   - EnemyBarrier
   layers:
   - Default
@@ -21,8 +22,8 @@ TagManager:
   - Enemy
   - EnemyAttack
   - PlayerAttack
-  - 
-  - 
+  - AllAttack
+  - NoDamaged
   - 
   - 
   - 

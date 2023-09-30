@@ -25,7 +25,6 @@ public class PlayerScanner : MonoBehaviour
     Vector3 fourthtargetvec;
     float curBombDelay = 0.0f;
     float curKnifeDelay = 0.0f;
-    float curBoomerangDelay = 5.0f;
 
     private void FixedUpdate()
     {
@@ -75,56 +74,11 @@ public class PlayerScanner : MonoBehaviour
 
             Bomb();
             Knife();
-            Boomerang();
         }
     }
 
     
-    void Boomerang()
-    {
-        if(GameManager.instance.SecondWepon3)
-        {
-            curBoomerangDelay += Time.deltaTime;
-            
-            if (curBoomerangDelay > 5.0f)
-            {
-                if (GameManager.instance.Boomerangnum > 0)
-                {
-                    GameObject Boomerang = GameManager.instance.pool.Get(7);
-                    Boomerang.transform.position = transform.position;
-                    Rigidbody2D rigid = Boomerang.GetComponent<Rigidbody2D>();
-                    rigid.AddForce(len.normalized * GameManager.instance.Boomerangspeed, ForceMode2D.Impulse);
-                    curBoomerangDelay = 0.0f;
-                }
-                if (GameManager.instance.Boomerangnum > 1)
-                {
-                    GameObject Boomerang = GameManager.instance.pool.Get(7);
-                    Boomerang.transform.position = transform.position;
-                    Rigidbody2D rigid = Boomerang.GetComponent<Rigidbody2D>();
-                    rigid.AddForce(secondlen.normalized * GameManager.instance.Boomerangspeed, ForceMode2D.Impulse);
-                    curBoomerangDelay = 0.0f;
-                }
-                if (GameManager.instance.Boomerangnum > 2)
-                {
-                    GameObject Boomerang = GameManager.instance.pool.Get(7);
-                    Boomerang.transform.position = transform.position;
-                    Rigidbody2D rigid = Boomerang.GetComponent<Rigidbody2D>();
-                    rigid.AddForce(thirdlen.normalized * GameManager.instance.Boomerangspeed, ForceMode2D.Impulse);
-                    curBoomerangDelay = 0.0f;
-                }
-                if (GameManager.instance.Boomerangnum > 3)
-                {
-                    GameObject Boomerang = GameManager.instance.pool.Get(7);
-                    Boomerang.transform.position = transform.position;
-                    Rigidbody2D rigid = Boomerang.GetComponent<Rigidbody2D>();
-                    rigid.AddForce(fourthlen.normalized * GameManager.instance.Boomerangspeed, ForceMode2D.Impulse);
-                    curBoomerangDelay = 0.0f;
-                }
-
-
-            }
-        }
-    }
+    
     void Bomb()
     {
         if (GameManager.instance.SecondWepon2)

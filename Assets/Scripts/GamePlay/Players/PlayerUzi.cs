@@ -1,14 +1,11 @@
 using UnityEngine;
 
-public class Gun1 : MonoBehaviour
+public class PlayerUzi : MonoBehaviour
 {
-    
-    private Animator animator;
     public Transform GunHud;
     SpriteRenderer spriteRenderer;
     private void Awake()
     {
-        animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
     }
@@ -19,7 +16,7 @@ public class Gun1 : MonoBehaviour
         Vector3 len = Camera.main.ScreenToWorldPoint(Input.mousePosition) - playervec;
         float z = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, z);
-        transform.position = GunHud.transform.position + len.normalized*0.5f;
+        transform.position = GunHud.transform.position + len.normalized * 0.5f;
         if (len.x > 0)
         {
             spriteRenderer.flipY = false;
@@ -38,13 +35,4 @@ public class Gun1 : MonoBehaviour
     {
         spriteRenderer.color = new Color(1, 1, 1, 1.0f);
     }
-    public void Shot()
-    {
-        animator.SetTrigger("Shot");
-    }
-    public void Idle()
-    {
-        animator.SetTrigger("Idle");
-    }
-
 }

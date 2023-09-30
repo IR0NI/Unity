@@ -10,9 +10,6 @@ public class GameManager : MonoBehaviour
 
     public PoolManager pool;
     public Player player;
-    float Dashimsi;
-    [SerializeField]
-    private Slider Dashbar;
 
     //ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ
     public int Level = 0;
@@ -26,17 +23,17 @@ public class GameManager : MonoBehaviour
     public bool SecondWepon3 = false;
     public bool SecondWepon4 = false;
     public bool SecondWepon5 = false;
-    private float CurEnemy1BuildDelay = -9990.0f;
-    private float CurEnemy2BuildDelay = -990.0f;
+    private float CurEnemy1BuildDelay = 0.0f;
+    private float CurEnemy2BuildDelay = 0.0f;
     private float CurEnemy3BuildDelay = 0.0f;
-    private float CurEnemy4BuildDelay = -9990.0f;
+    private float CurEnemy4BuildDelay = 0.0f;
     private float CurEnemy5BuildDelay = -9990.0f;
     private float CurEnemy6BuildDelay = -9990.0f;
 
     private float MaxEnemy1BuildDelay = 3.0f;
     private float MaxEnemy2BuildDelay = 7.0f;
     private float MaxEnemy3BuildDelay = 3.0f;
-    private float MaxEnemy4BuildDelay = 10.0f;
+    private float MaxEnemy4BuildDelay = 5.0f;
     private float MaxEnemy5BuildDelay = 10.0f;
     private float MaxEnemy6BuildDelay = 10.0f;
     public int pos = 0;
@@ -66,12 +63,11 @@ public class GameManager : MonoBehaviour
     public float Axespeed = 150.0f;
     public float Axetime = 2.0f;
 
-    //ºÎ¸Þ¶û
-    public int Boomerangnum = 1;
-    public float Boomerangdmg = 10.0f;
-    //ºÎ¸Þ¶ûÁö¼Ó½Ã°£
-    public float Boomerangtime = 5.0f;
-    public float Boomerangspeed = 25.0f;
+    //Áö·Ú
+    
+    public float Minedmg = 10.0f;
+    public float Minetime = 5.0f;
+    public int Minerange = 1;
 
     //ÆÄÆí
 
@@ -104,6 +100,7 @@ public class GameManager : MonoBehaviour
     public Text Upgrade2Text;
     public Text Upgrade3Text;
     public GameObject UpgradeMenuUI;
+    public Text BulletText;
 
     //¿¤¸®Æ®¿¤¸®Æ® Àû¿ÀºêÁ§Æ®
     public GameObject GameoverUI;
@@ -120,7 +117,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         EnemyBuildPos = new Transform[] { EnemyBuildPos1, EnemyBuildPos2, EnemyBuildPos3, EnemyBuildPos4, EnemyBuildPos5, EnemyBuildPos6, EnemyBuildPos7, EnemyBuildPos8, EnemyBuildPos9, EnemyBuildPos10, EnemyBuildPos11, EnemyBuildPos12 };
-        Dashbar.value = (float)player.CurDashDelay / (float)3.0f;
         
         switch (GameReadyManager.instance.SecondWeaponNum)
         {
@@ -145,8 +141,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        Dashimsi = (float)player.CurDashDelay / (float)3.0f;
-        Dashbar.value = Mathf.Lerp(Dashbar.value, Dashimsi, Time.deltaTime * 10);
         PlayTime += Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Escape) && OnMenu == false && isPause == false)
         {
@@ -332,7 +326,7 @@ public class GameManager : MonoBehaviour
                             UpgradeText[i].text = "ÆøÅº+1";
                             break;
                         case 3:
-                            UpgradeText[i].text = "ºÎ¸Þ¶û+1";
+                            UpgradeText[i].text = "";
                             break;
                         case 4:
                             UpgradeText[i].text = "µµ³¢+1";
@@ -352,7 +346,7 @@ public class GameManager : MonoBehaviour
                             UpgradeText[i].text = "ÆøÅº ÇÇÇØ·® »ó½Â";
                             break;
                         case 3:
-                            UpgradeText[i].text = "ºÎ¸Þ¶û ÇÇÇØ·® »ó½Â";
+                            UpgradeText[i].text = "Áö·Ú ÇÇÇØ·® »ó½Â";
                             break;
                         case 4:
                             UpgradeText[i].text = "µµ³¢ ÇÇÇØ·® »ó½Â";
@@ -372,7 +366,7 @@ public class GameManager : MonoBehaviour
                             UpgradeText[i].text = "ÆøÅº Æø¹ß¹üÀ§ »ó½Â";
                             break;
                         case 3:
-                            UpgradeText[i].text = "ºÎ¸Þ¶û ¼Óµµ »ó½Â";
+                            UpgradeText[i].text = "Áö·Ú Æø¹ß¹üÀ§ »ó½Â";
                             break;
                         case 4:
                             UpgradeText[i].text = "µµ³¢ ¹üÀ§ »ó½Â";
@@ -392,7 +386,7 @@ public class GameManager : MonoBehaviour
                             UpgradeText[i].text = "ÆøÅº ÅõÃ´½Ã°£ °¨¼Ò";
                             break;
                         case 3:
-                            UpgradeText[i].text = "ºÎ¸Þ¶û Áö¼Ó½Ã°£ Áõ°¡";
+                            UpgradeText[i].text = "Áö·Ú ¼³Ä¡ÁÖ±â °¨¼Ò";
                             break;
                         case 4:
                             UpgradeText[i].text = "µµ³¢ ÀçÀåÀü½Ã°£ °¨¼Ò";
@@ -444,7 +438,7 @@ public class GameManager : MonoBehaviour
                         Bombnum += 1;
                         break;
                     case 3:
-                        Boomerangnum += 1;
+                        
                         break;
                     case 4:
                         Axenum += 1;
@@ -479,7 +473,7 @@ public class GameManager : MonoBehaviour
                         Bombdmg += 10.0f;
                         break;
                     case 3:
-                        Boomerangdmg += 10.0f;
+                        Minedmg += 10.0f;
                         break;
                     case 4:
                         Axedmg += 10.0f;
@@ -499,7 +493,7 @@ public class GameManager : MonoBehaviour
                         Bombrange += 1;
                         break;
                     case 3:
-                        Boomerangspeed += 10.0f;
+                        Minerange += 1;
                         break;
                     case 4:
                         Axerange += 0.5f;
@@ -519,7 +513,7 @@ public class GameManager : MonoBehaviour
                         Bombtime -= 0.75f;
                         break;
                     case 3:
-                        Boomerangtime += 5.0f;
+                        Minetime -= 0.75f;
                         break;
                     case 4:
                         Axetime -= 0.5f;
@@ -530,6 +524,11 @@ public class GameManager : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void Bulletupdate()
+    {
+        BulletText.text = Player.instance.magazine + " / " + Player.instance.maxmagazine;
     }
 
     void Sight()
