@@ -26,12 +26,15 @@ public class Player : MonoBehaviour
     //±ÇÃÑ
     public Transform PistolLefthud;
     public Transform PistolRighthud;
+    public GameObject PistolEffect;
     //¼¦°ß
     public Transform ShotgunLefthud;
     public Transform ShotgunRighthud;
+    public GameObject ShotgunEffect;
     //¿ìÁö
     public Transform UziLefthud;
     public Transform UziRighthud;
+    public GameObject UziEffect;
     //ÃÑ
     public PlayerPistol pistol;
     public PlayerShotgun shotgun;
@@ -544,12 +547,55 @@ public class Player : MonoBehaviour
                 CurFireDelay = 0.0f;
                 magazine -= 1;
                 GameManager.instance.Bulletupdate();
+                if (len.x > 0)
+                {
+                    switch (GameReadyManager.instance.GunNum)
+                    {
+                        case 1:
+                            PistolEffect.SetActive(true);
+                            PistolEffect.transform.position = new Vector3(PistolRighthud.transform.position.x, PistolRighthud.transform.position.y, 0);
+                            break;
+                        case 2:
+                            ShotgunEffect.SetActive(true);
+                            ShotgunEffect.transform.position = new Vector3(ShotgunRighthud.transform.position.x, ShotgunRighthud.transform.position.y, 0);
+                            break;
+                        case 3:
+                            UziEffect.SetActive(true);
+                            UziEffect.transform.position = new Vector3(UziRighthud.transform.position.x,UziRighthud.transform.position.y, 0);
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (GameReadyManager.instance.GunNum)
+                    {
+                        case 1:
+                            PistolEffect.SetActive(true);
+                            PistolEffect.transform.position = new Vector3(PistolLefthud.transform.position.x, PistolLefthud.transform.position.y, 0);
+                            break;
+                        case 2:
+                            ShotgunEffect.SetActive(true);
+                            ShotgunEffect.transform.position = new Vector3(ShotgunLefthud.transform.position.x, ShotgunLefthud.transform.position.y, 0);
+                            break;
+                        case 3:
+                            UziEffect.SetActive(true);
+                            UziEffect.transform.position = new Vector3(UziLefthud.transform.position.x, UziLefthud.transform.position.y, 0);
+                            break;
+                    }
+                }
+                Invoke("GunEffectOff", 0.1f);
                 if(magazine <= 0)
                 {
                     GunReload();
                 }
             }
         }
+    }
+    void GunEffectOff()
+    {
+        PistolEffect.SetActive(false);
+        ShotgunEffect.SetActive(false);
+        UziEffect.SetActive(false);
     }
     private void InstallMine()
     {
