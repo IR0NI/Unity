@@ -24,9 +24,9 @@ public class GameManager : MonoBehaviour
     public bool SecondWepon4 = false;
     public bool SecondWepon5 = false;
     private float CurEnemy1BuildDelay = 0.0f;
-    private float CurEnemy2BuildDelay = 0.0f;
-    private float CurEnemy3BuildDelay = 0.0f;
-    private float CurEnemy4BuildDelay = 0.0f;
+    private float CurEnemy2BuildDelay = -9990.0f;
+    private float CurEnemy3BuildDelay = -9990.0f;
+    private float CurEnemy4BuildDelay = -9990.0f;
     private float CurEnemy5BuildDelay = -9990.0f;
     private float CurEnemy6BuildDelay = -9990.0f;
 

@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D rigid2D;
     private Vector3 moveDirectionX = Vector3.zero;
+    private Vector3 DashDirection = Vector3.zero;
     private SpriteRenderer spriteRenderer;
 
     //재장전시간
@@ -156,8 +157,11 @@ public class Player : MonoBehaviour
     {
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
-
         moveDirectionX = new Vector3(x, y, 0).normalized;
+        if (isDash)
+        {
+            moveDirectionX = DashDirection;
+        }
         transform.position += moveDirectionX * moveSpeed * 0.05f * Time.fixedDeltaTime;
 
         if (x != 0 || y != 0)
@@ -189,6 +193,7 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                DashDirection = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0).normalized;
                 gameObject.layer = 12;
                 NormalSpeed = moveSpeed;
                 Invoke("ByeDash", 0.5f);

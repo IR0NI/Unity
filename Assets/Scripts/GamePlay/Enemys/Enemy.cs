@@ -32,6 +32,13 @@ public class Enemy : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Animator animator;
     private bool isAttack = false;
+    private int Nav = 0;
+    private bool ishorizontalnav = false;
+    private bool isverticalnav = false;
+    private bool isRight = false;
+    private bool isLeft = false;
+    private bool isUp = false;
+    private bool isDown = false;
 
 
     private void OnEnable()
@@ -102,7 +109,38 @@ public class Enemy : MonoBehaviour
     private void FixedUpdate()
     {
         float Move = MoveSpeed * 0.05f;
-        transform.position = Vector2.MoveTowards(transform.position, target.position, MoveSpeed * 0.05f * Time.fixedDeltaTime);
+        if (Nav < 1 || Diff < 3)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, target.position, MoveSpeed * 0.05f * Time.fixedDeltaTime);
+        } else
+        {
+            if (ishorizontalnav)
+            {
+                if (isRight)
+                {
+                    transform.position += new Vector3(Move, 0, 0) * Time.fixedDeltaTime;
+                }
+                else if (isLeft)
+                {
+                    transform.position += new Vector3(-Move, 0, 0) * Time.fixedDeltaTime;
+                }
+            }
+
+            if (isverticalnav)
+            {
+                if (isUp)
+                {
+                    transform.position += new Vector3(0, Move, 0) * Time.fixedDeltaTime;
+                }
+                else if (isDown)
+                {
+                    transform.position += new Vector3(0, -Move, 0) * Time.fixedDeltaTime;
+                }
+            }
+
+        }
+
+
         if (target.transform.position.x - transform.position.x > 0)
         {
             spriteRenderer.flipX = false;
@@ -239,9 +277,9 @@ public class Enemy : MonoBehaviour
     {
         if (Enemy1CurShotDelay >= Enemy1MaxShotDelay && Diff < 3)
         {
-            MoveZero();
-            animator.SetBool("Enemy1Attack", true);
-            Invoke("Enemy1realattack", 0.3f);
+           // MoveZero();
+            //animator.SetBool("Enemy1Attack", true);
+           // Invoke("Enemy1realattack", 0.3f);
             Enemy1CurShotDelay = 0.0f;
         }
     }
@@ -284,9 +322,9 @@ public class Enemy : MonoBehaviour
     {
         if (Enemy3CurShotDelay >= Enemy3MaxShotDelay && Diff < 2)
         {
-            MoveZero();
-            animator.SetBool("Enemy3Attack", true);
-            Invoke("Enemy3realattack", 0.3f);
+          //  MoveZero();
+          //  animator.SetBool("Enemy3Attack", true);
+          //  Invoke("Enemy3realattack", 0.3f);
             Enemy3CurShotDelay = 0.0f;
         }
     }
@@ -360,6 +398,53 @@ public class Enemy : MonoBehaviour
             {
                 collision.GetComponent<Player>().GetDamaged();
             }
+        }
+
+        if (collision.gameObject.tag == "Horizontalnav" )
+        {
+            Nav += 1;
+            ishorizontalnav = true;
+            if (target.transform.position.x - transform.position.x > 0)
+            {
+                isRight = true;
+            }
+            else if (target.transform.position.x - transform.position.x <= 0)
+            {
+                isLeft = true;
+            }
+        }
+
+        if (collision.gameObject.tag == "Verticalnav" )
+        {
+            Nav += 1;
+            isverticalnav = true;
+            if (target.transform.position.y - transform.position.y > 0)
+            {
+                isUp = true;
+            }
+            else if (target.transform.position.y - transform.position.y <= 0)
+            {
+                isDown = true;
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Horizontalnav")
+        {
+            Nav -= 1;
+            ishorizontalnav = false;
+            isRight = false;
+            isLeft = false;
+        }
+
+        if (collision.gameObject.tag == "Verticalnav")
+        {
+            Nav -= 1;
+            isverticalnav = false;
+            isUp = false;
+            isDown = false;
         }
     }
 }
