@@ -12,6 +12,8 @@ TagManager:
   - EnemyBarrier
   - Horizontalnav
   - Verticalnav
+  - Cover
+  - Decoration
   layers:
   - Default
   - TransparentFX
@@ -28,7 +30,7 @@ TagManager:
   - NoDamaged
   - Nav
   - Decoration
-  - 
+  - Cover
   - 
   - 
   - 

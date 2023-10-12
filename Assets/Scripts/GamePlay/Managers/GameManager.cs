@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     private float CurEnemy2BuildDelay = -9990.0f;
     private float CurEnemy3BuildDelay = -9990.0f;
     private float CurEnemy4BuildDelay = -9990.0f;
-    private float CurEnemy5BuildDelay = -9990.0f;
+    private float CurEnemy5BuildDelay = 0.0f;
     private float CurEnemy6BuildDelay = -9990.0f;
 
     private float MaxEnemy1BuildDelay = 3.0f;

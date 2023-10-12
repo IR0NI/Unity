@@ -35,6 +35,10 @@ public class PlayerBullet : MonoBehaviour
             Deactive();
         }
 
+        if (collision.gameObject.tag == ("Cover"))
+        {
+            Deactive();
+        }
     }
 
     public void Deactive()

@@ -363,10 +363,18 @@ public class Enemy : MonoBehaviour
 
     private void Enemy5Attack()
     {
-        if (Enemy5CurShotDelay >= Enemy5MaxShotDelay)
+        if (Enemy5CurShotDelay >= Enemy5MaxShotDelay && Diff < 15)
         {
+            MoveZero();
+            Invoke("Enemy5RealAttack", 1.0f);
             Enemy5CurShotDelay = 0.0f;
         }
+    }
+
+    private void Enemy5RealAttack()
+    {
+        GameObject Enemy5Bullet = GameManager.instance.pool.Get(20);
+        Enemy5Bullet.transform.position = target.transform.position;
     }
 
     private void Enemy6Attack()
