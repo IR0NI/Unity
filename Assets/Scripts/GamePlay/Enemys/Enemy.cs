@@ -112,17 +112,37 @@ public class Enemy : MonoBehaviour
         if (Nav < 1 || Diff < 3)
         {
             transform.position = Vector2.MoveTowards(transform.position, target.position, MoveSpeed * 0.05f * Time.fixedDeltaTime);
+
+            if (target.transform.position.x - transform.position.x > 0)
+            {
+                spriteRenderer.flipX = false;
+            }
+            else if (target.transform.position.x - transform.position.x < 0)
+            {
+                spriteRenderer.flipX = true;
+            }
+
         } else
         {
+            if(ishorizontalnav && isverticalnav)
+            {
+                Move = MoveSpeed * 0.05f * 0.75f;
+            }
+            else
+            {
+                Move = MoveSpeed * 0.05f;
+            }
             if (ishorizontalnav)
             {
                 if (isRight)
                 {
                     transform.position += new Vector3(Move, 0, 0) * Time.fixedDeltaTime;
+                    spriteRenderer.flipX = false;
                 }
                 else if (isLeft)
                 {
                     transform.position += new Vector3(-Move, 0, 0) * Time.fixedDeltaTime;
+                    spriteRenderer.flipX = true;
                 }
             }
 
@@ -141,14 +161,7 @@ public class Enemy : MonoBehaviour
         }
 
 
-        if (target.transform.position.x - transform.position.x > 0)
-        {
-            spriteRenderer.flipX = false;
-        }
-        else if (target.transform.position.x - transform.position.x < 0)
-        {
-            spriteRenderer.flipX = true;
-        }
+        
 
     }
 
@@ -435,6 +448,27 @@ public class Enemy : MonoBehaviour
                 isDown = true;
             }
         }
+
+        if( collision.gameObject.tag == "Down")
+        {
+            Nav += 1;
+            isverticalnav = true;
+            isDown = true;
+        }
+
+        if (collision.gameObject.tag == "Left")
+        {
+            Nav += 1;
+            ishorizontalnav = true;
+            isLeft = true;
+        }
+
+        if (collision.gameObject.tag == "Right")
+        {
+            Nav += 1;
+            ishorizontalnav = true;
+            isRight = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -453,6 +487,27 @@ public class Enemy : MonoBehaviour
             isverticalnav = false;
             isUp = false;
             isDown = false;
+        }
+
+        if (collision.gameObject.tag == "Down")
+        {
+            Nav -= 1;
+            isverticalnav = false;
+            isDown = false;
+        }
+
+        if (collision.gameObject.tag == "Left")
+        {
+            Nav -= 1;
+            ishorizontalnav = false;
+            isLeft = false;
+        }
+
+        if (collision.gameObject.tag == "Right")
+        {
+            Nav -= 1;
+            ishorizontalnav = false;
+            isRight = false;
         }
     }
 }

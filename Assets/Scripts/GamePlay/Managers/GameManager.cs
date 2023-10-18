@@ -23,11 +23,11 @@ public class GameManager : MonoBehaviour
     public bool SecondWepon3 = false;
     public bool SecondWepon4 = false;
     public bool SecondWepon5 = false;
-    private float CurEnemy1BuildDelay = 0.0f;
+    private float CurEnemy1BuildDelay = -9990.0f;
     private float CurEnemy2BuildDelay = -9990.0f;
     private float CurEnemy3BuildDelay = -9990.0f;
     private float CurEnemy4BuildDelay = -9990.0f;
-    private float CurEnemy5BuildDelay = 0.0f;
+    private float CurEnemy5BuildDelay = -9990.0f;
     private float CurEnemy6BuildDelay = -9990.0f;
 
     private float MaxEnemy1BuildDelay = 3.0f;
@@ -524,6 +524,13 @@ public class GameManager : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void UpgradeMenuOn()
+    {
+        UpgradeMenu();
+        UpgradeMenuUI.SetActive(true);
+        IsPause();
     }
 
     public void Bulletupdate()

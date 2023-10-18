@@ -30,6 +30,18 @@ public class PlayerBullet : MonoBehaviour
             }
         }
 
+        if(collision.gameObject.tag == "Can")
+        {
+            if (bulletpeneration > 0)
+            {
+                bulletpeneration -= 1;
+                if (bulletpeneration < 1)
+                {
+                    Deactive();
+                }
+            }
+        }
+
         if (collision.gameObject.CompareTag("EnemyBarrier"))
         {
             Deactive();
